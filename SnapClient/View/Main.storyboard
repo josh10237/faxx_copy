@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Main View Controller-->
+        <scene sceneID="BH0-5y-0nL">
+            <objects>
+                <viewController storyboardIdentifier="main" id="fUC-gq-ALt" customClass="MainViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UpD-MR-dsr">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j6T-vs-heJ">
+                                <rect key="frame" x="369" y="57" width="30" height="34"/>
+                                <state key="normal">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faxx_ICON" translatesAutoresizingMaskIntoConstraints="NO" id="bKA-II-Npl">
+                                <rect key="frame" x="15" y="49" width="50" height="50"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="07w-YS-0Kx">
+                                <rect key="frame" x="75" y="55.5" width="144" height="37"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0E5-ii-2Jg">
+                                <rect key="frame" x="157" y="428" width="100" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="To Chat &gt;"/>
+                                <connections>
+                                    <action selector="goButtonTapped:" destination="fUC-gq-ALt" eventType="touchUpInside" id="mT7-zW-4pb"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0E5-ii-2Jg" firstAttribute="centerX" secondItem="UpD-MR-dsr" secondAttribute="centerX" id="Efs-sh-XkG"/>
+                            <constraint firstItem="07w-YS-0Kx" firstAttribute="leading" secondItem="bKA-II-Npl" secondAttribute="trailing" constant="10" id="FJa-G7-6HG"/>
+                            <constraint firstItem="bKA-II-Npl" firstAttribute="leading" secondItem="qzz-K3-lks" secondAttribute="leading" constant="15" id="Hci-Xc-fS6"/>
+                            <constraint firstItem="0E5-ii-2Jg" firstAttribute="centerY" secondItem="UpD-MR-dsr" secondAttribute="centerY" id="I4Y-rU-8dR"/>
+                            <constraint firstItem="07w-YS-0Kx" firstAttribute="centerY" secondItem="bKA-II-Npl" secondAttribute="centerY" id="IvE-y9-u0f"/>
+                            <constraint firstItem="j6T-vs-heJ" firstAttribute="centerY" secondItem="bKA-II-Npl" secondAttribute="centerY" id="gAY-ov-Gqs"/>
+                            <constraint firstItem="bKA-II-Npl" firstAttribute="top" secondItem="qzz-K3-lks" secondAttribute="top" constant="5" id="hml-rM-K7r"/>
+                            <constraint firstItem="qzz-K3-lks" firstAttribute="trailing" secondItem="j6T-vs-heJ" secondAttribute="trailing" constant="15" id="k8U-NT-urs"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="qzz-K3-lks"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3OU-3z-j9w"/>
+                    <connections>
+                        <outlet property="iconView" destination="j6T-vs-heJ" id="ArL-2t-JTs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DF6-fY-iml" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="669.56521739130437" y="153.34821428571428"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="sM0-C6-eCa">
+            <objects>
+                <viewController storyboardIdentifier="chat" id="mFw-IC-xPI" customClass="ChatViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="18I-J9-YKX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="oh9-Gz-Oat"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="QGE-NR-eBY"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="spa-TG-bxf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1407" y="156"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="faxx_ICON" width="50" height="50"/>
+    </resources>
+</document>

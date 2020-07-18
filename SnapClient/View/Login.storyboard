@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tG3-ih-3GM">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="OJz-5W-wZ1">
+            <objects>
+                <viewController id="bkv-mi-3OK" customClass="LoginViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5LI-GI-hjl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faxplussnap" translatesAutoresizingMaskIntoConstraints="NO" id="lPi-kw-gW2">
+                                <rect key="frame" x="50" y="150" width="275" height="155"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8A-Nz-sOV">
+                                <rect key="frame" x="50" y="455" width="275" height="99"/>
+                                <state key="normal" image="loginWithSnap"/>
+                                <connections>
+                                    <action selector="loginButtonTapped:" destination="bkv-mi-3OK" eventType="touchUpInside" id="vF1-pe-8kj"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcometofaxxwhite" translatesAutoresizingMaskIntoConstraints="NO" id="Wst-og-bEH">
+                                <rect key="frame" x="37.5" y="73" width="300" height="27"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Wst-og-bEH" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="1Fa-dt-7dH"/>
+                            <constraint firstItem="J8A-Nz-sOV" firstAttribute="top" secondItem="lPi-kw-gW2" secondAttribute="bottom" constant="150" id="4C3-e1-f8V"/>
+                            <constraint firstItem="lPi-kw-gW2" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="Ajr-YA-RAV"/>
+                            <constraint firstItem="J8A-Nz-sOV" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="EsN-Yz-tju"/>
+                            <constraint firstItem="lPi-kw-gW2" firstAttribute="top" secondItem="Wst-og-bEH" secondAttribute="bottom" constant="50" id="GYg-JO-h8f"/>
+                            <constraint firstItem="lPi-kw-gW2" firstAttribute="top" secondItem="afO-va-6js" secondAttribute="top" constant="150" id="zx3-3D-gsF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="afO-va-6js"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wKN-o7-e4b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-12" y="-6.746626686656672"/>
+        </scene>
+        <!--Load View Controller-->
+        <scene sceneID="x7o-wa-3uQ">
+            <objects>
+                <viewController id="tG3-ih-3GM" customClass="LoadViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="B7y-Cj-T0b">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="faxx_ART_MAIN1024" translatesAutoresizingMaskIntoConstraints="NO" id="vnq-rJ-3qp">
+                                <rect key="frame" x="-13" y="133" width="400" height="400"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94730812310000001" green="0.69898796080000003" blue="0.65489000080000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="vnq-rJ-3qp" firstAttribute="centerY" secondItem="B7y-Cj-T0b" secondAttribute="centerY" id="ByC-Nf-M9i"/>
+                            <constraint firstItem="vnq-rJ-3qp" firstAttribute="centerX" secondItem="B7y-Cj-T0b" secondAttribute="centerX" id="JQc-RB-P7t"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Nta-dr-psf"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yfb-dW-6SS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-721" y="-7"/>
+        </scene>
+        <!--Login Confirm View Controller-->
+        <scene sceneID="DB2-uH-PaH">
+            <objects>
+                <viewController id="wNT-Bd-Z0T" customClass="LoginConfirmViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N9i-yU-r0H">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wL1-Xw-s8B">
+                                <rect key="frame" x="159" y="60" width="57.5" height="26"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkv-pm-CIU">
+                                <rect key="frame" x="37.5" y="468" width="300" height="99"/>
+                                <state key="normal" image="FAXX_lets_go"/>
+                                <connections>
+                                    <action selector="goButtonTapped:" destination="wNT-Bd-Z0T" eventType="touchUpInside" id="Ziv-QH-f0F"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z8u-SG-DGT">
+                                <rect key="frame" x="137.5" y="111" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="3fK-NM-3gG"/>
+                                    <constraint firstAttribute="width" constant="100" id="ovM-A9-oQW"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="z8u-SG-DGT" firstAttribute="top" secondItem="wL1-Xw-s8B" secondAttribute="bottom" constant="25" id="1dg-83-h29"/>
+                            <constraint firstItem="z8u-SG-DGT" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="NPV-pN-zNi"/>
+                            <constraint firstItem="wL1-Xw-s8B" firstAttribute="top" secondItem="6Xv-Mo-1Su" secondAttribute="top" constant="60" id="YlH-Wh-stT"/>
+                            <constraint firstItem="jkv-pm-CIU" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="u4Y-1m-XW8"/>
+                            <constraint firstItem="6Xv-Mo-1Su" firstAttribute="bottom" secondItem="jkv-pm-CIU" secondAttribute="bottom" constant="100" id="uVv-C6-IPw"/>
+                            <constraint firstItem="wL1-Xw-s8B" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="wOg-Fy-4Qz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Xv-Mo-1Su"/>
+                    </view>
+                    <connections>
+                        <outlet property="avatarImageView" destination="z8u-SG-DGT" id="DGW-Mq-CxF"/>
+                        <outlet property="goButton" destination="jkv-pm-CIU" id="ipr-vY-xVw"/>
+                        <outlet property="nameLabel" destination="wL1-Xw-s8B" id="e7b-EC-GWU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bm9-rz-zBs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="689" y="-7"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="FAXX_lets_go" width="300" height="99"/>
+        <image name="faxplussnap" width="275" height="155"/>
+        <image name="faxx_ART_MAIN1024" width="512" height="512"/>
+        <image name="loginWithSnap" width="275" height="99"/>
+        <image name="welcometofaxxwhite" width="300" height="27"/>
+    </resources>
+</document>
