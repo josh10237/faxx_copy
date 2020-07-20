@@ -39,6 +39,7 @@ class MainViewController: UIViewController {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
             newViewController.modalPresentationStyle = .fullScreen
+            newViewController.userEntity = userEntity
             self.present(newViewController, animated: true, completion: nil)
         }
 
@@ -46,5 +47,6 @@ class MainViewController: UIViewController {
     @IBAction func goButtonTapped(_ sender: Any) {
             goToChat()
         }
+
     }
     

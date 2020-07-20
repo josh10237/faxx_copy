@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
     // request UserInfo to SnapSDK.
     // If you haven't requested yet, it will jump to the SnapChat app and get auth.
     private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())){
-        let graphQLQuery = "{me{displayName, bitmoji{avatar}}}"
+        let graphQLQuery = "{me{displayName, externalId, bitmoji{avatar}}}"
 
         SCSDKLoginClient
             .fetchUserData(
