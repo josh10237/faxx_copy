@@ -8,6 +8,41 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Profile View Controller-->
+        <scene sceneID="b8a-Cx-ceA">
+            <objects>
+                <viewController storyboardIdentifier="profile" id="b2S-Ll-sTU" customClass="ProfileViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3ed-tC-w3T">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iQt-5s-pcV">
+                                <rect key="frame" x="88" y="172" width="239" height="137"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tXa-GQ-DoD">
+                                <rect key="frame" x="70" y="44" width="90" height="37"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="tXa-GQ-DoD" firstAttribute="leading" secondItem="PI8-tP-y4E" secondAttribute="leading" constant="70" id="J5v-jr-zo2"/>
+                            <constraint firstItem="iQt-5s-pcV" firstAttribute="top" secondItem="PI8-tP-y4E" secondAttribute="top" constant="150" id="edR-Gh-wZL"/>
+                            <constraint firstItem="iQt-5s-pcV" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="mQb-yn-PJg"/>
+                            <constraint firstItem="tXa-GQ-DoD" firstAttribute="top" secondItem="3ed-tC-w3T" secondAttribute="topMargin" id="qF4-tJ-T55"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="PI8-tP-y4E"/>
+                    </view>
+                    <connections>
+                        <outlet property="avatarImageView" destination="iQt-5s-pcV" id="XAI-3p-VcY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Voj-da-bMw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1028.985507246377" y="-502.23214285714283"/>
+        </scene>
         <!--Main View Controller-->
         <scene sceneID="BH0-5y-0nL">
             <objects>
@@ -21,6 +56,9 @@
                                 <state key="normal">
                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="profileButtonTapped:" destination="fUC-gq-ALt" eventType="touchUpInside" id="SG7-n8-b8h"/>
+                                </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faxx_ICON" translatesAutoresizingMaskIntoConstraints="NO" id="bKA-II-Npl">
                                 <rect key="frame" x="15" y="49" width="50" height="50"/>
@@ -32,12 +70,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0E5-ii-2Jg">
-                                <rect key="frame" x="157" y="428" width="100" height="41"/>
+                                <rect key="frame" x="157" y="427.5" width="100" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="To Chat &gt;"/>
                                 <connections>
                                     <action selector="goButtonTapped:" destination="fUC-gq-ALt" eventType="touchUpInside" id="mT7-zW-4pb"/>
                                 </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gn4-aY-3iq">
+                                <rect key="frame" x="50" y="739" width="354" height="93"/>
+                                <state key="normal" title="Button" image="getMessages"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,11 +92,14 @@
                             <constraint firstItem="j6T-vs-heJ" firstAttribute="centerY" secondItem="bKA-II-Npl" secondAttribute="centerY" id="gAY-ov-Gqs"/>
                             <constraint firstItem="bKA-II-Npl" firstAttribute="top" secondItem="qzz-K3-lks" secondAttribute="top" constant="5" id="hml-rM-K7r"/>
                             <constraint firstItem="qzz-K3-lks" firstAttribute="trailing" secondItem="j6T-vs-heJ" secondAttribute="trailing" constant="15" id="k8U-NT-urs"/>
+                            <constraint firstItem="qzz-K3-lks" firstAttribute="bottom" secondItem="gn4-aY-3iq" secondAttribute="bottom" constant="30" id="wT3-0U-fAu"/>
+                            <constraint firstItem="gn4-aY-3iq" firstAttribute="centerX" secondItem="UpD-MR-dsr" secondAttribute="centerX" constant="20" id="yAF-dk-Or0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qzz-K3-lks"/>
                     </view>
                     <navigationItem key="navigationItem" id="3OU-3z-j9w"/>
                     <connections>
+                        <outlet property="getMessages" destination="gn4-aY-3iq" id="sn9-Nd-rZy"/>
                         <outlet property="iconView" destination="j6T-vs-heJ" id="ArL-2t-JTs"/>
                     </connections>
                 </viewController>
@@ -81,5 +126,6 @@
     </scenes>
     <resources>
         <image name="faxx_ICON" width="50" height="50"/>
+        <image name="getMessages" width="300" height="93"/>
     </resources>
 </document>

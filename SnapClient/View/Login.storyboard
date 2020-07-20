@@ -11,7 +11,7 @@
         <!--Login View Controller-->
         <scene sceneID="OJz-5W-wZ1">
             <objects>
-                <viewController id="bkv-mi-3OK" customClass="LoginViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="login" id="bkv-mi-3OK" customClass="LoginViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5LI-GI-hjl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -73,7 +73,7 @@
         <!--Login Confirm View Controller-->
         <scene sceneID="DB2-uH-PaH">
             <objects>
-                <viewController id="wNT-Bd-Z0T" customClass="LoginConfirmViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginconfirm" id="wNT-Bd-Z0T" customClass="LoginConfirmViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N9i-yU-r0H">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

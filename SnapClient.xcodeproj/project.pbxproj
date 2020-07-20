@@ -14,6 +14,7 @@
 		28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322DB20D3D6020045E02A /* LaunchScreen.storyboard */; };
 		28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322FA20D3D83C0045E02A /* Login.storyboard */; };
 		28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C322FC20D3D8500045E02A /* LoginViewController.swift */; };
+		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
 		67546C9024C0D46D00312D8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67546C8F24C0D46D00312D8E /* Assets.xcassets */; };
 		67546C9224C117E700312D8E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546C9124C117E700312D8E /* MainViewController.swift */; };
 		67546C9424C1226D00312D8E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67546C9324C1226D00312D8E /* Main.storyboard */; };
@@ -53,6 +54,7 @@
 		28C322FC20D3D8500045E02A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		51AFDAB6523B8AD33090ECDE /* Pods-SnapClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SnapClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-SnapClient/Pods-SnapClient.release.xcconfig"; sourceTree = "<group>"; };
 		56BCB97D81307E8889F84D4C /* Pods_SnapClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SnapClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		67546C8F24C0D46D00312D8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../../Downloads/AppIcons (3)/Assets.xcassets"; sourceTree = "<group>"; };
 		67546C9124C117E700312D8E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		67546C9324C1226D00312D8E /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				2842FB3C20E89B7700D34863 /* LoginConfirmViewController.swift */,
 				28C322FC20D3D8500045E02A /* LoginViewController.swift */,
 				67546C9524C186FF00312D8E /* LoadViewController.swift */,
+				67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 			files = (
 				2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */,
 				287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */,
+				67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */,
 				67546C9624C186FF00312D8E /* LoadViewController.swift in Sources */,
 				28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */,
 				67546CA124C2442400312D8E /* Constraints.swift in Sources */,

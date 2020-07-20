@@ -15,6 +15,7 @@ import SCSDKBitmojiKit
 class MainViewController: UIViewController {
     var userEntity: UserEntity?
     @IBOutlet weak var iconView: UIButton!
+    @IBOutlet weak var getMessages: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         let barLayer = CALayer()
@@ -42,10 +43,24 @@ class MainViewController: UIViewController {
             newViewController.userEntity = userEntity
             self.present(newViewController, animated: true, completion: nil)
         }
+    
+    @available(iOS 13.0, *)
+    private func goToProfile(){
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let newViewController = storyBoard.instantiateViewController(identifier: "profile") as!ProfileViewController
+            newViewController.modalPresentationStyle = .fullScreen
+            newViewController.userEntity = userEntity
+            self.present(newViewController, animated: true, completion: nil)
+        }
 
     @available(iOS 13.0, *)
     @IBAction func goButtonTapped(_ sender: Any) {
             goToChat()
+        }
+    
+    @available(iOS 13.0, *)
+    @IBAction func profileButtonTapped(_ sender: Any) {
+            goToProfile()
         }
 
     }

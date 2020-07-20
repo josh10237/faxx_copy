@@ -43,6 +43,10 @@ class ChatViewController: JSQMessagesViewController {
         backbutton.frame = CGRect(origin: CGPoint(x: 20, y: 35), size: CGSize(width:25,height: 25))
         self.view.addSubview(backbutton)
         
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backPressed))
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+        
         
         senderId = externalID
         senderDisplayName = ""
@@ -75,6 +79,7 @@ class ChatViewController: JSQMessagesViewController {
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
         newViewController.userEntity = userEntity
         newViewController.modalPresentationStyle = .fullScreen
+        newViewController.modalPresentationStyle = .custom
         self.present(newViewController, animated: true, completion: nil)
     }
     
@@ -111,7 +116,8 @@ class ChatViewController: JSQMessagesViewController {
     {
         let ref = Constants.refs.databaseChats.childByAutoId()
 
-        let message = ["sender_id": senderId, "name": senderDisplayName, "text": text]
+        let message = ["sender_id": senderId, "text": text]
+        //let otherUser = ["displayname": "", "text": text]
 
         ref.setValue(message)
 
