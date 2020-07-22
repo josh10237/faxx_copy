@@ -80,6 +80,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gn4-aY-3iq">
                                 <rect key="frame" x="50" y="739" width="354" height="93"/>
                                 <state key="normal" title="Button" image="getMessages"/>
+                                <connections>
+                                    <action selector="getMessages:" destination="fUC-gq-ALt" eventType="touchUpInside" id="Fs8-Jx-ja1"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

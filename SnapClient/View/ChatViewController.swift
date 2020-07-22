@@ -55,17 +55,16 @@ class ChatViewController: JSQMessagesViewController {
         inputToolbar.contentView.leftBarButtonItem = nil
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-        let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
+        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
 
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
             if  let data        = snapshot.value as? [String: String],
                 let id          = data["sender_id"],
-                let name        = data["name"],
                 let text        = data["text"],
                 !text.isEmpty
             {
-                if let message = JSQMessage(senderId: id, displayName: name, text: text)
+                if let message = JSQMessage(senderId: id, displayName: "", text: text)
                 {
                     self?.messages.append(message)
 
@@ -114,10 +113,8 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
-        let ref = Constants.refs.databaseChats.childByAutoId()
-
+        let ref = Constants.refs.databaseRoot.child(self.externalID).childByAutoId()
         let message = ["sender_id": senderId, "text": text]
-        //let otherUser = ["displayname": "", "text": text]
 
         ref.setValue(message)
 

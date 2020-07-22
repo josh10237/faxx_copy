@@ -42,4 +42,5 @@ class LoginConfirmViewController: UIViewController {
     @IBAction func goButtonTapped(_ sender: Any) {
         goToMain()
     }
+    
 }

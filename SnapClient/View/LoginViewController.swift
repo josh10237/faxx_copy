@@ -8,8 +8,6 @@
 
 import UIKit
 import SCSDKLoginKit
-let FaxxPink = UIColor(red: 254/255, green: 175/255, blue: 163/255, alpha: 1)
-let SnapYellow = UIColor(red: 255/255, green: 252/255, blue: 0/255, alpha: 1)
 
 class LoginViewController: UIViewController {
 

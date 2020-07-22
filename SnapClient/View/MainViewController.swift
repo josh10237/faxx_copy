@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import SCSDKLoginKit
 import SCSDKBitmojiKit
+import SCSDKCreativeKit
 
 
 class MainViewController: UIViewController {
@@ -62,6 +63,30 @@ class MainViewController: UIViewController {
     @IBAction func profileButtonTapped(_ sender: Any) {
             goToProfile()
         }
+    
+    @IBAction func getMessages(_ sender: Any) {
+        postToSnap()
+    }
+    
+    
+    func postToSnap(){
+        let snap = SCSDKNoSnapContent()
+        let sticker = SCSDKSnapSticker(stickerImage: #imageLiteral(resourceName: "SwipeUp"))
+        snap.sticker = sticker
+        snap.caption = "Straight Faxx, no printer"
+        snap.attachmentUrl = "https://www.snapchat.com"
+        let api = SCSDKSnapAPI(content: snap)
+        api.startSnapping { error in
+                    
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                // success
+            
+            }
+        }
+
+    }
 
     }
     
