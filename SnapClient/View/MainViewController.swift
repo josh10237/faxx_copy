@@ -21,16 +21,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        print("LOADING MAIN")
-//        print(Constants.newMessageID)
-//        print("RUN IF")
-//        if Constants.newMessageID != "" {
-//            if #available(iOS 13.0, *) {
-//                print("HIIII")
-//                ChatViewController().createNewMessage(posterId: Constants.newMessageID)
-//            }
-//            Constants.newMessageID = ""
-//        }
         
         let barLayer = CALayer()
         let screenSize: CGRect = UIScreen.main.bounds
@@ -57,6 +47,7 @@ class MainViewController: UIViewController {
             let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
             newViewController.modalPresentationStyle = .fullScreen
             newViewController.userEntity = userEntity
+            newViewController.otherUserID = "4fnuew8efwef8wn"
             self.present(newViewController, animated: true, completion: nil)
         }
     

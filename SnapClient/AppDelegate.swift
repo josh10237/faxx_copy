@@ -33,12 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let posterID = (s!["user"]) as! String
                 print("POSTER ID")
                 print(posterID)
-                //Constants.newMessageID = posterID
                 if #available(iOS 13.0, *) {
-                    print("RUNN")
-                    //ChatViewController().createNewMessage(posterId: posterID)
-                    
-                    
                     let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
                     if keyWindow != nil {
                         if var topController = keyWindow?.rootViewController {
@@ -50,10 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
                             newViewController.modalPresentationStyle = .fullScreen
 
-
-        
                             if self.sharedUserEntity != nil {
                                 newViewController.userEntity = self.sharedUserEntity
+                                newViewController.otherUserID = posterID
                                 topController.present(newViewController, animated: true, completion: nil)
                             } else {
                                 self.closedDeepLink = true

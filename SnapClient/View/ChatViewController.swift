@@ -12,12 +12,11 @@ import JSQMessagesViewController
 import SCSDKLoginKit
 import SCSDKBitmojiKit
 
-var userEntityStore: UserEntity?
-
 @available(iOS 13.0, *)
 class ChatViewController: JSQMessagesViewController {
     var externalID:String = ""
     var userEntity: UserEntity?
+    var otherUserID:String = ""
     var messages = [JSQMessage]()
     lazy var outgoingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: FaxxPink)
@@ -29,20 +28,6 @@ class ChatViewController: JSQMessagesViewController {
     override func viewDidLoad() {
         print("EXTRNL")
         print(userEntity?.externalID as Any)
-        if userEntity != nil {
-            print("UES RE")
-            userEntityStore = userEntity
-        }else{
-            print("UE RE")
-            userEntity = userEntityStore
-        }
-        
-        //self.createNewMessage(posterId: "")
-        
-//        if Constants.newMessageID != "" {
-//            self.createNewMessage(posterId: Constants.newMessageID)
-//            Constants.newMessageID = ""
-//        }
         
         print(userEntity as Any)
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
@@ -89,24 +74,6 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
-    @objc func createNewMessage(posterId: String){
-        print("RECIEVED")
-        print(userEntity)
-        print(userEntityStore)
-        print("NEW MESSAGE WITH")
-        print(posterId)
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
-        newViewController.modalPresentationStyle = .fullScreen
-            if userEntity == nil{
-            newViewController.userEntity = userEntityStore
-            print("STORE")
-        }else{
-            print("REG")
-            newViewController.userEntity = userEntity
-        }
-        self.present(newViewController, animated: true, completion: nil)
-    }
     
     @objc func backPressed() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -148,10 +115,10 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
-        let ref = Constants.refs.databaseRoot.child(self.externalID).childByAutoId()
+        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
         let message = ["sender_id": senderId, "text": text]
 
-        ref.setValue(message)
+        ref1.setValue(message)
 
         finishSendingMessage()
     }

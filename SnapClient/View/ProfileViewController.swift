@@ -14,13 +14,6 @@ class ProfileViewController: UIViewController{
     let screenSize: CGRect = UIScreen.main.bounds
     override func viewDidLoad() {
         
-//       if Constants.newMessageID != "" {
-//            if #available(iOS 13.0, *) {
-//                ChatViewController().createNewMessage(posterId: Constants.newMessageID)
-//            }
-//            Constants.newMessageID = ""
-//        }
-        
         super.viewDidLoad()
         let barLayer = CALayer()
         let rectFrame: CGRect = CGRect(x:CGFloat(0), y:CGFloat(0), width:CGFloat(screenSize.width), height:CGFloat(90))
