@@ -11,6 +11,7 @@ import Firebase
 
 struct Constants
 {
+    //static var newMessageID = ""
     struct refs
     {
         static let databaseRoot = Database.database().reference()

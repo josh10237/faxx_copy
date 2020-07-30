@@ -10,5 +10,6 @@ target 'SnapClient' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'JSQMessagesViewController'
+  pod 'Branch'
   
 end

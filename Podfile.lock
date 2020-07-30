@@ -1,4 +1,5 @@
 PODS:
+  - Branch (0.34.0)
   - Firebase/Auth (6.28.1):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.7.0)
@@ -94,6 +95,7 @@ PODS:
   - SnapSDK/SCSDKLoginKit (1.6.2)
 
 DEPENDENCIES:
+  - Branch
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -105,6 +107,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Branch
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -127,6 +130,7 @@ SPEC REPOS:
     - SnapSDK
 
 SPEC CHECKSUMS:
+  Branch: 446aeb832102f56f04edf5fa7cb0a752dc392ca7
   Firebase: ed042590caa0029392257529a8003c25ee82bc18
   FirebaseAnalytics: 5fa308e1b13f838d0f6dc74719ac2a72e8c5afc4
   FirebaseAuth: 06feef26ff3a98323677c76c4102146b872cd6b7
@@ -148,6 +152,6 @@ SPEC CHECKSUMS:
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   SnapSDK: 32174d85fb51f46ee3420e0d4dc2f983fb1ff748
 
-PODFILE CHECKSUM: 588c151b70bb60216436e4d4f8d0797077b1ab6a
+PODFILE CHECKSUM: ad85b5418840e8de81207f028de27ec36d1f84e9
 
 COCOAPODS: 1.9.3

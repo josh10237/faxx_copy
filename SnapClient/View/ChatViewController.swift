@@ -12,8 +12,9 @@ import JSQMessagesViewController
 import SCSDKLoginKit
 import SCSDKBitmojiKit
 
-//var externalID:String = ""
+var userEntityStore: UserEntity?
 
+@available(iOS 13.0, *)
 class ChatViewController: JSQMessagesViewController {
     var externalID:String = ""
     var userEntity: UserEntity?
@@ -26,6 +27,24 @@ class ChatViewController: JSQMessagesViewController {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
     override func viewDidLoad() {
+        print("EXTRNL")
+        print(userEntity?.externalID as Any)
+        if userEntity != nil {
+            print("UES RE")
+            userEntityStore = userEntity
+        }else{
+            print("UE RE")
+            userEntity = userEntityStore
+        }
+        
+        //self.createNewMessage(posterId: "")
+        
+//        if Constants.newMessageID != "" {
+//            self.createNewMessage(posterId: Constants.newMessageID)
+//            Constants.newMessageID = ""
+//        }
+        
+        print(userEntity as Any)
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
         super.viewDidLoad()
         let barLayer = CALayer()
@@ -47,16 +66,12 @@ class ChatViewController: JSQMessagesViewController {
         swipeRight.direction = .right
         self.view.addGestureRecognizer(swipeRight)
         
-        
         senderId = externalID
         senderDisplayName = ""
-
-
         inputToolbar.contentView.leftBarButtonItem = nil
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
         let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
-
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
             if  let data        = snapshot.value as? [String: String],
@@ -73,6 +88,26 @@ class ChatViewController: JSQMessagesViewController {
             }
         })
     }
+    
+    @objc func createNewMessage(posterId: String){
+        print("RECIEVED")
+        print(userEntity)
+        print(userEntityStore)
+        print("NEW MESSAGE WITH")
+        print(posterId)
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
+        newViewController.modalPresentationStyle = .fullScreen
+            if userEntity == nil{
+            newViewController.userEntity = userEntityStore
+            print("STORE")
+        }else{
+            print("REG")
+            newViewController.userEntity = userEntity
+        }
+        self.present(newViewController, animated: true, completion: nil)
+    }
+    
     @objc func backPressed() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
@@ -120,7 +155,7 @@ class ChatViewController: JSQMessagesViewController {
 
         finishSendingMessage()
     }
-
+    
     
 }
 
