@@ -56,7 +56,8 @@ class ChatViewController: JSQMessagesViewController {
         inputToolbar.contentView.leftBarButtonItem = nil
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
+        let ref1 = Constants.refs.databaseRoot.child(self.externalID)
+        let query = ref1.child(self.otherUserID).queryLimited(toLast: 10)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
             if  let data        = snapshot.value as? [String: String],
