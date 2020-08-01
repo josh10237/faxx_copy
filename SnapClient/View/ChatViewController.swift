@@ -12,7 +12,6 @@ import JSQMessagesViewController
 import SCSDKLoginKit
 import SCSDKBitmojiKit
 
-@available(iOS 13.0, *)
 class ChatViewController: JSQMessagesViewController {
     var externalID:String = ""
     var userEntity: UserEntity?
@@ -26,30 +25,14 @@ class ChatViewController: JSQMessagesViewController {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
     override func viewDidLoad() {
+        self.addTitle(title: otherUserID)
         print("EXTRNL")
         print(userEntity?.externalID as Any)
         
         print(userEntity as Any)
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
         super.viewDidLoad()
-        let barLayer = CALayer()
-        let screenSize: CGRect = UIScreen.main.bounds
-        let rectFrame: CGRect = CGRect(x:CGFloat(0), y:CGFloat(0), width:CGFloat(screenSize.width), height:CGFloat(70))
-        barLayer.frame = rectFrame
-        barLayer.backgroundColor = FaxxPink.cgColor
-        view.layer.insertSublayer(barLayer, at: 1)
         
-        let image = UIImage(named: "leftarrow_ICON")
-        let backbutton = UIButton(type: UIButton.ButtonType.custom)
-        backbutton.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
-        backbutton.setImage(image, for: .normal)
-        backbutton.addTarget(self, action: #selector(backPressed), for: .touchUpInside)
-        backbutton.frame = CGRect(origin: CGPoint(x: 20, y: 35), size: CGSize(width:25,height: 25))
-        self.view.addSubview(backbutton)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backPressed))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
         
         senderId = externalID
         senderDisplayName = ""

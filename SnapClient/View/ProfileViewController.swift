@@ -15,20 +15,7 @@ class ProfileViewController: UIViewController{
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        let barLayer = CALayer()
-        let rectFrame: CGRect = CGRect(x:CGFloat(0), y:CGFloat(0), width:CGFloat(screenSize.width), height:CGFloat(90))
-        barLayer.frame = rectFrame
-        barLayer.backgroundColor = FaxxPink.cgColor
-        view.layer.insertSublayer(barLayer, at: 0)
-            
-        let image = UIImage(named: "leftarrow_ICON")
-        let backbutton = UIButton(type: UIButton.ButtonType.custom)
-        backbutton.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
-        backbutton.setImage(image, for: .normal)
-        backbutton.addTarget(self, action: #selector(backPressed), for: .touchUpInside)
-        backbutton.frame = CGRect(origin: CGPoint(x: 20, y: 50), size: CGSize(width:25,height: 25))
-        self.view.addSubview(backbutton)
-        
+        self.addTitle(title: (userEntity?.displayName)!)
         guard let avatarString = userEntity?.avatar else { return }
         avatarImageView.layer.borderColor = FaxxDarkPink.cgColor
         avatarImageView.layer.backgroundColor = FaxxLightPink.cgColor
@@ -71,12 +58,7 @@ class ProfileViewController: UIViewController{
     
     
     @objc func backPressed() {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
-        newViewController.userEntity = userEntity
-        newViewController.modalPresentationStyle = .fullScreen
-        newViewController.modalPresentationStyle = .custom
-        self.present(newViewController, animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func roundRect(){

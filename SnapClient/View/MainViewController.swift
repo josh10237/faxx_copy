@@ -14,62 +14,69 @@ import SCSDKCreativeKit
 import Branch
 
 class MainViewController: UIViewController {
-    var userEntity: UserEntity?
-    var URL = ""
+    
+    //MARK: Interface Builder
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var iconView: UIButton!
     @IBOutlet weak var getMessages: UIButton!
+    
+    var userIds: [String] = []
+    var externalID:String = ""
+    var userEntity: UserEntity?
+    var URL = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addTitle(title: "Messages")
+        self.addChatButton(withAction: #selector(navigateToAbout))
         
+        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
         
-        let barLayer = CALayer()
-        let screenSize: CGRect = UIScreen.main.bounds
-        let rectFrame: CGRect = CGRect(x:CGFloat(0), y:CGFloat(0), width:CGFloat(screenSize.width), height:CGFloat(100))
-        barLayer.frame = rectFrame
-        barLayer.backgroundColor = FaxxPink.cgColor
-        view.layer.insertSublayer(barLayer, at: 0)
         if userEntity != nil {
             SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
                 DispatchQueue.main.async {
                     if let avatarURL = avatarURL {
-                        self.iconView.setImage(UIImage.load(from: avatarURL), for: .normal)
-                        self.iconView.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
-                        self.iconView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
-                        
+                        self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: avatarURL)!)
                     }
                 }
             }
         }
-    }
-    @available(iOS 13.0, *)
-    func goToChat(){
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
-            newViewController.modalPresentationStyle = .fullScreen
-            newViewController.userEntity = userEntity
-            newViewController.otherUserID = "4fnuew8efwef8wn"
-            self.present(newViewController, animated: true, completion: nil)
-        }
-    
-    @available(iOS 13.0, *)
-    private func goToProfile(){
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let newViewController = storyBoard.instantiateViewController(identifier: "profile") as!ProfileViewController
-            newViewController.modalPresentationStyle = .fullScreen
-            newViewController.userEntity = userEntity
-            self.present(newViewController, animated: true, completion: nil)
-        }
-    
+        
+        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
+        _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
-    @available(iOS 13.0, *)
-    @IBAction func goButtonTapped(_ sender: Any) {
-            goToChat()
-        }
+            let data = snapshot.key
+            self!.userIds.append(data)
+            self?.tableView.reloadData()
+            //self!.addToStack(disply: data)
+        })
+        
+        //self.makeScrollable()
+    }
     
-    @available(iOS 13.0, *)
-    @IBAction func profileButtonTapped(_ sender: Any) {
-            goToProfile()
-        }
+    @objc func navigateToProfile() {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        newViewController.userEntity = userEntity
+        
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
+    @objc func navigateToAbout() {
+        print("About Page")
+    }
+    
+    
+    
+    func goToChat(otherUserId: String){
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        newViewController.userEntity = userEntity
+        newViewController.otherUserID = otherUserId
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
     
     @IBAction func getMessages(_ sender: Any) {
         getURL()
@@ -77,13 +84,9 @@ class MainViewController: UIViewController {
     
     
     func postToSnap(){
-        print("URL")
-        print(self.URL)
         let snap = SCSDKNoSnapContent()
         snap.sticker = SCSDKSnapSticker(stickerImage: #imageLiteral(resourceName: "SwipeUp"))
         snap.attachmentUrl = (self.URL)
-        print("FINAL")
-        print(snap.attachmentUrl)
         let api = SCSDKSnapAPI(content: snap)
         api.startSnapping { error in
                     
@@ -124,5 +127,23 @@ class MainViewController: UIViewController {
 
     }
 
+}
+
+//MARK:- TableView Data Source And Delegate Methods
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userIds.count
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
+        cell.nameLabel.text = userIds[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.goToChat(otherUserId: userIds[indexPath.row])
+    }
+    
+    
+}

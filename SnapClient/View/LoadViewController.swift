@@ -75,11 +75,7 @@ class LoadViewController: UIViewController {
         }
     }
     private func goToMain(_ entity: UserEntity){
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        newViewController.userEntity = entity
-        self.present(newViewController, animated: true, completion: nil)
+        StoryboardManager.segueToHome(with: entity)
     }
     
     private func goToLogIn(){

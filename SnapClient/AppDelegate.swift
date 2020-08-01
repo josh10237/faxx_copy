@@ -82,6 +82,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       Branch.getInstance().handlePushNotification(userInfo)
     }
     
+    func replaceRootViewController(with vc: UIViewController) {
+        self.window?.rootViewController = vc
+        self.window?.makeKeyAndVisible()
+    }
+    
 
 }
 
