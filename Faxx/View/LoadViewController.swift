@@ -27,11 +27,6 @@ class LoadViewController: UIViewController {
         super.viewDidAppear(animated)
         
         // Try to login. If you haven't requested yet, userEntity will be nil.
-        self.fetchUE()
-    }
-    
-    func fetchUE() {
-        // Try to login. If you haven't requested yet, userEntity will be nil.
         self.fetchSnapUserInfo({ (userEntity, error) in
             
             if let userEntity = userEntity {
@@ -56,6 +51,7 @@ class LoadViewController: UIViewController {
             }
         })
     }
+    
     func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())){
         let graphQLQuery = "{me{displayName, externalId, bitmoji{avatar}}}"
         
@@ -73,6 +69,7 @@ class LoadViewController: UIViewController {
             }) { (error, isUserLoggedOut) in
                 completion(nil, error)
         }
+        
     }
     private func goToMain(_ entity: UserEntity){
         StoryboardManager.segueToHome(with: entity)
@@ -80,7 +77,7 @@ class LoadViewController: UIViewController {
     
     private func goToLogIn(){
         let storyBoard: UIStoryboard = UIStoryboard(name: "Login", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "login") as!MainViewController
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "login") as! LoginViewController
         newViewController.modalPresentationStyle = .fullScreen
         self.present(newViewController, animated: true, completion: nil)
     }

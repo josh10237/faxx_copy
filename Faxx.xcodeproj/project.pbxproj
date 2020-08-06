@@ -22,11 +22,10 @@
 		67546C9D24C242D600312D8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 67546C9C24C242D600312D8E /* GoogleService-Info.plist */; };
 		67546CA124C2442400312D8E /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546CA024C2442400312D8E /* Constraints.swift */; };
 		67546CA324C246BA00312D8E /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546CA224C246BA00312D8E /* ChatViewController.swift */; };
-		677A6BB424D4BBE200DC1685 /* messageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BB324D4BBE200DC1685 /* messageCard.swift */; };
-		677A6BB624D4BD6300DC1685 /* MessageCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 677A6BB524D4BD6300DC1685 /* MessageCard.xib */; };
 		677A6BB824D5262200DC1685 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BB724D5262200DC1685 /* MessageTableViewCell.swift */; };
 		677A6BBA24D52DF900DC1685 /* StoryboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BB924D52DF900DC1685 /* StoryboardManager.swift */; };
 		677A6BBC24D534B300DC1685 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */; };
+		677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBD24D88C1400DC1685 /* AnonIcons.swift */; };
 		DA77A6D62EE0FBE7488DBD51 /* Pods_SnapClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56BCB97D81307E8889F84D4C /* Pods_SnapClient.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,11 +67,10 @@
 		67546C9C24C242D600312D8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		67546CA024C2442400312D8E /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		67546CA224C246BA00312D8E /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		677A6BB324D4BBE200DC1685 /* messageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messageCard.swift; sourceTree = "<group>"; };
-		677A6BB524D4BD6300DC1685 /* MessageCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCard.xib; sourceTree = "<group>"; };
 		677A6BB724D5262200DC1685 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		677A6BB924D52DF900DC1685 /* StoryboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardManager.swift; sourceTree = "<group>"; };
 		677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		677A6BBD24D88C1400DC1685 /* AnonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnonIcons.swift; sourceTree = "<group>"; };
 		ADB3FF3CCFBB419945DE0598 /* Pods-SnapClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SnapClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SnapClient/Pods-SnapClient.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,8 +99,6 @@
 				28C322FC20D3D8500045E02A /* LoginViewController.swift */,
 				67546C9524C186FF00312D8E /* LoadViewController.swift */,
 				67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */,
-				677A6BB324D4BBE200DC1685 /* messageCard.swift */,
-				677A6BB524D4BD6300DC1685 /* MessageCard.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -121,6 +117,7 @@
 				287526F220F3450800601FE0 /* UIImage+Extension.swift */,
 				677A6BB924D52DF900DC1685 /* StoryboardManager.swift */,
 				677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */,
+				677A6BBD24D88C1400DC1685 /* AnonIcons.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -130,7 +127,7 @@
 			children = (
 				67546CA024C2442400312D8E /* Constraints.swift */,
 				67546C9724C23EA200312D8E /* Bridging-Header.h */,
-				28C322CF20D3D6000045E02A /* SnapClient */,
+				28C322CF20D3D6000045E02A /* Faxx */,
 				28C322CE20D3D6000045E02A /* Products */,
 				28C322E420D3D6280045E02A /* Frameworks */,
 				8FF562124B73CF55E52A259C /* Pods */,
@@ -145,7 +142,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		28C322CF20D3D6000045E02A /* SnapClient */ = {
+		28C322CF20D3D6000045E02A /* Faxx */ = {
 			isa = PBXGroup;
 			children = (
 				287526F120F344FD00601FE0 /* Utils */,
@@ -156,7 +153,7 @@
 				28C322DE20D3D6020045E02A /* Info.plist */,
 				67546C9C24C242D600312D8E /* GoogleService-Info.plist */,
 			);
-			path = SnapClient;
+			path = Faxx;
 			sourceTree = "<group>";
 		};
 		28C322E420D3D6280045E02A /* Frameworks */ = {
@@ -183,9 +180,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		28C322CC20D3D6000045E02A /* SnapClient */ = {
+		28C322CC20D3D6000045E02A /* Faxx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "SnapClient" */;
+			buildConfigurationList = 28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "Faxx" */;
 			buildPhases = (
 				3940904CB1180623ACDAD552 /* [CP] Check Pods Manifest.lock */,
 				28C322C920D3D6000045E02A /* Sources */,
@@ -198,7 +195,7 @@
 			);
 			dependencies = (
 			);
-			name = SnapClient;
+			name = Faxx;
 			productName = SnapClient;
 			productReference = 28C322CD20D3D6000045E02A /* Faxx.app */;
 			productType = "com.apple.product-type.application";
@@ -211,14 +208,14 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0940;
-				ORGANIZATIONNAME = Kboy;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					28C322CC20D3D6000045E02A = {
 						CreatedOnToolsVersion = 9.4;
 					};
 				};
 			};
-			buildConfigurationList = 28C322C820D3D6000045E02A /* Build configuration list for PBXProject "SnapClient" */;
+			buildConfigurationList = 28C322C820D3D6000045E02A /* Build configuration list for PBXProject "Faxx" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -231,7 +228,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				28C322CC20D3D6000045E02A /* SnapClient */,
+				28C322CC20D3D6000045E02A /* Faxx */,
 			);
 		};
 /* End PBXProject section */
@@ -242,7 +239,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */,
-				677A6BB624D4BD6300DC1685 /* MessageCard.xib in Resources */,
 				67546C9424C1226D00312D8E /* Main.storyboard in Resources */,
 				67546C9D24C242D600312D8E /* GoogleService-Info.plist in Resources */,
 				28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */,
@@ -297,6 +293,7 @@
 			files = (
 				2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */,
 				287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */,
+				677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */,
 				677A6BBA24D52DF900DC1685 /* StoryboardManager.swift in Sources */,
 				67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */,
 				67546C9624C186FF00312D8E /* LoadViewController.swift in Sources */,
@@ -306,7 +303,6 @@
 				67546C9224C117E700312D8E /* MainViewController.swift in Sources */,
 				28C322D120D3D6000045E02A /* AppDelegate.swift in Sources */,
 				677A6BBC24D534B300DC1685 /* UIViewController+Extensions.swift in Sources */,
-				677A6BB424D4BBE200DC1685 /* messageCard.swift in Sources */,
 				67546CA324C246BA00312D8E /* ChatViewController.swift in Sources */,
 				2842FB3920E895EE00D34863 /* UserEntity.swift in Sources */,
 			);
@@ -451,7 +447,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = SnapClient/Info.plist;
+				INFOPLIST_FILE = Faxx/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -475,7 +471,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = SnapClient/Info.plist;
+				INFOPLIST_FILE = Faxx/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -491,7 +487,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		28C322C820D3D6000045E02A /* Build configuration list for PBXProject "SnapClient" */ = {
+		28C322C820D3D6000045E02A /* Build configuration list for PBXProject "Faxx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28C322DF20D3D6020045E02A /* Debug */,
@@ -500,7 +496,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "SnapClient" */ = {
+		28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "Faxx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28C322E220D3D6020045E02A /* Debug */,

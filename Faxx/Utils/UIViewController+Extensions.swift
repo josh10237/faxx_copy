@@ -29,9 +29,9 @@ extension UIViewController {
         profileButton.setImage(image, for: .normal)
         profileButton.addTarget(self, action: action, for: .touchUpInside)
         let profileBarButton = UIBarButtonItem(customView: profileButton)
-        let width = profileBarButton.customView?.widthAnchor.constraint(equalToConstant: 30.0)
+        let width = profileBarButton.customView?.widthAnchor.constraint(equalToConstant: 40.0)
         width?.isActive = true
-        let height = profileBarButton.customView?.heightAnchor.constraint(equalToConstant: 30.0)
+        let height = profileBarButton.customView?.heightAnchor.constraint(equalToConstant: 40.0)
         height?.isActive = true
         
         self.navigationItem.rightBarButtonItem = profileBarButton
@@ -44,9 +44,9 @@ extension UIViewController {
         chatButton.setImage(UIImage(named: "faxx_ART_MAIN1024"), for: .normal)
         chatButton.addTarget(self, action: action, for: .touchUpInside)
         let chatBarButton = UIBarButtonItem(customView: chatButton)
-        let width = chatBarButton.customView?.widthAnchor.constraint(equalToConstant: 30.0)
+        let width = chatBarButton.customView?.widthAnchor.constraint(equalToConstant: 40.0)
         width?.isActive = true
-        let height = chatBarButton.customView?.heightAnchor.constraint(equalToConstant: 30.0)
+        let height = chatBarButton.customView?.heightAnchor.constraint(equalToConstant: 40.0)
         height?.isActive = true
         
         self.navigationItem.leftBarButtonItem = chatBarButton

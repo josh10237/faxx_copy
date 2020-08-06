@@ -20,17 +20,20 @@ class MainViewController: UIViewController {
     @IBOutlet weak var iconView: UIButton!
     @IBOutlet weak var getMessages: UIButton!
     
-    var userIds: [String] = []
+    var userIds: [[String: String]] = [[:]]
     var externalID:String = ""
     var userEntity: UserEntity?
     var URL = ""
+    var dispSetYet = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("LOAD MAIN VC")
+        
         self.addTitle(title: "Messages")
         self.addChatButton(withAction: #selector(navigateToAbout))
         
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
+        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         
         if userEntity != nil {
             SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
@@ -41,18 +44,54 @@ class MainViewController: UIViewController {
                 }
             }
         }
-        
-        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-
-            let data = snapshot.key
-            self!.userIds.append(data)
-            self?.tableView.reloadData()
-            //self!.addToStack(disply: data)
-        })
-        
-        //self.makeScrollable()
     }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        userIds.removeAll()
+        tableView.reloadData()
+        DispatchQueue.main.async {
+            let qq = Constants.refs.databaseRoot.child(self.externalID).child("Info").queryLimited(toLast: 1)
+            _ = qq.observe(.childAdded, with: { [weak self] snapshot in
+                let nm = String(snapshot.key)
+                print(nm)
+                self!.dispSetYet = true
+                print("DISPSETYET")
+                print(self!.dispSetYet)
+            })
+                
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+               if !self.dispSetYet{
+                   print("Reset")
+                   let ref = Constants.refs.databaseRoot.child(self.externalID).child("Info")
+                   let content = [self.userEntity?.displayName: self.userEntity?.avatar]
+                   ref.setValue(content)
+                   self.dispSetYet = true
+               }
+            })
+        }
+
+            let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
+            _ = query.observe(.childAdded, with: { [weak self] snapshot in
+
+                let data = String(snapshot.key)
+                if data != "Info"{
+                    let query1 = Constants.refs.databaseRoot.child(data).child("Info").queryLimited(toLast: 1)
+                    _ = query1.observe(.childAdded, with: { [weak self] snapshot in
+                        let av = snapshot.value as! String
+                        let nm = String(snapshot.key)
+                        print("POOP")
+                        print(nm)
+                        print(data)
+                        print(av)
+                        self!.userIds.append(["userID": data, "displayName": nm, "avatar": av])
+                        self?.tableView.reloadData()
+                    })
+                }
+            })
+            
+        }
     
     @objc func navigateToProfile() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -69,12 +108,13 @@ class MainViewController: UIViewController {
     
     
     
-    func goToChat(otherUserId: String){
+    func goToChat(otherUserId: String, otherUserDisplayName: String){
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
         newViewController.modalPresentationStyle = .fullScreen
         newViewController.userEntity = userEntity
         newViewController.otherUserID = otherUserId
+        newViewController.otherUserDisplayName = otherUserDisplayName
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
     
@@ -85,23 +125,22 @@ class MainViewController: UIViewController {
     
     func postToSnap(){
         let snap = SCSDKNoSnapContent()
-        snap.sticker = SCSDKSnapSticker(stickerImage: #imageLiteral(resourceName: "SwipeUp"))
+        snap.sticker = SCSDKSnapSticker(stickerImage: #imageLiteral(resourceName: "swipeUp"))
         snap.attachmentUrl = (self.URL)
         let api = SCSDKSnapAPI(content: snap)
         api.startSnapping { error in
                     
             if let error = error {
                 print(error.localizedDescription)
-            } else {
-                // success
-            
             }
         }
 
     }
     
     func getURL() {
-        Branch.getInstance().setIdentity(String((userEntity?.externalID)!.dropFirst(6)))
+        print("HIIIIIII")
+        print(externalID)
+        Branch.getInstance().setIdentity(externalID)
         let buo = BranchUniversalObject.init(canonicalIdentifier: "content/12345")
         buo.title = "Swipe Up"
         buo.publiclyIndex = true
@@ -115,7 +154,7 @@ class MainViewController: UIViewController {
         lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$match_duration", withValue: "2000")
 
-        lp.addControlParam("user", withValue: String((userEntity?.externalID)!.dropFirst(6)))
+        lp.addControlParam("user", withValue: String((userEntity?.externalID)!.dropFirst(6)).replacingOccurrences(of: "/", with: ""))
         lp.addControlParam("random", withValue: UUID.init().uuidString)
         
         buo.getShortUrl(with: lp) { url, error in
@@ -137,12 +176,15 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
-        cell.nameLabel.text = userIds[indexPath.row]
+        print("HII12")
+        print(userIds[indexPath.row]["displayName"])
+        cell.nameLabel.text = userIds[indexPath.row]["displayName"]
+        cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] ?? "")
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.goToChat(otherUserId: userIds[indexPath.row])
+        self.goToChat(otherUserId: userIds[indexPath.row]["userID"]!, otherUserDisplayName: userIds[indexPath.row]["displayName"]!)
     }
     
     

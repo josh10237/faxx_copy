@@ -5,7 +5,6 @@
 //  Created by Kei Fujikawa on 2018/06/15.
 //  Copyright © 2018年 Kboy. All rights reserved.
 //
-
 import UIKit
 import SCSDKLoginKit
 
@@ -19,20 +18,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//        // Try to login. If you haven't requested yet, userEntity will be nil.
-//        self.fetchSnapUserInfo({ (userEntity, error) in
-//
-//            if let userEntity = userEntity {
-//                DispatchQueue.main.async {
-//                    self.goToMain(userEntity)
-//                }
-//            }
-//        })
-//    }
     
     // go to confirm ViewController
     private func goToLoginConfirm(_ entity: UserEntity){

@@ -16,6 +16,7 @@ class ChatViewController: JSQMessagesViewController {
     var externalID:String = ""
     var userEntity: UserEntity?
     var otherUserID:String = ""
+    var otherUserDisplayName:String = ""
     var messages = [JSQMessage]()
     lazy var outgoingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: FaxxPink)
@@ -25,12 +26,12 @@ class ChatViewController: JSQMessagesViewController {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
     override func viewDidLoad() {
-        self.addTitle(title: otherUserID)
+        self.addTitle(title: otherUserDisplayName)
         print("EXTRNL")
         print(userEntity?.externalID as Any)
         
         print(userEntity as Any)
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6))
+        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         super.viewDidLoad()
         
         
@@ -100,9 +101,11 @@ class ChatViewController: JSQMessagesViewController {
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
         let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
+        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
         let message = ["sender_id": senderId, "text": text]
 
         ref1.setValue(message)
+        ref2.setValue(message)
 
         finishSendingMessage()
     }
