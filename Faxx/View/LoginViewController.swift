@@ -2,8 +2,8 @@
 //  LoginViewController.swift
 //  SnapClient
 //
-//  Created by Kei Fujikawa on 2018/06/15.
-//  Copyright © 2018年 Kboy. All rights reserved.
+//  Created by Josh Benson on 7/16/20
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 import UIKit
 import SCSDKLoginKit
@@ -21,8 +21,8 @@ class LoginViewController: UIViewController {
     
     // go to confirm ViewController
     private func goToLoginConfirm(_ entity: UserEntity){
-        let storyboard = UIStoryboard(name: "LoginConfirm", bundle: nil)
-        let vc = storyboard.instantiateInitialViewController() as! LoginConfirmViewController
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "loginconfirm") as!LoginConfirmViewController
         vc.userEntity = entity
         present(vc, animated: true, completion: nil)
     }

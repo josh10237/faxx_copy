@@ -3,11 +3,11 @@
 //  SnapClient
 //
 //  Created by Josh Benson on 7/20/20.
-//  Copyright © 2020 Kboy. All rights reserved.
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 
 import Foundation
-
+import SCSDKLoginKit
 class ProfileViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var score: UILabel!
@@ -72,9 +72,23 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-    @objc func backPressed() {
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func logMeOut(_ sender: Any) {
+        SCSDKLoginClient.clearToken()
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Login", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "load") as! LoadViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        self.present(newViewController, animated: true, completion: nil)
     }
+    @IBAction func addGwen(_ sender: Any) {
+        let d = String(Date().timeIntervalSinceReferenceDate)
+        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
+        let message = ["sender_id": "jFF65mp1bb4lMGIRkye8Gmuab18EMfHi27z9GhfzOo", "text": "text", "time": d] as [String : Any]
+        ref1.setValue(message)
+        let ref2 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
+        let message2 = ["sender_id": "gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev", "text": "text", "time": d] as [String : Any]
+        ref2.setValue(message2)
+    }
+    
     
     func roundRect(){
         let rectWidth:CGFloat = 100
@@ -98,11 +112,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         textField.resignFirstResponder()
         let ref = Constants.refs.databaseRoot.child(self.externalID).child("Info")
         let current = displayName.text
-        print("BEFORE")
         let set = [current: avatarURL]
-
         ref.setValue(set)
-        print("AFTER")
         return true
     }
 }

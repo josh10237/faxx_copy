@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  SnapClient
 //
-//  Created by Kei Fujikawa on 2018/06/15.
-//  Copyright © 2018年 Kboy. All rights reserved.
+//  Created by Josh Benson on 2020/06/15.
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 
 import UIKit

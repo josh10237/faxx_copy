@@ -3,7 +3,7 @@
 //  SnapClient
 //
 //  Created by Josh Benson on 7/17/20.
-//  Copyright © 2020 Kboy. All rights reserved.
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 
 import Foundation
@@ -100,9 +100,17 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+//        let currentDateTime = formatter.date(from: "2016/10/08 22:31")
+        let d = String(Int(Date().timeIntervalSinceReferenceDate))
         let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
         let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
-        let message = ["sender_id": senderId, "text": text]
+        let message = ["sender_id": senderId, "text": text, "time": d]
+//        let d = Date().timeIntervalSinceReferenceDate
+//        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
+//        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
+//        let message = ["sender_id": senderId, "text": text, "time": d] as [String : Any]
 
         ref1.setValue(message)
         ref2.setValue(message)

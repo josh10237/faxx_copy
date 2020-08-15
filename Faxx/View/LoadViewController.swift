@@ -3,7 +3,7 @@
 //  SnapClient
 //
 //  Created by Josh Benson on 7/17/20.
-//  Copyright © 2020 Kboy. All rights reserved.
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 
 import Foundation
@@ -16,7 +16,6 @@ let FaxxDarkPink = UIColor(red: 200/255, green: 125/255, blue: 115/255, alpha: 1
 let FaxxLightPink = UIColor(red: 255/255, green: 210/255, blue: 200/255, alpha: 1)
 let SnapYellow = UIColor(red: 255/255, green: 252/255, blue: 0/255, alpha: 1)
 
-@available(iOS 13.0, *)
 class LoadViewController: UIViewController {
     var userEntity: UserEntity?
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -35,7 +34,7 @@ class LoadViewController: UIViewController {
                     if self.appDelegate.closedDeepLink {
                         self.appDelegate.closedDeepLink = false
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                        let newViewController = storyBoard.instantiateViewController(identifier: "chat") as!ChatViewController
+                        let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as!ChatViewController
                         newViewController.modalPresentationStyle = .fullScreen
                         newViewController.userEntity = userEntity
                         self.present(newViewController, animated: true, completion: nil)

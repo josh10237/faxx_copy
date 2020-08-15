@@ -2,8 +2,8 @@
 //  File.swift
 //  SnapClient
 //
-//  Created by Kei Fujikawa on 2018/07/09.
-//  Copyright © 2018年 Kboy. All rights reserved.
+//  Created by Josh Benson on 7/16/20/
+//  Copyright © 2020 FAXX. All rights reserved.
 //
 
 import UIKit

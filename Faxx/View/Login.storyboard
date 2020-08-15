@@ -49,7 +49,7 @@
         <!--Load View Controller-->
         <scene sceneID="x7o-wa-3uQ">
             <objects>
-                <viewController id="tG3-ih-3GM" customClass="LoadViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="load" id="tG3-ih-3GM" customClass="LoadViewController" customModule="Faxx" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B7y-Cj-T0b">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
