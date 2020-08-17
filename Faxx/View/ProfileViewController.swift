@@ -80,7 +80,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         self.present(newViewController, animated: true, completion: nil)
     }
     @IBAction func addGwen(_ sender: Any) {
-        let d = String(Date().timeIntervalSinceReferenceDate)
+        let d = String(Int(Date().timeIntervalSinceReferenceDate))
         let ref1 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
         let message = ["sender_id": "jFF65mp1bb4lMGIRkye8Gmuab18EMfHi27z9GhfzOo", "text": "text", "time": d] as [String : Any]
         ref1.setValue(message)

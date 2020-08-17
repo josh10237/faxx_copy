@@ -41,7 +41,7 @@ class ChatViewController: JSQMessagesViewController {
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
         let ref1 = Constants.refs.databaseRoot.child(self.externalID)
-        let query = ref1.child(self.otherUserID).queryLimited(toLast: 10)
+        let query = ref1.child(self.otherUserID).queryLimited(toLast: 10000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
             if  let data        = snapshot.value as? [String: String],
@@ -100,17 +100,12 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-//        let currentDateTime = formatter.date(from: "2016/10/08 22:31")
+
         let d = String(Int(Date().timeIntervalSinceReferenceDate))
         let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
         let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
         let message = ["sender_id": senderId, "text": text, "time": d]
-//        let d = Date().timeIntervalSinceReferenceDate
-//        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
-//        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
-//        let message = ["sender_id": senderId, "text": text, "time": d] as [String : Any]
+
 
         ref1.setValue(message)
         ref2.setValue(message)

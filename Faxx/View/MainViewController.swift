@@ -72,7 +72,7 @@ class MainViewController: UIViewController {
             })
         }
         
-        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 10)
+        let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 1000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             
             let data = String(snapshot.key)
@@ -85,6 +85,31 @@ class MainViewController: UIViewController {
                     _ = query2.observe(.childAdded, with: { [weak self] snapshot in
                         let data1 = snapshot.value as? [String: Any]
                         let time = data1!["time"]
+                        let senderId = data1!["sender_id"]
+                        let text = data1!["text"]
+                        print(time)
+                        let t = Int((time as! NSString).intValue)
+                        let d = Int(Date().timeIntervalSinceReferenceDate)
+                        let timeSince = d - t
+//                        self!.userIds.append(["userID": "\(data)", "displayName": nm, "avatar": av, "time_ref": "\(time)"])
+//                        let ordered = self!.userIds.sorted(by: self!.compareNames)
+//                        self?.userIds = ordered
+//                        self?.tableView.reloadData()
+                        if t != 1000000000
+                        {
+                            if timeSince > 60 {//1209600 {
+                                print("hi")
+                                let ref = Constants.refs.databaseRoot.child(self!.externalID).child(data)
+                                let refOther = Constants.refs.databaseRoot.child(data).child(self!.externalID)
+                                ref.setValue("")
+                                refOther.setValue("")
+                                let content = ["sender_id": senderId, "text": text, "time": "1000000000"]
+                                ref.childByAutoId().setValue(content)
+                                refOther.childByAutoId().setValue(content)
+                                self?.tableView.reloadData()
+                            }
+                        }
+                        //TODO: Add thing to block duplicates cuz there is weird bug when user updates to long ago while still in the app
                         self!.userIds.append(["userID": "\(data)", "displayName": nm, "avatar": av, "time_ref": "\(time)"])
                         let ordered = self!.userIds.sorted(by: self!.compareNames)
                         self?.userIds = ordered
@@ -196,13 +221,19 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             let time = data!["time"]
             let t = Int((time as! NSString).intValue)
             let final = d - t
-            if final / 604800 > 1 {
+            print("eyy")
+            print (final)
+            print(time)
+            if t == 1000000000 {
+                cell.timeLabel.text = "Long ago"
+            }
+            else if final / 604800 > 0 {
                 cell.timeLabel.text = String(final / 604800) + "w"
-            }else if final / 86400 > 1 {
+            }else if final / 86400 > 0 {
                 cell.timeLabel.text = String(final / 86400) + "d"
-            } else if final / 3600 > 1{
+            } else if final / 3600 > 0{
                 cell.timeLabel.text = String(final / 3600) + "h"
-            } else if final / 60 > 1{
+            } else if final / 60 > 0{
                 cell.timeLabel.text = String(final / 60) + "m"
             } else {
                 cell.timeLabel.text = String(final) + "s"
