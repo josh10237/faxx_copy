@@ -71,49 +71,49 @@ class MainViewController: UIViewController {
                 }
             })
         }
-        
+        //Query all convos under your user id
         let query = Constants.refs.databaseRoot.child(self.externalID).queryLimited(toLast: 1000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             
             let data = String(snapshot.key)
+            //if data (each other user id) is not info
             if data != "Info"{
+                //Query other users info
                 let query1 = Constants.refs.databaseRoot.child(data).child("Info").queryLimited(toLast: 1)
                 _ = query1.observe(.childAdded, with: { [weak self] snapshot in
                     let av = snapshot.value as! String
                     let nm = String(snapshot.key)
-                    let query2 = Constants.refs.databaseRoot.child(self!.externalID).child(data).queryLimited(toLast: 1)
+                    //query the last message in convo
+                    let query2 = Constants.refs.databaseRoot.child(self!.externalID).child(data).queryLimited(toLast: 2)
                     _ = query2.observe(.childAdded, with: { [weak self] snapshot in
-                        let data1 = snapshot.value as? [String: Any]
-                        let time = data1!["time"]
-                        let senderId = data1!["sender_id"]
-                        let text = data1!["text"]
-                        print(time)
-                        let t = Int((time as! NSString).intValue)
-                        let d = Int(Date().timeIntervalSinceReferenceDate)
-                        let timeSince = d - t
-//                        self!.userIds.append(["userID": "\(data)", "displayName": nm, "avatar": av, "time_ref": "\(time)"])
-//                        let ordered = self!.userIds.sorted(by: self!.compareNames)
-//                        self?.userIds = ordered
-//                        self?.tableView.reloadData()
-                        if t != 1000000000
-                        {
-                            if timeSince > 60 {//1209600 {
-                                print("hi")
-                                let ref = Constants.refs.databaseRoot.child(self!.externalID).child(data)
-                                let refOther = Constants.refs.databaseRoot.child(data).child(self!.externalID)
-                                ref.setValue("")
-                                refOther.setValue("")
-                                let content = ["sender_id": senderId, "text": text, "time": "1000000000"]
-                                ref.childByAutoId().setValue(content)
-                                refOther.childByAutoId().setValue(content)
-                                self?.tableView.reloadData()
+                        let key1 = snapshot.key
+                        if key1 != "tableData"{
+                            let data1 = snapshot.value as? [String: Any]
+                            let time = data1!["time"]
+                            let senderId = data1!["sender_id"]
+                            let text = data1!["text"]
+                            let t = Int((time as! NSString).intValue)
+                            let d = Int(Date().timeIntervalSinceReferenceDate)
+                            let timeSince = d - t
+                            if t != 1000000000
+                            {
+                                if timeSince > 1209600 {
+                                    let ref = Constants.refs.databaseRoot.child(self!.externalID).child(data)
+                                    let refOther = Constants.refs.databaseRoot.child(data).child(self!.externalID)
+                                    ref.setValue("")
+                                    refOther.setValue("")
+                                    let content = ["sender_id": senderId, "text": text, "time": "1000000000"]
+                                    ref.childByAutoId().setValue(content)
+                                    refOther.childByAutoId().setValue(content)
+                                    self?.tableView.reloadData()
+                                }
                             }
-                        }
-                        //TODO: Add thing to block duplicates cuz there is weird bug when user updates to long ago while still in the app
-                        self!.userIds.append(["userID": "\(data)", "displayName": nm, "avatar": av, "time_ref": "\(time)"])
-                        let ordered = self!.userIds.sorted(by: self!.compareNames)
-                        self?.userIds = ordered
-                        self?.tableView.reloadData()
+                            //TODO: Add thing to block duplicates cuz there is weird bug when user updates to long ago while still in the app
+                            self!.userIds.append(["userID": "\(data)", "displayName": nm, "avatar": av, "time_ref": "\(time)"])
+                            let ordered = self!.userIds.sorted(by: self!.compareNames)
+                            self?.userIds = ordered
+                            self?.tableView.reloadData()
+                            }
                         })
                 })
             }
@@ -209,40 +209,52 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
-        
+        cell.newMessageDot.image = nil
+        cell.nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         cell.nameLabel.text = userIds[indexPath.row]["displayName"]
         cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] ?? "")
         let d = Int(Date().timeIntervalSinceReferenceDate)
         let ref1 = Constants.refs.databaseRoot.child(self.externalID)
-        let query = ref1.child(userIds[indexPath.row]["userID"]!).queryLimited(toLast: 1)
+        let query = ref1.child(userIds[indexPath.row]["userID"]!).queryLimited(toLast: 2)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
-
-            let data = snapshot.value as? [String: Any]
-            let time = data!["time"]
-            let t = Int((time as! NSString).intValue)
-            let final = d - t
-            print("eyy")
-            print (final)
-            print(time)
-            if t == 1000000000 {
-                cell.timeLabel.text = "Long ago"
-            }
-            else if final / 604800 > 0 {
-                cell.timeLabel.text = String(final / 604800) + "w"
-            }else if final / 86400 > 0 {
-                cell.timeLabel.text = String(final / 86400) + "d"
-            } else if final / 3600 > 0{
-                cell.timeLabel.text = String(final / 3600) + "h"
-            } else if final / 60 > 0{
-                cell.timeLabel.text = String(final / 60) + "m"
-            } else {
-                cell.timeLabel.text = String(final) + "s"
-            }
+            let key1 = snapshot.key
+            if key1 != "tableData"{
+                let data = snapshot.value as? [String: Any]
+                let time = data!["time"]
+                let t = Int((time as! NSString).intValue)
+                let final = d - t
+                if t == 1000000000 {
+                    cell.timeLabel.text = "Long ago"
+                }
+                else if final / 604800 > 0 {
+                    cell.timeLabel.text = String(final / 604800) + "w"
+                }else if final / 86400 > 0 {
+                    cell.timeLabel.text = String(final / 86400) + "d"
+                } else if final / 3600 > 0{
+                    cell.timeLabel.text = String(final / 3600) + "h"
+                } else if final / 60 > 0{
+                    cell.timeLabel.text = String(final / 60) + "m"
+                } else {
+                    cell.timeLabel.text = String(final) + "s"
+                }
+            }  else {
+               let isNew = snapshot.value as! Bool
+                if isNew{
+                    cell.newMessageDot.image = UIImage(named: "unread_message")
+                    cell.nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
+                }
+           }
         })
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let newMessRef = Constants.refs.databaseRoot.child(self.externalID).child(userIds[indexPath.row]["userID"]!).child("tableData")
+        newMessRef.setValue(false)
+        print("HEYY")
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
+//        cell.newMessageDot.image = UIImage(named: "is_anon")
+//        cell.nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         self.goToChat(otherUserId: userIds[indexPath.row]["userID"]!, otherUserDisplayName: userIds[indexPath.row]["displayName"]!)
     }
     
@@ -250,10 +262,6 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print(userIds)
-            print(indexPath.row)
-            print(self.userIds[indexPath.row])
-            print(self.userIds[indexPath.row]["userID"] as Any)
             let ref = Constants.refs.databaseRoot.child(self.externalID).child(self.userIds[indexPath.row]["userID"]!)
             userIds.remove(at: indexPath.row)
             ref.removeValue()

@@ -103,12 +103,16 @@ class ChatViewController: JSQMessagesViewController {
 
         let d = String(Int(Date().timeIntervalSinceReferenceDate))
         let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
-        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).childByAutoId()
+        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID)
         let message = ["sender_id": senderId, "text": text, "time": d]
 
 
         ref1.setValue(message)
-        ref2.setValue(message)
+        ref2.childByAutoId().setValue(message)
+        let newMessRef = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).child("tableData")
+        newMessRef.setValue(true)
+        let newMessRefSelf = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).child("tableData")
+        newMessRefSelf.setValue(false)
 
         finishSendingMessage()
     }

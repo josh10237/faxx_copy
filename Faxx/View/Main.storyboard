@@ -98,8 +98,8 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b50-7r-KpY">
-                                                    <rect key="frame" x="85" y="24.5" width="108.5" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                                    <rect key="frame" x="85" y="24.5" width="106.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -117,13 +117,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="is_anon" translatesAutoresizingMaskIntoConstraints="NO" id="e0W-ys-3O1">
-                                                    <rect key="frame" x="208.5" y="22.5" width="25" height="25"/>
+                                                    <rect key="frame" x="206.5" y="22.5" width="25" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="Bql-uq-Z49"/>
                                                         <constraint firstAttribute="height" constant="25" id="qjV-MZ-b7p"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unread_message" translatesAutoresizingMaskIntoConstraints="NO" id="fCn-Ve-VNy">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fCn-Ve-VNy">
                                                     <rect key="frame" x="10" y="27.5" width="15" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="15" id="D47-vh-WNs"/>
@@ -234,6 +234,5 @@
     <resources>
         <image name="getMessages" width="300" height="82"/>
         <image name="is_anon" width="600" height="600"/>
-        <image name="unread_message" width="260" height="261"/>
     </resources>
 </document>

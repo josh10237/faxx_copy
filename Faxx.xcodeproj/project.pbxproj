@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F86C38448A2776701C934D1 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C71A09CF2775000401857612 /* Pods_Faxx.framework */; };
 		2842FB3920E895EE00D34863 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842FB3820E895EE00D34863 /* UserEntity.swift */; };
 		2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842FB3C20E89B7700D34863 /* LoginConfirmViewController.swift */; };
 		287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287526F220F3450800601FE0 /* UIImage+Extension.swift */; };
@@ -27,6 +26,7 @@
 		677A6BBA24D52DF900DC1685 /* StoryboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BB924D52DF900DC1685 /* StoryboardManager.swift */; };
 		677A6BBC24D534B300DC1685 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */; };
 		677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBD24D88C1400DC1685 /* AnonIcons.swift */; };
+		909D449A6590D990229D24AE /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6313ED8EB45B6DA2D17B2E9 /* Pods_Faxx.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,9 +69,9 @@
 		677A6BB924D52DF900DC1685 /* StoryboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardManager.swift; sourceTree = "<group>"; };
 		677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		677A6BBD24D88C1400DC1685 /* AnonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnonIcons.swift; sourceTree = "<group>"; };
-		C71A09CF2775000401857612 /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E35A7498D26D04E9ACFD3B79 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
-		FFABEAE3C9774EA3BB1A36A6 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
+		BCEAE6625A99F612A171D77A /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
+		DC1F8E7D4A2F0AB6FF0CA15D /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
+		F6313ED8EB45B6DA2D17B2E9 /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F86C38448A2776701C934D1 /* Pods_Faxx.framework in Frameworks */,
+				909D449A6590D990229D24AE /* Pods_Faxx.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +163,7 @@
 				28C322E520D3D6280045E02A /* SCSDKCoreKit.framework */,
 				28C322E620D3D6280045E02A /* SCSDKCreativeKit.framework */,
 				28C322E720D3D6280045E02A /* SCSDKLoginKit.framework */,
-				C71A09CF2775000401857612 /* Pods_Faxx.framework */,
+				F6313ED8EB45B6DA2D17B2E9 /* Pods_Faxx.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,8 +171,8 @@
 		C6F87B9902BE44B8B184AE11 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FFABEAE3C9774EA3BB1A36A6 /* Pods-Faxx.debug.xcconfig */,
-				E35A7498D26D04E9ACFD3B79 /* Pods-Faxx.release.xcconfig */,
+				DC1F8E7D4A2F0AB6FF0CA15D /* Pods-Faxx.debug.xcconfig */,
+				BCEAE6625A99F612A171D77A /* Pods-Faxx.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -184,12 +184,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "Faxx" */;
 			buildPhases = (
-				6330EC1BBD7A286EE466326D /* [CP] Check Pods Manifest.lock */,
+				17B4FE97E4DEFAFA9F3EFB13 /* [CP] Check Pods Manifest.lock */,
 				28C322C920D3D6000045E02A /* Sources */,
 				28C322CA20D3D6000045E02A /* Frameworks */,
 				28C322CB20D3D6000045E02A /* Resources */,
 				287526F020F340FB00601FE0 /* Embed Frameworks */,
-				0D6463B1661956C1FE7DD367 /* [CP] Embed Pods Frameworks */,
+				61876395F8F4043F15ED987D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,24 +249,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0D6463B1661956C1FE7DD367 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6330EC1BBD7A286EE466326D /* [CP] Check Pods Manifest.lock */ = {
+		17B4FE97E4DEFAFA9F3EFB13 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -286,6 +269,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		61876395F8F4043F15ED987D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Faxx/Pods-Faxx-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -442,7 +442,7 @@
 		};
 		28C322E220D3D6020045E02A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FFABEAE3C9774EA3BB1A36A6 /* Pods-Faxx.debug.xcconfig */;
+			baseConfigurationReference = DC1F8E7D4A2F0AB6FF0CA15D /* Pods-Faxx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -466,7 +466,7 @@
 		};
 		28C322E320D3D6020045E02A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E35A7498D26D04E9ACFD3B79 /* Pods-Faxx.release.xcconfig */;
+			baseConfigurationReference = BCEAE6625A99F612A171D77A /* Pods-Faxx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

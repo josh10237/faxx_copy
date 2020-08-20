@@ -7,7 +7,6 @@ target 'Faxx' do
   pod 'SnapSDK', :subspecs => ['SCSDKLoginKit', 'SCSDKCreativeKit', 'SCSDKBitmojiKit']
   pod 'Firebase/Core'
   pod 'Firebase/Storage'
-  pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'JSQMessagesViewController'
   pod 'Branch'

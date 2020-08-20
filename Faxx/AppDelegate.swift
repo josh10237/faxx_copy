@@ -9,6 +9,7 @@
 import UIKit
 import SCSDKLoginKit
 import Firebase
+import FirebaseCore
 import Branch
 
 @UIApplicationMain
