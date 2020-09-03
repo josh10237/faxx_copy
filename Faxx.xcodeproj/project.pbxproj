@@ -18,7 +18,6 @@
 		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
 		674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674866A424EE162F005D3F82 /* AnonIcons.xcassets */; };
 		6748BC4A24FE0D260014018E /* fax_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6748BC4924FE0D260014018E /* fax_animation.gif */; };
-		67546C9024C0D46D00312D8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67546C8F24C0D46D00312D8E /* Assets.xcassets */; };
 		67546C9224C117E700312D8E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546C9124C117E700312D8E /* MainViewController.swift */; };
 		67546C9424C1226D00312D8E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67546C9324C1226D00312D8E /* Main.storyboard */; };
 		67546C9624C186FF00312D8E /* LoadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546C9524C186FF00312D8E /* LoadViewController.swift */; };
@@ -30,6 +29,7 @@
 		677A6BBC24D534B300DC1685 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */; };
 		677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBD24D88C1400DC1685 /* AnonIcons.swift */; };
 		67BDF9CB24FF03210021E8D5 /* faxx_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9CA24FF03210021E8D5 /* faxx_animation.gif */; };
+		67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9CC2501B2640021E8D5 /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,7 +62,6 @@
 		67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		674866A424EE162F005D3F82 /* AnonIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AnonIcons.xcassets; sourceTree = "<group>"; };
 		6748BC4924FE0D260014018E /* fax_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = fax_animation.gif; path = ../../../fax_animation.gif; sourceTree = "<group>"; };
-		67546C8F24C0D46D00312D8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../../Downloads/AppIcons (3)/Assets.xcassets"; sourceTree = "<group>"; };
 		67546C9124C117E700312D8E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		67546C9324C1226D00312D8E /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		67546C9524C186FF00312D8E /* LoadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		677A6BBD24D88C1400DC1685 /* AnonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnonIcons.swift; sourceTree = "<group>"; };
 		67BDF9CA24FF03210021E8D5 /* faxx_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = faxx_animation.gif; path = ../../../../Downloads/faxx_animation.gif; sourceTree = "<group>"; };
+		67BDF9CC2501B2640021E8D5 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		C7B6E2426332371DC98E8001 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
 		CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1661C929477970C3032A131 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,8 +157,8 @@
 				2842FB3F20E8A8C800D34863 /* Model */,
 				2842FB3E20E8A8C100D34863 /* View */,
 				28C322D020D3D6000045E02A /* AppDelegate.swift */,
-				67546C8F24C0D46D00312D8E /* Assets.xcassets */,
 				28C322DE20D3D6020045E02A /* Info.plist */,
+				67BDF9CC2501B2640021E8D5 /* Media.xcassets */,
 				67546C9C24C242D600312D8E /* GoogleService-Info.plist */,
 				674866A424EE162F005D3F82 /* AnonIcons.xcassets */,
 			);
@@ -253,7 +253,7 @@
 				67546C9D24C242D600312D8E /* GoogleService-Info.plist in Resources */,
 				67BDF9CB24FF03210021E8D5 /* faxx_animation.gif in Resources */,
 				28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */,
-				67546C9024C0D46D00312D8E /* Assets.xcassets in Resources */,
+				67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */,
 				674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
