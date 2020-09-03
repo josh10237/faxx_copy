@@ -30,8 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let s = (params as? [String: AnyObject])
             if s!["user"] != nil {
                 let posterID = (s!["user"]) as! String
-                print("POSTER ID")
-                print(posterID)
                 let externalID = String((self.sharedUserEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
                 let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
                 if keyWindow != nil {
@@ -45,13 +43,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         newViewController.modalPresentationStyle = .fullScreen
 
                         if self.sharedUserEntity != nil {
+                            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(externalID).child(posterID)
+                            let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(posterID).child("AAAAA3AAAAA" + externalID)
+//                            userDataRefMe.child("Info").setValue(<#T##value: Any?##Any?#>)
+//                            userDataRefMe.child("Info").setValue(<#T##value: Any?##Any?#>)
+                            
                             newViewController.userEntity = self.sharedUserEntity
                             newViewController.otherUserID = posterID
                             newViewController.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
                             topController.present(newViewController, animated: true, completion: nil)
                             //TODO FIx bug with deep link chat screen
                             //topController.navigationController?.pushViewController(newViewController, animated: true)
-                            let anonID = "AAAAA" + externalID
                             //Get your own display name
 //                            ref = Constants.refs.databaseRoot.child(externalID).childByAutoId()
 //                            ref = Constants.refs.databaseRoot.child(externalID).child(posterID).childByAutoId()

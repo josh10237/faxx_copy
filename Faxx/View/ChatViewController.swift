@@ -40,8 +40,8 @@ class ChatViewController: JSQMessagesViewController {
         inputToolbar.contentView.leftBarButtonItem = nil
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-        let ref1 = Constants.refs.databaseRoot.child(self.externalID)
-        let query = ref1.child(self.otherUserID).queryLimited(toLast: 10000)
+        let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID)
+        let query = messageDataRefMe.queryLimited(toLast: 10000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
 
             if  let data        = snapshot.value as? [String: String],
@@ -101,18 +101,16 @@ class ChatViewController: JSQMessagesViewController {
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
 
-        let d = String(Int(Date().timeIntervalSinceReferenceDate))
-        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).childByAutoId()
-        let ref2 = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID)
-        let message = ["sender_id": senderId, "text": text, "time": d]
-
-
-        ref1.setValue(message)
-        ref2.childByAutoId().setValue(message)
-        let newMessRef = Constants.refs.databaseRoot.child(self.otherUserID).child(self.externalID).child("tableData")
-        newMessRef.setValue(true)
-        let newMessRefSelf = Constants.refs.databaseRoot.child(self.externalID).child(self.otherUserID).child("tableData")
-        newMessRefSelf.setValue(false)
+        let d = Int(Date().timeIntervalSinceReferenceDate)
+        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
+        let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
+        let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID).childByAutoId()
+        let messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child(self.externalID).childByAutoId()
+        let message = ["sender_id": senderId, "text": text]
+        messageDataRefMe.setValue(message)
+        messageDataRefThem.setValue(message)
+        userDataRefMe.child("time").setValue(d)
+        userDataRefThem.child("isNew").setValue(true)
 
         finishSendingMessage()
     }

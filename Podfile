@@ -10,5 +10,6 @@ target 'Faxx' do
   pod 'Firebase/Database'
   pod 'JSQMessagesViewController'
   pod 'Branch'
+
   
 end

@@ -13,9 +13,10 @@ class MessageTableViewCell: UITableViewCell {
     //MARK:- Interface Builder
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var isAnonBadge: UIImageView!
     @IBOutlet weak var newMessageDot: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var anonLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

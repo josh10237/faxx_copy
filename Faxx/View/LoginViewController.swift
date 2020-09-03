@@ -7,16 +7,29 @@
 //
 import UIKit
 import SCSDKLoginKit
+//import SwiftGifOrigin
+
 
 class LoginViewController: UIViewController {
-
+    @IBOutlet weak var gifImage: UIImageView!
+    
     override func viewDidLoad() {
-        let vlayer = CAGradientLayer()
-        vlayer.frame = view.bounds
-        vlayer.colors=[SnapYellow.cgColor, FaxxPink.cgColor]
-        view.layer.insertSublayer(vlayer, at: 0)
-        super.viewDidLoad()
-        
+//        let vlayer = CAGradientLayer()
+//        vlayer.frame = view.bounds
+//        vlayer.colors=[SnapYellow.cgColor, FaxxPink.cgColor]
+//        view.layer.insertSublayer(vlayer, at: 0)
+//        super.viewDidLoad()
+//        self.gifImage.image = UIImage.gif(name: "faxx_animation")
+//        self.gifImage.image = UIImage.gif(name: "faxx_animation.gif")
+//        guard let confettiImageView = UIImageView.fromGif(frame: view.frame, resourceName: "faxx_animation") else { return }
+        //confettiImageView.animationDuration = 3
+        //confettiImageView.animationRepeatCount = 1
+//        view.addSubview(confettiImageView)
+//        confettiImageView.startAnimating()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+//            confettiImageView.stopAnimating()
+//        })
+
     }
     
     // go to confirm ViewController
@@ -76,5 +89,27 @@ class LoginViewController: UIViewController {
                 })
             }
         })
+    }
+}
+
+extension UIImageView {
+    static func fromGif(frame: CGRect, resourceName: String) -> UIImageView? {
+        guard let path = Bundle.main.path(forResource: resourceName, ofType: "gif") else {
+            print("Gif does not exist at that path")
+            return nil
+        }
+        let url = URL(fileURLWithPath: path)
+        guard let gifData = try? Data(contentsOf: url),
+            let source =  CGImageSourceCreateWithData(gifData as CFData, nil) else { return nil }
+        var images = [UIImage]()
+        let imageCount = CGImageSourceGetCount(source)
+        for i in 0 ..< imageCount {
+            if let image = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                images.append(UIImage(cgImage: image))
+            }
+        }
+        let gifImageView = UIImageView(frame: frame)
+        gifImageView.animationImages = images
+        return gifImageView
     }
 }

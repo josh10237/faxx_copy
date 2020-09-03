@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var displayName: UITextField!
     var externalID = ""
     var avatarURL = ""
+    var myDispName = ""
     var userEntity: UserEntity?
     
     let screenSize: CGRect = UIScreen.main.bounds
@@ -22,14 +23,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         super.viewDidLoad()
         displayName.delegate = self
         
-        let query = Constants.refs.databaseRoot.child(externalID).child("Info").queryLimited(toLast: 1)
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            let nm = String(snapshot.key)
-            self!.avatarURL = snapshot.value as! String
-            self!.displayName.text = nm
-            //self!.displayName.isUserInteractionEnabled = false
-            self!.addTitle(title: nm)
-        })
+        //self!.displayName.isUserInteractionEnabled = false
+        self.addTitle(title: myDispName)
         
         guard let avatarString = userEntity?.avatar else { return }
         avatarImageView.layer.borderColor = FaxxDarkPink.cgColor

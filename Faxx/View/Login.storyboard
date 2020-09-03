@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tG3-ih-3GM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tG3-ih-3GM">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -16,31 +16,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faxplussnap" translatesAutoresizingMaskIntoConstraints="NO" id="lPi-kw-gW2">
-                                <rect key="frame" x="50" y="150" width="275" height="155"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faxx_ART_MAIN1024" translatesAutoresizingMaskIntoConstraints="NO" id="QSN-KT-5oo">
+                                <rect key="frame" x="62.5" y="100" width="250" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="3q4-lE-mUm"/>
+                                    <constraint firstAttribute="width" constant="250" id="xG3-YV-VCB"/>
+                                </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8A-Nz-sOV">
-                                <rect key="frame" x="50" y="455" width="275" height="99"/>
+                                <rect key="frame" x="20" y="487" width="335" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="U7S-nQ-6HY"/>
+                                    <constraint firstAttribute="width" constant="335" id="UvP-qm-Zg4"/>
+                                </constraints>
                                 <state key="normal" image="loginWithSnap"/>
                                 <connections>
                                     <action selector="loginButtonTapped:" destination="bkv-mi-3OK" eventType="touchUpInside" id="vF1-pe-8kj"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcometofaxxwhite" translatesAutoresizingMaskIntoConstraints="NO" id="Wst-og-bEH">
-                                <rect key="frame" x="37.5" y="73" width="300" height="27"/>
-                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.99607843139999996" green="0.68627450980000004" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Wst-og-bEH" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="1Fa-dt-7dH"/>
-                            <constraint firstItem="J8A-Nz-sOV" firstAttribute="top" secondItem="lPi-kw-gW2" secondAttribute="bottom" constant="150" id="4C3-e1-f8V"/>
-                            <constraint firstItem="lPi-kw-gW2" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="Ajr-YA-RAV"/>
                             <constraint firstItem="J8A-Nz-sOV" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="EsN-Yz-tju"/>
-                            <constraint firstItem="lPi-kw-gW2" firstAttribute="top" secondItem="Wst-og-bEH" secondAttribute="bottom" constant="50" id="GYg-JO-h8f"/>
-                            <constraint firstItem="lPi-kw-gW2" firstAttribute="top" secondItem="afO-va-6js" secondAttribute="top" constant="150" id="zx3-3D-gsF"/>
+                            <constraint firstItem="QSN-KT-5oo" firstAttribute="top" secondItem="afO-va-6js" secondAttribute="top" constant="100" id="G9z-5Y-PjE"/>
+                            <constraint firstItem="QSN-KT-5oo" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="TRR-Va-IC0"/>
+                            <constraint firstItem="afO-va-6js" firstAttribute="bottom" secondItem="J8A-Nz-sOV" secondAttribute="bottom" constant="100" id="jeF-Z0-hgi"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="afO-va-6js"/>
                     </view>
+                    <connections>
+                        <outlet property="gifImage" destination="QSN-KT-5oo" id="QbX-wQ-Mj7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wKN-o7-e4b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -78,54 +84,85 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wL1-Xw-s8B">
-                                <rect key="frame" x="159" y="60" width="57.5" height="26"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wL1-Xw-s8B">
+                                <rect key="frame" x="146.5" y="60" width="82" height="26.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkv-pm-CIU">
-                                <rect key="frame" x="37.5" y="468" width="300" height="99"/>
-                                <state key="normal" image="FAXX_lets_go"/>
-                                <connections>
-                                    <action selector="goButtonTapped:" destination="wNT-Bd-Z0T" eventType="touchUpInside" id="Ziv-QH-f0F"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z8u-SG-DGT">
-                                <rect key="frame" x="137.5" y="111" width="100" height="100"/>
+                                <rect key="frame" x="137.5" y="111.5" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="3fK-NM-3gG"/>
                                     <constraint firstAttribute="width" constant="100" id="ovM-A9-oQW"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-bw-rga">
+                                <rect key="frame" x="61" y="262" width="253" height="105"/>
+                                <state key="normal" image="female"/>
+                                <connections>
+                                    <action selector="goFemale:" destination="wNT-Bd-Z0T" eventType="touchUpInside" id="hbM-qO-UDu"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once you select your gender you cannot change it later on!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4D-A9-wsc">
+                                <rect key="frame" x="20.5" y="627" width="334.5" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Z0l-RE-Aqc" userLabel="height &gt; 20"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w89-fx-hqD">
+                                <rect key="frame" x="61" y="512" width="253" height="105"/>
+                                <state key="normal" image="nonBinary"/>
+                                <connections>
+                                    <action selector="goNonBinary:" destination="wNT-Bd-Z0T" eventType="touchUpInside" id="Em2-XS-eCd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHh-JL-ov0">
+                                <rect key="frame" x="61" y="387" width="253" height="105"/>
+                                <state key="normal" image="male"/>
+                                <connections>
+                                    <action selector="goMale:" destination="wNT-Bd-Z0T" eventType="touchUpInside" id="Ex5-0j-56B"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="z8u-SG-DGT" firstAttribute="top" secondItem="wL1-Xw-s8B" secondAttribute="bottom" constant="25" id="1dg-83-h29"/>
+                            <constraint firstItem="ZHh-JL-ov0" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="5Ha-vJ-WL2"/>
+                            <constraint firstItem="x4D-A9-wsc" firstAttribute="bottom" secondItem="6Xv-Mo-1Su" secondAttribute="bottom" id="8M0-6i-7ZC"/>
                             <constraint firstItem="z8u-SG-DGT" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="NPV-pN-zNi"/>
+                            <constraint firstItem="x4D-A9-wsc" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="Yi4-uH-9JS"/>
                             <constraint firstItem="wL1-Xw-s8B" firstAttribute="top" secondItem="6Xv-Mo-1Su" secondAttribute="top" constant="60" id="YlH-Wh-stT"/>
-                            <constraint firstItem="jkv-pm-CIU" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="u4Y-1m-XW8"/>
-                            <constraint firstItem="6Xv-Mo-1Su" firstAttribute="bottom" secondItem="jkv-pm-CIU" secondAttribute="bottom" constant="100" id="uVv-C6-IPw"/>
+                            <constraint firstItem="x4D-A9-wsc" firstAttribute="bottom" secondItem="6Xv-Mo-1Su" secondAttribute="bottom" id="axf-eK-crf"/>
+                            <constraint firstItem="x4D-A9-wsc" firstAttribute="top" secondItem="w89-fx-hqD" secondAttribute="bottom" constant="10" id="lKK-ws-fKy"/>
+                            <constraint firstItem="w89-fx-hqD" firstAttribute="top" secondItem="ZHh-JL-ov0" secondAttribute="bottom" constant="20" id="mWJ-tS-2Yr"/>
+                            <constraint firstItem="ZHh-JL-ov0" firstAttribute="top" secondItem="Z8Y-bw-rga" secondAttribute="bottom" constant="20" id="mva-So-Xuf"/>
+                            <constraint firstItem="w89-fx-hqD" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="ow8-00-EAh"/>
+                            <constraint firstItem="Z8Y-bw-rga" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="tvI-im-wRa"/>
                             <constraint firstItem="wL1-Xw-s8B" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="wOg-Fy-4Qz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Xv-Mo-1Su"/>
                     </view>
                     <connections>
                         <outlet property="avatarImageView" destination="z8u-SG-DGT" id="DGW-Mq-CxF"/>
-                        <outlet property="goButton" destination="jkv-pm-CIU" id="ipr-vY-xVw"/>
+                        <outlet property="femaleGoButton" destination="Z8Y-bw-rga" id="PBA-rR-tDF"/>
+                        <outlet property="maleGoButton" destination="ZHh-JL-ov0" id="btM-SE-UWA"/>
                         <outlet property="nameLabel" destination="wL1-Xw-s8B" id="e7b-EC-GWU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bm9-rz-zBs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="689" y="-7"/>
+            <point key="canvasLocation" x="688.79999999999995" y="-7.6461769115442282"/>
         </scene>
     </scenes>
     <resources>
-        <image name="FAXX_lets_go" width="300" height="99"/>
-        <image name="faxplussnap" width="275" height="155"/>
         <image name="faxx_ART_MAIN1024" width="512" height="512"/>
-        <image name="loginWithSnap" width="275" height="99"/>
-        <image name="welcometofaxxwhite" width="300" height="27"/>
+        <image name="female" width="253" height="105"/>
+        <image name="loginWithSnap" width="813" height="184"/>
+        <image name="male" width="253" height="105"/>
+        <image name="nonBinary" width="253" height="105"/>
     </resources>
 </document>

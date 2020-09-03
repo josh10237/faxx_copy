@@ -8,12 +8,8 @@
 import Foundation
 
 
-//extension UIViewController {
-//
-//    func getAnon(){
-//        let arr = ["Race Car", "Toilet Paper", "Giraffe", "Hippo", "Racket", "Wheel", "Cheese", "Hotdog", "Camera"]
-//        let assigned = arr.randomElement()
-//        return assigned
-//    }
-//
-//}
+func n() -> String?{
+    let arr = ["Race Car", "Toilet Paper", "Giraffe", "Hippo", "Racket", "Wheel", "Cheese", "Hotdog", "Camera"]
+    let assigned = arr.randomElement()//! as String
+    return assigned
+}
