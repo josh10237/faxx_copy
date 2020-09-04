@@ -81,13 +81,14 @@ class MainViewController: UIViewController {
                 self!.myDispName = snpsht.allKeys.first as! String
             } else if theirID != "Sex" {
                 let snpsht = snapshot.value as! NSDictionary
+                print(snapshot)
+                print(snpsht)
                 let theirInfo = snpsht["Info"] as! NSDictionary
                 let displayName = theirInfo.allKeys.first
                 let avatarURL = theirInfo.allValues.first
                 let time = snpsht.value(forKey: "time")
                 let isNew = snpsht.value(forKey: "isNew")
-                let isAnon = snpsht.value(forKey: "isAnon")
-                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": "\(time)", "isNew": isNew, "isAnon": isAnon])
+                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew])
                 let ordered = self!.userIds.sorted(by: self!.compareNames)
                 self?.userIds = ordered
                 self?.tableView.reloadData()
@@ -190,15 +191,16 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             cell.newMessageDot.image = nil
             cell.nameLabel.textColor = UIColor.darkGray
         }
-        if userIds[indexPath.row]["isAnon"] as! Int == 1{
-            cell.anonLabel.isHidden = false
-        } else {
-            cell.anonLabel.isHidden = true
-        }
+//        if userIds[indexPath.row]["isAnon"] as! Int == 1{
+//            cell.anonLabel.isHidden = false
+//        } else {
+//            cell.anonLabel.isHidden = true
+//        }
         cell.nameLabel.text = userIds[indexPath.row]["displayName"] as! String
         cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] as! String)
         let d = Int(Date().timeIntervalSinceReferenceDate)
-        let t = userIds[indexPath.row]["isAnon"] as! Int
+        print(userIds)
+        var t = userIds[indexPath.row]["time_ref"] as! Int
         let final = d - t
         if t == 1000000000 {
             cell.timeLabel.text = "Long ago"
@@ -219,7 +221,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if userIds[indexPath.row]["isNew"] as! Int == 1{
-            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(userIds[indexPath.row]["displayName"] as! String)
+            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(userIds[indexPath.row]["userID"] as! String)
             userDataRefMe.child("isNew").setValue(false)
         }
         self.goToChat(otherUserId: userIds[indexPath.row]["userID"] as! String, otherUserDisplayName: userIds[indexPath.row]["displayName"] as! String)
@@ -229,9 +231,11 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let ref = Constants.refs.databaseRoot.child(self.externalID).child(self.userIds[indexPath.row]["userID"] as! String)
+            let userDataRef = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.userIds[indexPath.row]["userID"] as! String)
+            let messageDataRef = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.userIds[indexPath.row]["userID"] as! String)
             userIds.remove(at: indexPath.row)
-            ref.removeValue()
+            userDataRef.removeValue()
+            messageDataRef.removeValue()
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

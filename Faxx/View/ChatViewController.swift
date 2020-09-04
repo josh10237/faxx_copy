@@ -43,6 +43,8 @@ class ChatViewController: JSQMessagesViewController {
         let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID)
         let query = messageDataRefMe.queryLimited(toLast: 10000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
+            print("lmaoooo")
+            print(snapshot)
 
             if  let data        = snapshot.value as? [String: String],
                 let id          = data["sender_id"],
@@ -103,7 +105,7 @@ class ChatViewController: JSQMessagesViewController {
 
         let d = Int(Date().timeIntervalSinceReferenceDate)
         let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
-        let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
+        let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child(self.externalID)
         let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID).childByAutoId()
         let messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child(self.externalID).childByAutoId()
         let message = ["sender_id": senderId, "text": text]

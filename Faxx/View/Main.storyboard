@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -163,8 +163,8 @@
                                     <outlet property="delegate" destination="fUC-gq-ALt" id="lCh-fn-kcO"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gn4-aY-3iq">
-                                <rect key="frame" x="57" y="672" width="300" height="82"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gn4-aY-3iq">
+                                <rect key="frame" x="0.0" y="710" width="414" height="44"/>
                                 <state key="normal" image="getMessages"/>
                                 <connections>
                                     <action selector="getMessages:" destination="fUC-gq-ALt" eventType="touchUpInside" id="Fs8-Jx-ja1"/>
@@ -233,6 +233,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="getMessages" width="300" height="82"/>
+        <image name="getMessages" width="298" height="44"/>
     </resources>
 </document>
