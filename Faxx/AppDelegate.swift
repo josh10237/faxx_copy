@@ -44,9 +44,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                         if self.sharedUserEntity != nil {
                             let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(externalID).child(posterID)
-                            let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(posterID).child("AAAAA3AAAAA" + externalID)
-//                            userDataRefMe.child("Info").setValue(<#T##value: Any?##Any?#>)
-//                            userDataRefMe.child("Info").setValue(<#T##value: Any?##Any?#>)
+                            let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(posterID).child("ZAAAAA3AAAAAZ" + externalID)
+                            let d = Int(Date().timeIntervalSinceReferenceDate)
+                            
+                            let query1 = Constants.refs.databaseRoot.child("UserData").child(posterID).child("Info").queryLimited(toFirst: 1)
+                            _ = query1.observe(.childAdded, with: { [weak self] snapshot in
+                                print("A!1")
+                                print(snapshot)
+                                //add their info to my user data
+                                let theirInfoAvatar = snapshot.value
+                                let theirInfoDisplayName = snapshot.key
+                                let content = ["Info": [theirInfoDisplayName: theirInfoAvatar], "isNew": false, "time": d] as [String : Any]
+                                userDataRefMe.setValue(content)
+                            })
+                            
+//                            add my info with anon delimiter to their info
+                            let content = ["Info": ["AnonDisplayName": "AnonAvatar"], "isNew": true, "time": d] as [String : Any]
+                            userDataRefThem.setValue(content)
+                            
+                            
                             
                             newViewController.userEntity = self.sharedUserEntity
                             newViewController.otherUserID = posterID

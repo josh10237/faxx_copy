@@ -74,21 +74,21 @@ class MainViewController: UIViewController {
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             let theirID = String(snapshot.key)
             //if data (each other user id) is not info
-            print("poopoo")
-            print(theirID)
             if theirID == "Info"{
                 let snpsht = snapshot.value as! NSDictionary
                 self!.myDispName = snpsht.allKeys.first as! String
             } else if theirID != "Sex" {
+                print("heyyyyyoooo")
+                print(snapshot.value)
                 let snpsht = snapshot.value as! NSDictionary
-                print(snapshot)
-                print(snpsht)
                 let theirInfo = snpsht["Info"] as! NSDictionary
                 let displayName = theirInfo.allKeys.first
                 let avatarURL = theirInfo.allValues.first
                 let time = snpsht.value(forKey: "time")
                 let isNew = snpsht.value(forKey: "isNew")
                 self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew])
+                print("HTTT")
+                print(self!.userIds)
                 let ordered = self!.userIds.sorted(by: self!.compareNames)
                 self?.userIds = ordered
                 self?.tableView.reloadData()
@@ -97,6 +97,7 @@ class MainViewController: UIViewController {
     }
     
     func compareNames(s1:[String : Any], s2:[String : Any]) -> Bool {
+        print(s1["time_ref"])
         let v1 = s1["time_ref"] as! Int
         let v2 = s2["time_ref"] as! Int
         return v1 > v2
