@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import FirebaseCore
+import FirebaseDatabase
 
 struct Constants
 {

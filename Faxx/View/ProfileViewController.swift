@@ -22,7 +22,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         super.viewDidLoad()
         displayName.delegate = self
-        
+        displayName.backgroundColor = UIColor(patternImage: UIImage(named: "ProfileNameBar")!)
         //self!.displayName.isUserInteractionEnabled = false
         self.addTitle(title: myDispName)
         
@@ -35,16 +35,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         avatarImageView.clipsToBounds = true
         avatarImageView.load(from: avatarString)
         
-        let backSplashLayer = CALayer()
-        let rectWidth:CGFloat = 300
-        let rectHeight:CGFloat = 350
-        let xf:CGFloat = (self.screenSize.width  - rectWidth)  / 2
-        let yf:CGFloat = (self.screenSize.height - rectHeight) / 5
-        let backSplashRectFrame: CGRect = CGRect(x: xf, y: yf, width: rectWidth, height: rectHeight)
-        backSplashLayer.cornerRadius = 25
-        backSplashLayer.frame = backSplashRectFrame
-        backSplashLayer.backgroundColor = FaxxPink.cgColor
-        view.layer.insertSublayer(backSplashLayer, at: 0)
+//        let backSplashLayer = CALayer()
+//        let rectWidth:CGFloat = 300
+//        let rectHeight:CGFloat = 350
+//        let xf:CGFloat = (self.screenSize.width  - rectWidth)  / 2
+//        let yf:CGFloat = (self.screenSize.height - rectHeight) / 5
+//        let backSplashRectFrame: CGRect = CGRect(x: xf, y: yf, width: rectWidth, height: rectHeight)
+//        backSplashLayer.cornerRadius = 25
+//        backSplashLayer.frame = backSplashRectFrame
+//        backSplashLayer.backgroundColor = FaxxPink.cgColor
+//        view.layer.insertSublayer(backSplashLayer, at: 0)
+//        
         
 //        for h in 1...3 {
 //            let boxLayer = CALayer()
