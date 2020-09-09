@@ -16,6 +16,7 @@
 		28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C322FC20D3D8500045E02A /* LoginViewController.swift */; };
 		530421E8CAE311BA593C48A1 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */; };
 		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
+		674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 674625A825099878002F42AF /* BalooPaaji-Regular.ttf */; };
 		674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674866A424EE162F005D3F82 /* AnonIcons.xcassets */; };
 		67546C9224C117E700312D8E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67546C9124C117E700312D8E /* MainViewController.swift */; };
 		67546C9424C1226D00312D8E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67546C9324C1226D00312D8E /* Main.storyboard */; };
@@ -59,6 +60,13 @@
 		28C322FA20D3D83C0045E02A /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		28C322FC20D3D8500045E02A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		674625A62508CFCC002F42AF /* Faxx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Faxx.entitlements; sourceTree = "<group>"; };
+		674625A825099878002F42AF /* BalooPaaji-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji-Regular.ttf"; sourceTree = "<group>"; };
+		674625AA250998E2002F42AF /* BalooPaaji2-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji2-Bold.ttf"; sourceTree = "<group>"; };
+		674625AB250998E2002F42AF /* BalooPaaji2-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji2-ExtraBold.ttf"; sourceTree = "<group>"; };
+		674625AC250998E2002F42AF /* BalooPaaji2-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji2-Regular.ttf"; sourceTree = "<group>"; };
+		674625AD250998E2002F42AF /* BalooPaaji2-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji2-Medium.ttf"; sourceTree = "<group>"; };
+		674625AE250998E2002F42AF /* BalooPaaji2-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji2-SemiBold.ttf"; sourceTree = "<group>"; };
 		674866A424EE162F005D3F82 /* AnonIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AnonIcons.xcassets; sourceTree = "<group>"; };
 		67546C9124C117E700312D8E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		67546C9324C1226D00312D8E /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -150,6 +158,8 @@
 		28C322CF20D3D6000045E02A /* Faxx */ = {
 			isa = PBXGroup;
 			children = (
+				674625A725099831002F42AF /* fonts */,
+				674625A62508CFCC002F42AF /* Faxx.entitlements */,
 				287526F120F344FD00601FE0 /* Utils */,
 				2842FB3F20E8A8C800D34863 /* Model */,
 				2842FB3E20E8A8C100D34863 /* View */,
@@ -172,6 +182,19 @@
 				CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		674625A725099831002F42AF /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				674625A825099878002F42AF /* BalooPaaji-Regular.ttf */,
+				674625AA250998E2002F42AF /* BalooPaaji2-Bold.ttf */,
+				674625AB250998E2002F42AF /* BalooPaaji2-ExtraBold.ttf */,
+				674625AD250998E2002F42AF /* BalooPaaji2-Medium.ttf */,
+				674625AC250998E2002F42AF /* BalooPaaji2-Regular.ttf */,
+				674625AE250998E2002F42AF /* BalooPaaji2-SemiBold.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 		C6F87B9902BE44B8B184AE11 /* Pods */ = {
@@ -247,6 +270,7 @@
 				28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */,
 				67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */,
 				67546C9424C1226D00312D8E /* Main.storyboard in Resources */,
+				674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */,
 				28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */,
 				67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */,
 				674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */,
@@ -453,6 +477,7 @@
 			baseConfigurationReference = D1661C929477970C3032A131 /* Pods-Faxx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6D99Z2R35B;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -477,6 +502,7 @@
 			baseConfigurationReference = C7B6E2426332371DC98E8001 /* Pods-Faxx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6D99Z2R35B;
 				FRAMEWORK_SEARCH_PATHS = (

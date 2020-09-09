@@ -97,7 +97,6 @@ class MainViewController: UIViewController {
     }
     
     func compareNames(s1:[String : Any], s2:[String : Any]) -> Bool {
-        print(s1["time_ref"])
         let v1 = s1["time_ref"] as! Int
         let v2 = s2["time_ref"] as! Int
         return v1 > v2
