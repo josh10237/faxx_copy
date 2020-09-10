@@ -12,6 +12,26 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var score: UILabel!
     @IBOutlet weak var displayName: UITextField!
+    
+    @IBOutlet weak var mainScore: UILabel!
+    @IBOutlet weak var numOneBest: UIImageView!
+    
+    @IBOutlet weak var numTwoBest: UIImageView!
+    
+    @IBOutlet weak var numThreeBest: UIImageView!
+    
+    @IBOutlet weak var numFourBest: UIImageView!
+    
+    @IBOutlet weak var numFiveBest: UIImageView!
+    
+    @IBOutlet weak var scoreOne: UILabel!
+    
+    @IBOutlet weak var scoreFour: UILabel!
+    
+    @IBOutlet weak var scoreThree: UILabel!
+    
+    @IBOutlet weak var scoreFive: UILabel!
+    @IBOutlet weak var scoreTwo: UILabel!
     var externalID = ""
     var avatarURL = ""
     var myDispName = ""
@@ -27,9 +47,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         self.addTitle(title: myDispName)
         
         guard let avatarString = userEntity?.avatar else { return }
-        avatarImageView.layer.borderColor = FaxxDarkPink.cgColor
-        avatarImageView.layer.backgroundColor = FaxxLightPink.cgColor
-        avatarImageView.layer.borderWidth = 5
+        
+       // avatarImageView.layer.borderColor = FaxxDarkPink.cgColor
+       // avatarImageView.layer.backgroundColor = FaxxLightPink.cgColor
+       // avatarImageView.layer.borderWidth = 5
         avatarImageView.layer.cornerRadius = 70
         //avatarImageView.layer.frame =
         avatarImageView.clipsToBounds = true
@@ -112,4 +133,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         ref.setValue(set)
         return true
     }
+    @IBAction func Notification(_ sender: Any) {
+    }
+    
+    @IBAction func tOS(_ sender: Any) {
+    }
+    
 }
