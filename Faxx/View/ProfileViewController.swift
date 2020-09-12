@@ -87,8 +87,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         view.backgroundColor = UIColor.white
 
     }
-    
-    
+
     @IBAction func logMeOut(_ sender: Any) {
         SCSDKLoginClient.clearToken()
         let storyBoard: UIStoryboard = UIStoryboard(name: "Login", bundle: nil)
@@ -96,15 +95,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         newViewController.modalPresentationStyle = .fullScreen
         self.present(newViewController, animated: true, completion: nil)
     }
-    @IBAction func addGwen(_ sender: Any) {
-        let d = String(Int(Date().timeIntervalSinceReferenceDate))
-        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
-        let message = ["sender_id": "jFF65mp1bb4lMGIRkye8Gmuab18EMfHi27z9GhfzOo", "text": "text", "time": d] as [String : Any]
-        ref1.setValue(message)
-        let ref2 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
-        let message2 = ["sender_id": "gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev", "text": "text", "time": d] as [String : Any]
-        ref2.setValue(message2)
-    }
+//    @IBAction func addGwen(_ sender: Any) {
+//        let d = String(Int(Date().timeIntervalSinceReferenceDate))
+//        let ref1 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
+//        let message = ["sender_id": "jFF65mp1bb4lMGIRkye8Gmuab18EMfHi27z9GhfzOo", "text": "text", "time": d] as [String : Any]
+//        ref1.setValue(message)
+//        let ref2 = Constants.refs.databaseRoot.child(self.externalID).child("gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev+fo").childByAutoId()
+//        let message2 = ["sender_id": "gLB5qtBQtng8qu8yICRiZ23SB8KBh4mu9bJVTev", "text": "text", "time": d] as [String : Any]
+//        ref2.setValue(message2)
+//    }
     
     
     func roundRect(){
@@ -125,18 +124,44 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
 
     }
     
+    @IBOutlet weak var DNText: UILabel!
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         let ref = Constants.refs.databaseRoot.child(self.externalID).child("Info")
+        
         let current = displayName.text
         let set = [current: avatarURL]
         ref.setValue(set)
         return true
     }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText = displayName.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else {
+            return false
+        }
+        
+        let updateText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        if updateText.count < 12{
+            DNText.textColor = UIColor.white
+            DNText.text = "Display Name"
+            return updateText.count < 12
+        }
+        else {
+            print("ERROR")
+            DNText.textColor = UIColor.red
+            DNText.text = "Display Name cannot be more than 11 characters"
+            return updateText.count < 12
+        }
+        
+    }
     @IBAction func Notification(_ sender: Any) {
+        
     }
     
     @IBAction func tOS(_ sender: Any) {
+        
     }
     
 }
