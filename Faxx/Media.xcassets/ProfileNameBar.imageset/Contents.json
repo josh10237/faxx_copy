@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "ProfileNameBar.png",
+      "filename" : "nameLabel.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
