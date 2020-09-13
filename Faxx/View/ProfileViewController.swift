@@ -134,11 +134,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         ref.setValue(set)
         return true
     }
+    let notAllowedCharacters = "/.$[]#"
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let currentText = displayName.text ?? ""
         guard let stringRange = Range(range, in: currentText) else {
             return false
+        
+            
         }
         
         let updateText = currentText.replacingCharacters(in: stringRange, with: string)
@@ -146,6 +150,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         if updateText.count < 12{
             DNText.textColor = UIColor.white
             DNText.text = "Display Name"
+            let characters = ["#", "/", "$", "[","]", "."]
+            for character in characters{
+                if string == character{
+                    print("This characters are not allowed")
+                    return false
+                }
+            }
             return updateText.count < 12
         }
         else {
