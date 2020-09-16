@@ -17,6 +17,8 @@ class ChatViewController: JSQMessagesViewController {
     var userEntity: UserEntity?
     var otherUserID:String = ""
     var otherUserDisplayName:String = ""
+    var amIAnon = false
+    var areTheyAnon = false
     var messages = [JSQMessage]()
     lazy var outgoingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: FaxxPink)
@@ -26,16 +28,22 @@ class ChatViewController: JSQMessagesViewController {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
     override func viewDidLoad() {
-        self.addTitle(title: otherUserDisplayName)
-        print("EXTRNL")
-        print(userEntity?.externalID as Any)
-        
-        print(userEntity as Any)
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         super.viewDidLoad()
         
+        self.addTitle(title: otherUserDisplayName)
+        print("EXTRNL")
+        print(externalID)
         
-        senderId = externalID
+//        print(userEntity as Any)
+//        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        print("Am I anon in viewDidLoad Chat")
+        print(amIAnon)
+        if amIAnon {
+            senderId = "ZAAAAA3AAAAAZ" + externalID
+        } else {
+            senderId = externalID
+        }
+        print(amIAnon)
         senderDisplayName = ""
         inputToolbar.contentView.leftBarButtonItem = nil
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
@@ -104,15 +112,57 @@ class ChatViewController: JSQMessagesViewController {
     {
 
         let d = Int(Date().timeIntervalSinceReferenceDate)
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
-        let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child(self.externalID)
-        let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID).childByAutoId()
-        let messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child(self.externalID).childByAutoId()
         let message = ["sender_id": senderId, "text": text]
-        messageDataRefMe.setValue(message)
+        
+        var messageDataRefThem = Constants.refs.databaseRoot.child("messageData")
+        var messageDataRefMe = Constants.refs.databaseRoot.child("messageData")
+        var userDataRefThem = Constants.refs.databaseRoot.child("UserData")
+        var userDataRefMe = Constants.refs.databaseRoot.child("UserData")
+        
+        print("Chat pressed send data:")
+        print("Am i Anon?")
+        print(amIAnon)
+        print("Are they anon?")
+        print(areTheyAnon)
+        
+        if areTheyAnon{
+            if amIAnon{
+                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID)
+                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID).childByAutoId()
+                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID)
+                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID).childByAutoId()
+            } else {
+                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID)
+                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID).childByAutoId()
+                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child(self.externalID)
+                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child(self.externalID).childByAutoId()
+            }
+        } else {
+            if amIAnon{
+                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).child(self.otherUserID)
+                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.externalID).child(self.otherUserID).childByAutoId()
+                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID)
+                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID).childByAutoId()
+            } else {
+                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
+                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID).childByAutoId()
+                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child(self.externalID)
+                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child(self.externalID).childByAutoId()
+                
+            }
+            
+        }
+        
+        print(userDataRefThem)
+        print(userDataRefMe)
+        print(messageDataRefThem)
+        print(messageDataRefMe)
         messageDataRefThem.setValue(message)
-        userDataRefMe.child("time").setValue(d)
+        userDataRefThem.child("time").setValue(d)
         userDataRefThem.child("isNew").setValue(true)
+        
+        messageDataRefMe.setValue(message)
+        userDataRefMe.child("time").setValue(d)
 
         finishSendingMessage()
     }

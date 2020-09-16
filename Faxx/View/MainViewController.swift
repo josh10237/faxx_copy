@@ -78,17 +78,34 @@ class MainViewController: UIViewController {
                 let snpsht = snapshot.value as! NSDictionary
                 self!.myDispName = snpsht.allKeys.first as! String
             } else if theirID != "Sex" {
-                print("heyyyyyoooo")
-                print(snapshot.value)
                 let snpsht = snapshot.value as! NSDictionary
                 let theirInfo = snpsht["Info"] as! NSDictionary
                 let displayName = theirInfo.allKeys.first
                 let avatarURL = theirInfo.allValues.first
                 let time = snpsht.value(forKey: "time")
                 let isNew = snpsht.value(forKey: "isNew")
-                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew])
-                print("HTTT")
-                print(self!.userIds)
+                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": false])
+                let ordered = self!.userIds.sorted(by: self!.compareNames)
+                self?.userIds = ordered
+                self?.tableView.reloadData()
+            }
+        })
+        
+        let queryAnon = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).queryLimited(toLast: 100)
+        _ = queryAnon.observe(.childAdded, with: { [weak self] snapshot in
+            let theirID = String(snapshot.key)
+            //if data (each other user id) is not info
+            if theirID == "Info"{
+                let snpsht = snapshot.value as! NSDictionary
+                self!.myDispName = snpsht.allKeys.first as! String
+            } else if theirID != "Sex" {
+                let snpsht = snapshot.value as! NSDictionary
+                let theirInfo = snpsht["Info"] as! NSDictionary
+                let displayName = theirInfo.allKeys.first
+                let avatarURL = theirInfo.allValues.first
+                let time = snpsht.value(forKey: "time")
+                let isNew = snpsht.value(forKey: "isNew")
+                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": true])
                 let ordered = self!.userIds.sorted(by: self!.compareNames)
                 self?.userIds = ordered
                 self?.tableView.reloadData()
@@ -120,12 +137,15 @@ class MainViewController: UIViewController {
     
     
     
-    func goToChat(otherUserId: String, otherUserDisplayName: String){
+    func goToChat(otherUserId: String, otherUserDisplayName: String, amIAnon: Bool){
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
         newViewController.modalPresentationStyle = .fullScreen
         newViewController.userEntity = userEntity
         newViewController.otherUserID = otherUserId
+        newViewController.externalID = self.externalID
+        newViewController.amIAnon = amIAnon
+        newViewController.areTheyAnon = otherUserId.hasPrefix("ZAAAAA3AAAAAZ") //if the other userid starts with anon delimiter than true else false
         newViewController.otherUserDisplayName = otherUserDisplayName
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
@@ -163,7 +183,6 @@ class MainViewController: UIViewController {
         lp.addControlParam("$ipad_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$match_duration", withValue: "2000")
-        
         lp.addControlParam("user", withValue: String((userEntity?.externalID)!.dropFirst(6)).replacingOccurrences(of: "/", with: ""))
         lp.addControlParam("random", withValue: UUID.init().uuidString)
         
@@ -224,7 +243,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(userIds[indexPath.row]["userID"] as! String)
             userDataRefMe.child("isNew").setValue(false)
         }
-        self.goToChat(otherUserId: userIds[indexPath.row]["userID"] as! String, otherUserDisplayName: userIds[indexPath.row]["displayName"] as! String)
+        self.goToChat(otherUserId: userIds[indexPath.row]["userID"] as! String, otherUserDisplayName: userIds[indexPath.row]["displayName"] as! String, amIAnon: userIds[indexPath.row]["amIAnon"] as! Bool)
     }
     
     

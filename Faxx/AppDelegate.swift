@@ -30,23 +30,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let s = (params as? [String: AnyObject])
             if s!["user"] != nil {
                 let posterID = (s!["user"]) as! String
+                print("loc 10")
+                print(posterID)
+                print(self.sharedUserEntity)
                 let externalID = String((self.sharedUserEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
                 let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
                 if keyWindow != nil {
+                    print("loc 11")
                     if var topController = keyWindow?.rootViewController {
                         while let presentedViewController = topController.presentedViewController {
                             topController = presentedViewController
                         }
-
+                        print("loc 12")
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as!ChatViewController
+                        newViewController.amIAnon = true
+                        newViewController.areTheyAnon = false
                         newViewController.modalPresentationStyle = .fullScreen
+                        print("loc 13")
 
                         if self.sharedUserEntity != nil {
-                            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(externalID).child(posterID)
+                            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + externalID).child(posterID)
                             let userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(posterID).child("ZAAAAA3AAAAAZ" + externalID)
                             let d = Int(Date().timeIntervalSinceReferenceDate)
-                            
                             let query1 = Constants.refs.databaseRoot.child("UserData").child(posterID).child("Info").queryLimited(toFirst: 1)
                             _ = query1.observe(.childAdded, with: { [weak self] snapshot in
                                 print("A!1")
@@ -54,7 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 //add their info to my user data
                                 let theirInfoAvatar = snapshot.value
                                 let theirInfoDisplayName = snapshot.key
+                                print("llm")
                                 let content = ["Info": [theirInfoDisplayName: theirInfoAvatar], "isNew": false, "time": d] as [String : Any]
+                                print(content)
                                 userDataRefMe.setValue(content)
                             })
                             
@@ -66,6 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             
                             newViewController.userEntity = self.sharedUserEntity
                             newViewController.otherUserID = posterID
+                            print("passing to chat")
+                            print(externalID)
+                            newViewController.externalID = externalID
                             newViewController.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
                             topController.present(newViewController, animated: true, completion: nil)
                             //TODO FIx bug with deep link chat screen

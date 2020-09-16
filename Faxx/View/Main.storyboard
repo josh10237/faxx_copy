@@ -32,7 +32,7 @@
                                 <rect key="frame" x="155" y="116" width="100.00000000000023" height="100"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5So-1K-Wen">
-                                <rect key="frame" x="100" y="820" width="20" height="22"/>
+                                <rect key="frame" x="100" y="840" width="20" height="22"/>
                                 <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <state key="normal" image="escape" catalog="system"/>
                                 <connections>
@@ -74,7 +74,7 @@
                                 <rect key="frame" x="137" y="613.5" width="20" height="19"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oeB-3p-8lG">
-                                <rect key="frame" x="197" y="820" width="20" height="22"/>
+                                <rect key="frame" x="197" y="840" width="20" height="22"/>
                                 <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <state key="normal" image="bell.fill" catalog="system"/>
                                 <connections>
@@ -82,7 +82,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9eB-e4-jQP">
-                                <rect key="frame" x="292" y="819" width="22" height="24"/>
+                                <rect key="frame" x="292" y="838" width="22" height="24"/>
                                 <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <state key="normal" image="doc.on.doc" catalog="system"/>
                                 <connections>
@@ -134,12 +134,14 @@
                             <constraint firstItem="lya-St-l4g" firstAttribute="leading" secondItem="PI8-tP-y4E" secondAttribute="leading" constant="20" id="Eux-Yk-QzR"/>
                             <constraint firstItem="t5p-Ia-rNy" firstAttribute="top" secondItem="eFa-fT-Ygm" secondAttribute="bottom" constant="12" id="FpP-H3-Ten"/>
                             <constraint firstItem="MrS-AO-Ywo" firstAttribute="centerY" secondItem="eFa-fT-Ygm" secondAttribute="centerY" constant="45" id="Fwl-Qg-TIq"/>
+                            <constraint firstItem="oeB-3p-8lG" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="FyQ-u2-JSD"/>
+                            <constraint firstItem="PI8-tP-y4E" firstAttribute="bottom" secondItem="9eB-e4-jQP" secondAttribute="bottom" id="Gm4-ey-KKo"/>
                             <constraint firstItem="zg3-Mj-28t" firstAttribute="top" secondItem="uvt-cc-u1F" secondAttribute="bottom" constant="50" id="HTf-rb-gMn"/>
                             <constraint firstItem="Kov-uB-T7D" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" constant="120" id="Hav-RW-ve5"/>
-                            <constraint firstItem="5So-1K-Wen" firstAttribute="centerY" secondItem="PI8-tP-y4E" secondAttribute="centerY" constant="378" id="Iz9-JW-CeH"/>
                             <constraint firstItem="WX5-FH-LQZ" firstAttribute="centerX" secondItem="eFa-fT-Ygm" secondAttribute="centerX" constant="-60" id="JEy-dj-GDS"/>
                             <constraint firstItem="P7z-Ra-scf" firstAttribute="centerY" secondItem="WX5-FH-LQZ" secondAttribute="centerY" constant="77.5" id="JSy-Gv-X93"/>
                             <constraint firstItem="t5p-Ia-rNy" firstAttribute="centerX" secondItem="PI8-tP-y4E" secondAttribute="centerX" id="KKJ-L1-LVG"/>
+                            <constraint firstItem="PI8-tP-y4E" firstAttribute="bottom" secondItem="5So-1K-Wen" secondAttribute="bottom" id="LdX-WD-MGa"/>
                             <constraint firstItem="HvB-wr-48V" firstAttribute="top" secondItem="zg3-Mj-28t" secondAttribute="bottom" constant="10" id="Lgx-gw-gLs"/>
                             <constraint firstItem="vTH-h4-VS4" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="M8V-WV-5Sd"/>
                             <constraint firstItem="eFa-fT-Ygm" firstAttribute="centerY" secondItem="PI8-tP-y4E" secondAttribute="centerY" constant="125" id="NDY-fo-J8Z"/>
@@ -150,15 +152,12 @@
                             <constraint firstItem="5So-1K-Wen" firstAttribute="leading" secondItem="PI8-tP-y4E" secondAttribute="leading" constant="100" id="Skt-u4-xL4"/>
                             <constraint firstItem="t5p-Ia-rNy" firstAttribute="centerX" secondItem="lya-St-l4g" secondAttribute="centerX" id="Sl6-zo-9JB"/>
                             <constraint firstItem="iQt-5s-pcV" firstAttribute="centerX" secondItem="PI8-tP-y4E" secondAttribute="centerX" id="TmE-WJ-3K4"/>
-                            <constraint firstItem="oeB-3p-8lG" firstAttribute="centerY" secondItem="PI8-tP-y4E" secondAttribute="centerY" constant="378" id="VAZ-fy-dfZ"/>
                             <constraint firstItem="C9K-8o-FHL" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" constant="-120" id="VCr-x1-lOT"/>
                             <constraint firstItem="WX5-FH-LQZ" firstAttribute="centerY" secondItem="eFa-fT-Ygm" secondAttribute="centerY" constant="45" id="W8G-e4-ntX"/>
                             <constraint firstItem="PI8-tP-y4E" firstAttribute="trailing" secondItem="9eB-e4-jQP" secondAttribute="trailing" constant="100" id="Wgq-ic-lpE"/>
-                            <constraint firstItem="oeB-3p-8lG" firstAttribute="centerX" secondItem="PI8-tP-y4E" secondAttribute="centerX" id="aD9-9M-fQL"/>
                             <constraint firstItem="tXT-g1-vsj" firstAttribute="centerY" secondItem="eFa-fT-Ygm" secondAttribute="centerY" constant="95" id="b07-6I-hAE"/>
                             <constraint firstItem="tXT-g1-vsj" firstAttribute="centerX" secondItem="eFa-fT-Ygm" secondAttribute="centerX" constant="120" id="gh1-K3-GFg"/>
                             <constraint firstItem="zg3-Mj-28t" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="icr-FL-JSs"/>
-                            <constraint firstItem="9eB-e4-jQP" firstAttribute="centerY" secondItem="PI8-tP-y4E" secondAttribute="centerY" constant="378" id="jq9-29-FIE"/>
                             <constraint firstItem="iQt-5s-pcV" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="mQb-yn-PJg"/>
                             <constraint firstItem="MrS-AO-Ywo" firstAttribute="centerX" secondItem="eFa-fT-Ygm" secondAttribute="centerX" constant="60" id="mry-7n-kLC"/>
                             <constraint firstItem="3TA-BH-5Wn" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" id="ohq-r6-7pN"/>
@@ -167,6 +166,7 @@
                             <constraint firstItem="Vyw-J6-WRp" firstAttribute="centerY" secondItem="eFa-fT-Ygm" secondAttribute="centerY" constant="95" id="thU-vR-2Nq"/>
                             <constraint firstItem="P7z-Ra-scf" firstAttribute="centerX" secondItem="3ed-tC-w3T" secondAttribute="centerX" constant="-60" id="w8n-ZF-biy"/>
                             <constraint firstItem="zg3-Mj-28t" firstAttribute="top" secondItem="vTH-h4-VS4" secondAttribute="bottom" constant="5" id="wzk-Vn-8yH"/>
+                            <constraint firstItem="PI8-tP-y4E" firstAttribute="bottom" secondItem="oeB-3p-8lG" secondAttribute="bottom" id="xrP-Gf-mE0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PI8-tP-y4E"/>
                     </view>
