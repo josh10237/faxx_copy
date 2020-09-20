@@ -90,9 +90,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         let current = displayName.text
         let set = [current: avatarURL]
         ref.setValue(set)
-        return true
+        if displayName.text!.count < 3 {
+             print ("too few chars")
+            self.view.endEditing(true)
+            return true
+        }
+        else {
+            return false
+        }
     }
-    let notAllowedCharacters = "/.$[]#"
+   // let notAllowedCharacters = "/.$[]#"
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
@@ -105,7 +112,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         
         let updateText = currentText.replacingCharacters(in: stringRange, with: string)
         
-        if updateText.count < 12{
+        
+        if updateText.count < 13{
             DNText.textColor = UIColor.white
             DNText.text = "Display Name"
             let characters = ["#", "/", "$", "[","]", "."]
@@ -115,13 +123,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
                     return false
                 }
             }
-            return updateText.count < 12
+            return updateText.count < 13
         }
         else {
             print("ERROR")
             DNText.textColor = UIColor.red
-            DNText.text = "Display Name cannot be more than 11 characters"
-            return updateText.count < 12
+            DNText.text = "Display Name cannot be more than 12 characters"
+            return updateText.count < 13
         }
         
     }
