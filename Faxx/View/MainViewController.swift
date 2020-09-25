@@ -27,6 +27,7 @@ class MainViewController: UIViewController {
     var URL = ""
     var myDispName = ""
     var myAvatarURL = ""
+    var lastScoreUploadTime:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,12 @@ class MainViewController: UIViewController {
         self.addChatButton(withAction: #selector(navigateToAbout))
         
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        
+        uploadScore()
+//        let d = Int(Date().timeIntervalSinceReferenceDate)
+//        if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
+//            uploadScore()
+//        }
         
         if userEntity != nil {
             SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
@@ -52,24 +59,6 @@ class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         userIds.removeAll()
         tableView.reloadData()
-//        DispatchQueue.main.async {
-//            let qq = Constants.refs.databaseRoot.child("userData").child(self.externalID).child("Info").queryLimited(toLast: 1)
-//            _ = qq.observe(.childAdded, with: { [weak self] snapshot in
-//                let nm = String(snapshot.key)
-//                self!.dispNotSetYet = false
-//            })
-//
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-//                if self.dispNotSetYet{
-//                    print("Reset")
-//                    let ref = Constants.refs.databaseRoot.child(self.externalID).child("Info")
-//                    let content = [self.userEntity?.displayName: self.userEntity?.avatar]
-//                    ref.setValue(content)
-//                    self.dispNotSetYet = false
-//                }
-//            })
-//        }
-        //Query all convos under your user id
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 100)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             let theirID = String(snapshot.key)
@@ -121,6 +110,7 @@ class MainViewController: UIViewController {
         
     
     @objc func navigateToProfile() {
+        uploadScore()
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
         newViewController.modalPresentationStyle = .fullScreen
@@ -135,7 +125,27 @@ class MainViewController: UIViewController {
         print("About Page")
     }
     
-    
+    func uploadScore(){
+        let dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
+        let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 1000)
+        _ = query.observe(.childAdded, with: { [weak self] snapshot in
+            print("XDXDXDXDXDXDXDX")
+            print(snapshot)
+            if String(snapshot.key) != "Info" && String(snapshot.key) != "Sex" {
+                print("made it")
+                let theirUserId = String(snapshot.key)
+                if  dict?[theirUserId] != nil {
+                    let userScoreIncreaseFromPeriod = dict?[theirUserId] as! Int
+                    let snpsht = snapshot.value as! NSDictionary
+                    let preUploadUserScore = snpsht.value(forKey: "score") as! Int
+                    Constants.refs.databaseRoot.child("UserData").child(self!.externalID).child(theirUserId).child("score").setValue(preUploadUserScore  + userScoreIncreaseFromPeriod)
+                }
+
+            }
+
+        })
+    }
+        
     
     func goToChat(otherUserId: String, otherUserDisplayName: String, amIAnon: Bool){
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -210,11 +220,6 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             cell.newMessageDot.image = nil
             cell.nameLabel.textColor = UIColor.darkGray
         }
-//        if userIds[indexPath.row]["isAnon"] as! Int == 1{
-//            cell.anonLabel.isHidden = false
-//        } else {
-//            cell.anonLabel.isHidden = true
-//        }
         cell.nameLabel.text = userIds[indexPath.row]["displayName"] as! String
         cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] as! String)
         let d = Int(Date().timeIntervalSinceReferenceDate)

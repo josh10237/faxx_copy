@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tG3-ih-3GM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tG3-ih-3GM">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,6 +35,7 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="afO-va-6js"/>
                         <color key="backgroundColor" red="0.99607843139999996" green="0.68627450980000004" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="J8A-Nz-sOV" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="EsN-Yz-tju"/>
@@ -42,7 +43,6 @@
                             <constraint firstItem="QSN-KT-5oo" firstAttribute="centerX" secondItem="5LI-GI-hjl" secondAttribute="centerX" id="TRR-Va-IC0"/>
                             <constraint firstItem="afO-va-6js" firstAttribute="bottom" secondItem="J8A-Nz-sOV" secondAttribute="bottom" constant="100" id="jeF-Z0-hgi"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="afO-va-6js"/>
                     </view>
                     <connections>
                         <outlet property="gifImage" destination="QSN-KT-5oo" id="QbX-wQ-Mj7"/>
@@ -64,12 +64,12 @@
                                 <rect key="frame" x="-13" y="133" width="400" height="400"/>
                             </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="Nta-dr-psf"/>
                         <color key="backgroundColor" red="0.94730812310000001" green="0.69898796080000003" blue="0.65489000080000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="vnq-rJ-3qp" firstAttribute="centerY" secondItem="B7y-Cj-T0b" secondAttribute="centerY" id="ByC-Nf-M9i"/>
                             <constraint firstItem="vnq-rJ-3qp" firstAttribute="centerX" secondItem="B7y-Cj-T0b" secondAttribute="centerX" id="JQc-RB-P7t"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="Nta-dr-psf"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yfb-dW-6SS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -128,6 +128,7 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Xv-Mo-1Su"/>
                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="z8u-SG-DGT" firstAttribute="top" secondItem="wL1-Xw-s8B" secondAttribute="bottom" constant="25" id="1dg-83-h29"/>
@@ -144,7 +145,6 @@
                             <constraint firstItem="Z8Y-bw-rga" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="tvI-im-wRa"/>
                             <constraint firstItem="wL1-Xw-s8B" firstAttribute="centerX" secondItem="N9i-yU-r0H" secondAttribute="centerX" id="wOg-Fy-4Qz"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Xv-Mo-1Su"/>
                     </view>
                     <connections>
                         <outlet property="avatarImageView" destination="z8u-SG-DGT" id="DGW-Mq-CxF"/>

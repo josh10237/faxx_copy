@@ -14,7 +14,7 @@
 		28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322DB20D3D6020045E02A /* LaunchScreen.storyboard */; };
 		28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322FA20D3D83C0045E02A /* Login.storyboard */; };
 		28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C322FC20D3D8500045E02A /* LoginViewController.swift */; };
-		530421E8CAE311BA593C48A1 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */; };
+		3063708AA87D992B67878147 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */; };
 		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
 		674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 674625A825099878002F42AF /* BalooPaaji-Regular.ttf */; };
 		674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674866A424EE162F005D3F82 /* AnonIcons.xcassets */; };
@@ -31,19 +31,6 @@
 		67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9D025030B370021E8D5 /* fax_animation.gif */; };
 		67BDF9D525030CCC0021E8D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9D425030CCC0021E8D5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		287526F020F340FB00601FE0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2842FB3820E895EE00D34863 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
@@ -81,9 +68,9 @@
 		67BDF9CC2501B2640021E8D5 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		67BDF9D025030B370021E8D5 /* fax_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fax_animation.gif; sourceTree = "<group>"; };
 		67BDF9D425030CCC0021E8D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C7B6E2426332371DC98E8001 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
-		CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D1661C929477970C3032A131 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
+		69319AA2F3AE2B6D167F4499 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
+		8431614FDFE75D7FAB1FD0A3 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
+		C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				530421E8CAE311BA593C48A1 /* Pods_Faxx.framework in Frameworks */,
+				3063708AA87D992B67878147 /* Pods_Faxx.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +166,7 @@
 				28C322E520D3D6280045E02A /* SCSDKCoreKit.framework */,
 				28C322E620D3D6280045E02A /* SCSDKCreativeKit.framework */,
 				28C322E720D3D6280045E02A /* SCSDKLoginKit.framework */,
-				CAF133A912B44AA3D8E83896 /* Pods_Faxx.framework */,
+				C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -200,8 +187,8 @@
 		C6F87B9902BE44B8B184AE11 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D1661C929477970C3032A131 /* Pods-Faxx.debug.xcconfig */,
-				C7B6E2426332371DC98E8001 /* Pods-Faxx.release.xcconfig */,
+				69319AA2F3AE2B6D167F4499 /* Pods-Faxx.debug.xcconfig */,
+				8431614FDFE75D7FAB1FD0A3 /* Pods-Faxx.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -213,12 +200,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28C322E120D3D6020045E02A /* Build configuration list for PBXNativeTarget "Faxx" */;
 			buildPhases = (
-				D6E4998E30C714148CDC96B4 /* [CP] Check Pods Manifest.lock */,
+				54F568AFF82E6AFF1F051801 /* [CP] Check Pods Manifest.lock */,
 				28C322C920D3D6000045E02A /* Sources */,
 				28C322CA20D3D6000045E02A /* Frameworks */,
 				28C322CB20D3D6000045E02A /* Resources */,
-				287526F020F340FB00601FE0 /* Embed Frameworks */,
-				E30EBAF8FA0F65951F480F3C /* [CP] Embed Pods Frameworks */,
+				D208EE81FEA1D085B3586E75 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -236,7 +222,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					28C322CC20D3D6000045E02A = {
@@ -281,7 +267,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D6E4998E30C714148CDC96B4 /* [CP] Check Pods Manifest.lock */ = {
+		54F568AFF82E6AFF1F051801 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -303,7 +289,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E30EBAF8FA0F65951F480F3C /* [CP] Embed Pods Frameworks */ = {
+		D208EE81FEA1D085B3586E75 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -384,6 +370,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -409,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -444,6 +431,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -463,7 +451,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -474,12 +462,14 @@
 		};
 		28C322E220D3D6020045E02A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1661C929477970C3032A131 /* Pods-Faxx.debug.xcconfig */;
+			baseConfigurationReference = 69319AA2F3AE2B6D167F4499 /* Pods-Faxx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6D99Z2R35B;
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -499,7 +489,7 @@
 		};
 		28C322E320D3D6020045E02A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7B6E2426332371DC98E8001 /* Pods-Faxx.release.xcconfig */;
+			baseConfigurationReference = 8431614FDFE75D7FAB1FD0A3 /* Pods-Faxx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;

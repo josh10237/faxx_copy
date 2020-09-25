@@ -11,5 +11,4 @@ target 'Faxx' do
   pod 'JSQMessagesViewController'
   pod 'Branch'
 
-  
 end

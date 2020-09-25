@@ -8,6 +8,7 @@
 
 import UIKit
 let defaults = UserDefaults.standard
+let scoreDict = defaults.dictionary(forKey: "scoreDict")
 
 class LoginConfirmViewController: UIViewController {
 
