@@ -36,10 +36,10 @@ class MainViewController: UIViewController {
         
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         
-        uploadScore()
 //        let d = Int(Date().timeIntervalSinceReferenceDate)
 //        if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
 //            uploadScore()
+//            lastScoreUploadTime = d
 //        }
         
         if userEntity != nil {
@@ -62,15 +62,16 @@ class MainViewController: UIViewController {
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 100)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             let theirID = String(snapshot.key)
+            let snpsht = snapshot.value as! NSDictionary
             //if data (each other user id) is not info
             if theirID == "Info"{
-                let snpsht = snapshot.value as! NSDictionary
-                self!.myDispName = snpsht.allKeys.first as! String
-            } else if theirID != "Sex" {
-                let snpsht = snapshot.value as! NSDictionary
+                //my Info
+                self!.myDispName = snpsht.value(forKey: "DisplayName") as! String
+            } else {
+                //get their info and add it
                 let theirInfo = snpsht["Info"] as! NSDictionary
-                let displayName = theirInfo.allKeys.first
-                let avatarURL = theirInfo.allValues.first
+                let displayName = theirInfo.value(forKey: "DisplayName")
+                let avatarURL = theirInfo.value(forKey: "Avatar")
                 let time = snpsht.value(forKey: "time")
                 let isNew = snpsht.value(forKey: "isNew")
                 self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": false])
@@ -80,26 +81,27 @@ class MainViewController: UIViewController {
             }
         })
         
-        let queryAnon = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).queryLimited(toLast: 100)
-        _ = queryAnon.observe(.childAdded, with: { [weak self] snapshot in
-            let theirID = String(snapshot.key)
-            //if data (each other user id) is not info
-            if theirID == "Info"{
-                let snpsht = snapshot.value as! NSDictionary
-                self!.myDispName = snpsht.allKeys.first as! String
-            } else if theirID != "Sex" {
-                let snpsht = snapshot.value as! NSDictionary
-                let theirInfo = snpsht["Info"] as! NSDictionary
-                let displayName = theirInfo.allKeys.first
-                let avatarURL = theirInfo.allValues.first
-                let time = snpsht.value(forKey: "time")
-                let isNew = snpsht.value(forKey: "isNew")
-                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": true])
-                let ordered = self!.userIds.sorted(by: self!.compareNames)
-                self?.userIds = ordered
-                self?.tableView.reloadData()
-            }
-        })
+//        let queryAnon = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).queryLimited(toLast: 100)
+//        _ = queryAnon.observe(.childAdded, with: { [weak self] snapshot in
+//            let theirID = String(snapshot.key)
+//            let snpsht = snapshot.value as! NSDictionary
+//            //if data (each other user id) is not info
+//            if theirID == "Info"{
+//                //my Info
+//                self!.myDispName = snpsht.value(forKey: "DisplayName") as! String
+//            } else {
+//                //get their info and add it
+//                let theirInfo = snpsht["Info"] as! NSDictionary
+//                let displayName = theirInfo.value(forKey: "DisplayName")
+//                let avatarURL = theirInfo.value(forKey: "Avatar")
+//                let time = snpsht.value(forKey: "time")
+//                let isNew = snpsht.value(forKey: "isNew")
+//                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": false])
+//                let ordered = self!.userIds.sorted(by: self!.compareNames)
+//                self?.userIds = ordered
+//                self?.tableView.reloadData()
+//            }
+//        })
     }
     
     func compareNames(s1:[String : Any], s2:[String : Any]) -> Bool {
@@ -110,7 +112,9 @@ class MainViewController: UIViewController {
         
     
     @objc func navigateToProfile() {
-        uploadScore()
+//        uploadScore()
+//        let d = Int(Date().timeIntervalSinceReferenceDate)
+//        lastScoreUploadTime = d
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
         newViewController.modalPresentationStyle = .fullScreen
@@ -148,6 +152,7 @@ class MainViewController: UIViewController {
         
     
     func goToChat(otherUserId: String, otherUserDisplayName: String, amIAnon: Bool){
+        print("GoToChat")
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
         newViewController.modalPresentationStyle = .fullScreen
@@ -158,6 +163,7 @@ class MainViewController: UIViewController {
         newViewController.areTheyAnon = otherUserId.hasPrefix("ZAAAAA3AAAAAZ") //if the other userid starts with anon delimiter than true else false
         newViewController.otherUserDisplayName = otherUserDisplayName
         self.navigationController?.pushViewController(newViewController, animated: true)
+        print("GoToChat2")
     }
     
     @IBAction func getMessages(_ sender: Any) {
@@ -220,6 +226,8 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             cell.newMessageDot.image = nil
             cell.nameLabel.textColor = UIColor.darkGray
         }
+        print(userIds)
+        print(userIds[indexPath.row]["displayName"])
         cell.nameLabel.text = userIds[indexPath.row]["displayName"] as! String
         cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] as! String)
         let d = Int(Date().timeIntervalSinceReferenceDate)

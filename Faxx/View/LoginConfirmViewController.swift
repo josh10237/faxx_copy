@@ -9,6 +9,7 @@
 import UIKit
 let defaults = UserDefaults.standard
 let scoreDict = defaults.dictionary(forKey: "scoreDict")
+let hasLoggedInBefore = defaults.bool(forKey: "hasLoggedInBefore")
 
 class LoginConfirmViewController: UIViewController {
 
@@ -48,26 +49,26 @@ class LoginConfirmViewController: UIViewController {
 
     @IBAction func goFemale(_ sender: Any) {
         let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        userDataRefMe.child("Sex").setValue(0)
-        let content = [self.userEntity?.displayName: self.userEntity?.avatar]
+        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
         userDataRefMe.child("Info").setValue(content)
+//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
         goToMain()
     }
     
 
     @IBAction func goMale(_ sender: Any) {
         let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        userDataRefMe.child("Sex").setValue(1)
-        let content = [self.userEntity?.displayName: self.userEntity?.avatar]
+        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
         userDataRefMe.child("Info").setValue(content)
+//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
         goToMain()
     }
     
     @IBAction func goNonBinary(_ sender: Any) {
         let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        userDataRefMe.child("Sex").setValue(2)
-        let content = [self.userEntity?.displayName: self.userEntity?.avatar]
+        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
         userDataRefMe.child("Info").setValue(content)
+//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
         goToMain()
     }
 }

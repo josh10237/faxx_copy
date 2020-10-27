@@ -164,9 +164,14 @@ class ChatViewController: JSQMessagesViewController {
         messageDataRefMe.setValue(message)
         userDataRefMe.child("time").setValue(d)
 
+        incrementScore(senderID: self.externalID, recieiverID: userDataRefThem)
         finishSendingMessage()
     }
     
+    func incrementScore(senderID:Any, recieiverID:Any){
+        
+    }
+        
     
 }
 

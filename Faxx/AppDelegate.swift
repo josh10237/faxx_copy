@@ -41,13 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         while let presentedViewController = topController.presentedViewController {
                             topController = presentedViewController
                         }
-                        print("loc 12")
-                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                        let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as!ChatViewController
-                        newViewController.amIAnon = true
-                        newViewController.areTheyAnon = false
-                        newViewController.modalPresentationStyle = .fullScreen
-                        print("loc 13")
 
                         if self.sharedUserEntity != nil {
                             let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + externalID).child(posterID)
@@ -67,18 +60,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             })
                             
 //                            add my info with anon delimiter to their info
-                            let content = ["Info": ["AnonDisplayName": "AnonAvatar"], "isNew": true, "time": d] as [String : Any]
+                            let content = ["Info": ["DisplayName": "Anon", "Avatar": "AnonAvatarURL", "Sex": 0, "Age": 1000], "isNew": true, "time": d] as [String : Any]
                             userDataRefThem.setValue(content)
                             
+//                            StoryboardManager.segueToChatDeepLink(entity: self.sharedUserEntity, posterID: posterID, externalID: externalID)
                             
                             
-                            newViewController.userEntity = self.sharedUserEntity
-                            newViewController.otherUserID = posterID
-                            print("passing to chat")
-                            print(externalID)
-                            newViewController.externalID = externalID
-                            newViewController.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
-                            topController.present(newViewController, animated: true, completion: nil)
+//                            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
+//                            newViewController.userEntity = self.sharedUserEntity
+//                            newViewController.goToChat(otherUserId: posterID, otherUserDisplayName: "Poster Display", amIAnon: true)
+//                            newViewController.modalPresentationStyle = .fullScreen
+//                            print("LOCFIND")
+//                            print(newViewController)
+//                            print(topController)
+//                            topController.present(newViewController, animated: true, completion: nil)
+                            
+                            //TODO: Link to a page where nav controller is created (or available) then from there call nav to chat with correct parameters
+//                            let storyBoard: UIStoryboard = UIStoryboard(name: "Login", bundle: nil)
+//                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "load") as!LoadViewController
+//                            newViewController.userEntity = self.sharedUserEntity
+//                            newViewController.goToChat(otherUserId: posterID, otherUserDisplayName: "Poster Display", amIAnon: true)
+//                            newViewController.modalPresentationStyle = .fullScreen
+//                            print("LOCFIND")
+//                            print(newViewController)
+//                            print(topController)
+//                            topController.present(newViewController, animated: true, completion: nil)
+                            
+                            
+                            
+                            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                            let mainNavigationVC = storyBoard.instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
+
+                            let newChatViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
+                            newChatViewController.amIAnon = true
+                            newChatViewController.areTheyAnon = false
+                            newChatViewController.userEntity = self.sharedUserEntity
+                            newChatViewController.otherUserID = posterID
+                            
+                            mainNavigationVC.present(newChatViewController, animated: true, completion: nil)
+//
+//                            newViewController.externalID = externalID
+//                            newViewController.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
+//                            topController.present(newViewController, animated: true, completion: nil)
                             //TODO FIx bug with deep link chat screen
                             //topController.navigationController?.pushViewController(newViewController, animated: true)
                             //Get your own display name
@@ -112,6 +136,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       // handler for Universal Links
         return Branch.getInstance().continue(userActivity)
     }
+    
+    
+    
+   
+
+    
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
       // handler for Push Notifications

@@ -22,5 +22,26 @@ class StoryboardManager {
         
 
     }
+//    class func segueToChatDeepLink(entity: UserEntity, posterID: String, externalID: String) {
+//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let newViewController = storyBoard.instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
+//        let chatVC = newViewController.viewControllers.first as! ChatViewController
+//        chatVC.userEntity = entity
+//
+//        chatVC.amIAnon = true
+//        chatVC.areTheyAnon = false
+//        chatVC.modalPresentationStyle = .fullScreen
+//
+//        chatVC.userEntity = entity
+//        chatVC.otherUserID = posterID
+//
+//        chatVC.externalID = externalID
+//        chatVC.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
+//
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.replaceRootViewController(with: newViewController)
+//
+//
+//    }
 
 }
