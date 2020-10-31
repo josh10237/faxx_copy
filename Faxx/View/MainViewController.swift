@@ -28,12 +28,16 @@ class MainViewController: UIViewController {
     var myDispName = ""
     var myAvatarURL = ""
     var lastScoreUploadTime:Int = 0
+    private var refreshControl = UIRefreshControl()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addTitle(title: "Messages")
         self.addChatButton(withAction: #selector(navigateToAbout))
         
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         
 //        let d = Int(Date().timeIntervalSinceReferenceDate)
@@ -53,6 +57,14 @@ class MainViewController: UIViewController {
             }
         }
     }
+    @objc func refresh(_ sender: AnyObject) {
+            userIds.removeAll()
+            tableView.reloadData()
+            refreshControl.endRefreshing()
+            print("refresh")
+            
+        }
+
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,8 +74,10 @@ class MainViewController: UIViewController {
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 100)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             let theirID = String(snapshot.key)
+            print("snpsht")
             let snpsht = snapshot.value as! NSDictionary
-            //if data (each other user id) is not info
+            print(snpsht)
+          //  if data (each other user id) is not info
             if theirID == "Info"{
                 //my Info
                 self!.myDispName = snpsht.value(forKey: "DisplayName") as! String
@@ -213,6 +227,8 @@ class MainViewController: UIViewController {
 
 //MARK:- TableView Data Source And Delegate Methods
 extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userIds.count
     }
