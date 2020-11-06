@@ -142,7 +142,6 @@ class MainViewController: UIViewController {
     @objc func navigateToAbout() {
         print("About Page")
     }
-    
     func uploadScore(){
         let dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 1000)
@@ -163,6 +162,7 @@ class MainViewController: UIViewController {
 
         })
     }
+    
         
     
     func goToChat(otherUserId: String, otherUserDisplayName: String, amIAnon: Bool){
