@@ -182,43 +182,56 @@ class ChatViewController: JSQMessagesViewController {
         messageDataRefMe.setValue(message)
         userDataRefMe.child("time").setValue(d)
 
-//        incrementScore(senderID: self.externalID, recieiverID: self.otherUserID)
-//        finishSendingMessage()
+        incrementScore(senderID: self.externalID, recieiverID: self.otherUserID)
+        finishSendingMessage()
     }
     
-//    func incrementScore(senderID:String, recieiverID:String){
-//        print("initial score:")
-//        var dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
-//        print(scoreDict)
-//        if dict?[senderID] == nil{
-//            dict?[senderID] = 0
-//            var myCurrentScore = dict?[senderID] as! Int
-//            myCurrentScore = myCurrentScore+1
-//            dict?[senderID] = myCurrentScore
-//        }else{
-//            var myCurrentScore = dict?[senderID] as! Int
-//            myCurrentScore = myCurrentScore+1
-//            dict?[senderID] = myCurrentScore
-//        }
-//        if dict?[senderID] == nil{
-//            dict?[recieiverID] = 0
-//            var theirCurrentScore = dict?[recieiverID] as! Int
-//            theirCurrentScore = theirCurrentScore+1
-//            dict?[recieiverID] = theirCurrentScore
-//        }else{
-//            var theirCurrentScore = dict?[recieiverID] as! Int
-//            theirCurrentScore = theirCurrentScore+1
-//            dict?[recieiverID] = theirCurrentScore
-//        }
-//
+    func incrementScore(senderID:String, recieiverID:String){
+        print("initial score:")
+        var dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
+        print(scoreDict)
+        
+        if scoreDict[senderID] == nil{
+           // dict?[senderID] = 1
+            print("added")
+            var myCurrentScore = scoreDict[senderID] as? Int
+            print(myCurrentScore)
+            myCurrentScore = 0
+            print(myCurrentScore)
+            var myCurrentScoreInt = myCurrentScore!+1
+            print(myCurrentScoreInt)
+            print("hi")
+            print(scoreDict)
+            scoreDict[senderID] = myCurrentScoreInt
+            print(scoreDict)
+            
+        }else{
+            var myCurrentScore = scoreDict[senderID] as? Int
+            myCurrentScore = myCurrentScore!+1
+            scoreDict[senderID] = myCurrentScore
+        }
+        if scoreDict[recieiverID] == nil{
+            //dict?[senderID] = 1
+            var theirCurrentScore = scoreDict[recieiverID] as? Int
+            theirCurrentScore = 0
+            var theirCurrentScoreInt = theirCurrentScore!+1
+            scoreDict[recieiverID] = theirCurrentScoreInt
+        }else{
+            var theirCurrentScore = scoreDict[recieiverID] as? Int
+            theirCurrentScore = theirCurrentScore!+1
+            scoreDict[recieiverID] = theirCurrentScore
+        }
+
 //        defaults.set(dict, forKey: "scoreDict")
 ////        defaults.dictionary(forKey: "scoreDict")
-//        print("increase score")
-//        print(defaults)
-//        print(scoreDict)
-//
+        print("final score:")
+        print(scoreDict)
+        print("increase score")
+        print(defaults)
+
         
     }
+}
 
         
     
