@@ -40,11 +40,11 @@ class MainViewController: UIViewController {
         tableView.addSubview(refreshControl)
         self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         
-//        let d = Int(Date().timeIntervalSinceReferenceDate)
-//        if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
-//            uploadScore()
-//            lastScoreUploadTime = d
-//        }
+       let d = Int(Date().timeIntervalSinceReferenceDate)
+       if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
+            uploadScore()
+          lastScoreUploadTime = d
+       }
         
         if userEntity != nil {
             SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
@@ -126,9 +126,9 @@ class MainViewController: UIViewController {
         
     
     @objc func navigateToProfile() {
-//        uploadScore()
-//        let d = Int(Date().timeIntervalSinceReferenceDate)
-//        lastScoreUploadTime = d
+        uploadScore()
+        let d = Int(Date().timeIntervalSinceReferenceDate)
+        lastScoreUploadTime = d
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
         newViewController.modalPresentationStyle = .fullScreen
@@ -143,19 +143,25 @@ class MainViewController: UIViewController {
         print("About Page")
     }
     func uploadScore(){
-        let dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 1000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             print("XDXDXDXDXDXDXDX")
             print(snapshot)
-            if String(snapshot.key) != "Info" && String(snapshot.key) != "Sex" {
+            if String(snapshot.key) != "Info" {
                 print("made it")
                 let theirUserId = String(snapshot.key)
-                if  dict?[theirUserId] != nil {
-                    let userScoreIncreaseFromPeriod = dict?[theirUserId] as! Int
+             //   print(theirUserId)
+              //  print(scoreDict[theirUserId])
+                if  scoreDict[theirUserId] != nil {
+                    let userScoreIncreaseFromPeriod = scoreDict[theirUserId] as! Int
+                    print("score from period:")
+                    print(userScoreIncreaseFromPeriod)
                     let snpsht = snapshot.value as! NSDictionary
+                    print("snpsht 1")
+                    print(snpsht)
                     let preUploadUserScore = snpsht.value(forKey: "score") as! Int
                     Constants.refs.databaseRoot.child("UserData").child(self!.externalID).child(theirUserId).child("score").setValue(preUploadUserScore  + userScoreIncreaseFromPeriod)
+                    scoreDict = [:]
                 }
 
             }

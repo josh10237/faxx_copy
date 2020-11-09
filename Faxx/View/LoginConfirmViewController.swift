@@ -8,7 +8,7 @@
 
 import UIKit
 let defaults = UserDefaults.standard
-let scoreDict: [String:Int] = defaults.dictionary(forKey: "scoreDict") as? [String:Int] ?? [:]
+var scoreDict: [String:Int] = defaults.dictionary(forKey: "scoreDict") as? [String:Int] ?? [:]
 let hasLoggedInBefore = defaults.bool(forKey: "hasLoggedInBefore")
 
 //var strings: [String:String] = userDefaults.object(forKey: "myKey") as? [String:String] ?? [:]
