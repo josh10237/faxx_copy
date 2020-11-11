@@ -66,6 +66,7 @@ class LoginViewController: UIViewController {
                         completion(userEntity, nil)
                     }
             }) { (error, isUserLoggedOut) in
+                print("error: ", error?.localizedDescription)
                 completion(nil, error)
         }
     }
@@ -80,7 +81,6 @@ class LoginViewController: UIViewController {
             
             if success {
                 self.fetchSnapUserInfo({ (userEntity, error) in
-                    
                     if let userEntity = userEntity {
                         DispatchQueue.main.async {
                             self.goToLoginConfirm(userEntity)
