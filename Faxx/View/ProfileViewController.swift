@@ -39,14 +39,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
     
     let screenSize: CGRect = UIScreen.main.bounds
     override func viewDidLoad() {
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
         super.viewDidLoad()
         displayName.delegate = self
         displayName.backgroundColor = UIColor(patternImage: UIImage(named: "ProfileNameBar")!)
         //self!.displayName.isUserInteractionEnabled = false
         self.addTitle(title: myDispName)
         displayName.text = myDispName
-        guard let avatarString = userEntity?.avatar else { return }
+        let avatarString = userEntity?.avatar ?? DefaultAvatarUrl
         avatarImageView.layer.cornerRadius = 70
         avatarImageView.clipsToBounds = true
         avatarImageView.load(from: avatarString)

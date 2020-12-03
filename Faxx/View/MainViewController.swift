@@ -12,122 +12,151 @@ import SCSDKLoginKit
 import SCSDKBitmojiKit
 import SCSDKCreativeKit
 import Branch
+import MessageKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, FirebaseManagerDelegate {
     
-    //MARK: Interface Builder
+    // MARK: - Firebase delegate
+    
+    func updateMessage(_ message: MockMessage) {
+        return
+    }
+    
+    func setTypingStatus(_ otherUserId: String, _ typing: Bool) {
+        let index = self.userIds.firstIndex { (item) -> Bool in
+            return item.userId == otherUserId
+        }
+        if index != nil {
+            self.userIds[index!].isTyping = typing
+            self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+        }
+    }
+    
+    func onMessageAdded(_ message: MockMessage) {
+        return
+    }
+    
+    func onSelfStateChanged(_ state: UserContact) {
+        let index = self.userIds.firstIndex { (item) -> Bool in
+            return item.userId == state.userId
+        }
+        if index != nil {
+            print("isNew: ", state.isNew)
+            self.userIds[index!].isNew = state.isNew
+            self.userIds[index!].time_ref = state.time_ref
+            self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+        }
+    }
+    
+    func onUserAdded(_ user: UserContact) {
+        if user.userId == self.externalID {
+            self.curUser = user
+        } else {
+            self.firebaseManager.observeMessageThread(self.externalID, user.userId)
+            let index = self.userIds.firstIndex { (item) -> Bool in
+                return item.userId == user.userId
+            }
+            if index != nil {
+                self.userIds[index!] = user
+                self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+            } else {
+                self.userIds.append(user)
+                let ordered = self.userIds.sorted(by: self.compareNames)
+                self.userIds = ordered
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    
+    // MARK: - Interface Builder
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var iconView: UIButton!
     @IBOutlet weak var getMessages: UIButton!
     
+    let firebaseManager = FirebaseManager()
     
-    var userIds: [[String: Any]] = [[:]]
-    var externalID:String = ""
+    var userIds: [UserContact] = []
+    var curUser: UserContact?
+    var externalID: String = ""
     var userEntity: UserEntity?
-    var URL = ""
+    var shareURL = ""
     var myDispName = ""
     var myAvatarURL = ""
     var lastScoreUploadTime:Int = 0
     private var refreshControl = UIRefreshControl()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.addTitle(title: "Messages")
-        self.addChatButton(withAction: #selector(navigateToAbout))
+        
+        firebaseManager.delegate = self
         
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
+        myDispName = userEntity?.displayName ?? ""
         
-       let d = Int(Date().timeIntervalSinceReferenceDate)
-       if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
+        let d = Int(getCurrentUtcTimeInterval())
+        if d > (lastScoreUploadTime + 10800){ // Plus 3 hours
             uploadScore()
-          lastScoreUploadTime = d
-       }
+            lastScoreUploadTime = d
+        }
         
         if userEntity != nil {
             SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
                 DispatchQueue.main.async {
-                    if let avatarURL = avatarURL {
-                        self.myAvatarURL = avatarURL
-                        self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: avatarURL)!)
+                    var avatar = avatarURL ?? ""
+                    if avatar == "" {
+                        avatar = DefaultAvatarUrl
                     }
+                    self.myAvatarURL = avatar
+                    self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: avatar)!)
                 }
             }
         }
+        updateUser()
+        
+        self.addTitle(title: "Messages")
+        self.addChatButton(withAction: #selector(navigateToAbout))
+        
+        refresh(self)
+        
     }
+    
+    func updateUser() {
+        let info = [
+            "DisplayName": self.userEntity?.displayName ?? "",
+            "Avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
+            "Sex": UserGender ?? "Female",
+            "Age": 1000,
+            "FCM_Token": FCM_Token
+        ] as [String : Any]
+        firebaseManager.updateUser(externalID, info)
+    }
+    
     @objc func refresh(_ sender: AnyObject) {
-            userIds.removeAll()
-            tableView.reloadData()
-            refreshControl.endRefreshing()
-            print("refresh")
-            
-        }
-
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         userIds.removeAll()
         tableView.reloadData()
-        let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 100)
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            let theirID = String(snapshot.key)
-            print("snpsht")
-            let snpsht = snapshot.value as! NSDictionary
-            print(snpsht)
-          //  if data (each other user id) is not info
-            if theirID == "Info"{
-                //my Info
-                self!.myDispName = snpsht.value(forKey: "DisplayName") as! String
-            } else {
-                //get their info and add it
-                let theirInfo = snpsht["Info"] as! NSDictionary
-                let displayName = theirInfo.value(forKey: "DisplayName")
-                let avatarURL = theirInfo.value(forKey: "Avatar")
-                let time = snpsht.value(forKey: "time")
-                let isNew = snpsht.value(forKey: "isNew")
-                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": false])
-                let ordered = self!.userIds.sorted(by: self!.compareNames)
-                self?.userIds = ordered
-                self?.tableView.reloadData()
-            }
-        })
+        refreshControl.endRefreshing()
         
-//        let queryAnon = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).queryLimited(toLast: 100)
-//        _ = queryAnon.observe(.childAdded, with: { [weak self] snapshot in
-//            let theirID = String(snapshot.key)
-//            let snpsht = snapshot.value as! NSDictionary
-//            //if data (each other user id) is not info
-//            if theirID == "Info"{
-//                //my Info
-//                self!.myDispName = snpsht.value(forKey: "DisplayName") as! String
-//            } else {
-//                //get their info and add it
-//                let theirInfo = snpsht["Info"] as! NSDictionary
-//                let displayName = theirInfo.value(forKey: "DisplayName")
-//                let avatarURL = theirInfo.value(forKey: "Avatar")
-//                let time = snpsht.value(forKey: "time")
-//                let isNew = snpsht.value(forKey: "isNew")
-//                self!.userIds.append(["userID": "\(theirID)", "displayName": displayName, "avatar": avatarURL, "time_ref": time, "isNew": isNew, "amIAnon": false])
-//                let ordered = self!.userIds.sorted(by: self!.compareNames)
-//                self?.userIds = ordered
-//                self?.tableView.reloadData()
-//            }
-//        })
+        firebaseManager.observeNewUser(self.externalID)
     }
-    
-    func compareNames(s1:[String : Any], s2:[String : Any]) -> Bool {
-        let v1 = s1["time_ref"] as! Int
-        let v2 = s2["time_ref"] as! Int
-        return v1 > v2
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        
+    }
+   
+    func compareNames(s1 :UserContact, s2: UserContact) -> Bool {
+        return s1.time_ref > s2.time_ref
     }
         
     
     @objc func navigateToProfile() {
         uploadScore()
-        let d = Int(Date().timeIntervalSinceReferenceDate)
+        let d = Int(getCurrentUtcTimeInterval())
         lastScoreUploadTime = d
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
@@ -142,59 +171,49 @@ class MainViewController: UIViewController {
     @objc func navigateToAbout() {
         print("About Page")
     }
+    
     func uploadScore(){
         let query = Constants.refs.databaseRoot.child("UserData").child(self.externalID).queryLimited(toLast: 1000)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            print("XDXDXDXDXDXDXDX")
-            print(snapshot)
             if String(snapshot.key) != "Info" {
-                print("made it")
                 let theirUserId = String(snapshot.key)
-             //   print(theirUserId)
-              //  print(scoreDict[theirUserId])
                 if  scoreDict[theirUserId] != nil {
-                    let userScoreIncreaseFromPeriod = scoreDict[theirUserId] as! Int
-                    print("score from period:")
-                    print(userScoreIncreaseFromPeriod)
-                    let snpsht = snapshot.value as! NSDictionary
-                    print("snpsht 1")
-                    print(snpsht)
-                    let preUploadUserScore = snpsht.value(forKey: "score") as! Int
-                    Constants.refs.databaseRoot.child("UserData").child(self!.externalID).child(theirUserId).child("score").setValue(preUploadUserScore  + userScoreIncreaseFromPeriod)
-                    scoreDict = [:]
+                    let userScoreIncreaseFromPeriod = scoreDict[theirUserId]
+                    if userScoreIncreaseFromPeriod != nil {
+                        let snpsht = snapshot.value as! NSDictionary
+                        let preUploadUserScore = snpsht.value(forKey: "score") as? Int
+                        if preUploadUserScore != nil {
+                            Constants.refs.databaseRoot.child("UserData").child(self!.externalID).child(theirUserId).child("score").setValue(preUploadUserScore!  + userScoreIncreaseFromPeriod!)
+                            scoreDict = [:]
+                        }
+                    }
                 }
-
             }
-
         })
     }
     
+    func goToChat(otherUserId: String, otherUserPushToken: String, otherUserAvatar: String, otherUserDisplayName: String, otherAnon: Bool) {
         
-    
-    func goToChat(otherUserId: String, otherUserDisplayName: String, amIAnon: Bool){
-        print("GoToChat")
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
-        newViewController.modalPresentationStyle = .fullScreen
         newViewController.userEntity = userEntity
         newViewController.otherUserID = otherUserId
         newViewController.externalID = self.externalID
-        newViewController.amIAnon = amIAnon
-        newViewController.areTheyAnon = otherUserId.hasPrefix("ZAAAAA3AAAAAZ") //if the other userid starts with anon delimiter than true else false
+        newViewController.otherUserPushToken = otherUserPushToken
+        newViewController.areTheyAnon = otherAnon //if the other userid starts with anon delimiter than true else false
+        newViewController.otherUserAvatar = otherUserAvatar
         newViewController.otherUserDisplayName = otherUserDisplayName
         self.navigationController?.pushViewController(newViewController, animated: true)
-        print("GoToChat2")
     }
     
     @IBAction func getMessages(_ sender: Any) {
         getURL()
     }
     
-    
     func postToSnap(){
         let snap = SCSDKNoSnapContent()
         snap.sticker = SCSDKSnapSticker(stickerImage: #imageLiteral(resourceName: "swipeUp"))
-        snap.attachmentUrl = (self.URL)
+        snap.attachmentUrl = (self.shareURL)
         let api = SCSDKSnapAPI(content: snap)
         api.startSnapping { error in
             
@@ -202,7 +221,6 @@ class MainViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
-        
     }
     
     func getURL() {
@@ -220,20 +238,23 @@ class MainViewController: UIViewController {
         lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$match_duration", withValue: "2000")
         lp.addControlParam("user", withValue: String((userEntity?.externalID)!.dropFirst(6)).replacingOccurrences(of: "/", with: ""))
+        lp.addControlParam("fcm_token", withValue: self.curUser?.fcm_token ?? "")
+        lp.addControlParam("avatar", withValue: self.userEntity?.avatar ?? DefaultAvatarUrl)
+        lp.addControlParam("displayName", withValue: userEntity?.displayName ?? "Annoymous")
+        lp.addControlParam("gender", withValue: UserGender ?? "Other")
         lp.addControlParam("random", withValue: UUID.init().uuidString)
         
         buo.getShortUrl(with: lp) { url, error in
-            self.URL = url ?? ""
+            self.shareURL = url ?? ""
             self.postToSnap()
         }
-        
     }
     
 }
 
 //MARK:- TableView Data Source And Delegate Methods
+
 extension MainViewController: UITableViewDataSource, UITableViewDelegate {
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userIds.count
@@ -241,52 +262,63 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
-        if userIds[indexPath.row]["isNew"] as! Int == 1{
+        
+        let userInfo = userIds[indexPath.row]
+        if userInfo.isNew {
             cell.newMessageDot.image = UIImage(named: "unread_message")
             cell.nameLabel.textColor = UIColor.black
         } else {
             cell.newMessageDot.image = nil
             cell.nameLabel.textColor = UIColor.darkGray
         }
-        print(userIds)
-        print(userIds[indexPath.row]["displayName"])
-        cell.nameLabel.text = userIds[indexPath.row]["displayName"] as! String
-        cell.profileImageView.load(from: userIds[indexPath.row]["avatar"] as! String)
-        let d = Int(Date().timeIntervalSinceReferenceDate)
-        print(userIds)
-        var t = userIds[indexPath.row]["time_ref"] as! Int
+      
+        if userInfo.isTyping {
+            cell.nameArea.isHidden = true
+            
+            cell.typingArea.isHidden = false
+            cell.typingNameLabel.text = "\(userInfo.displayName) is typing"
+            cell.typingImage.showAnimatingDotsInImageView()
+        } else {
+            cell.nameArea.isHidden = false
+            cell.nameLabel.text = userInfo.displayName
+            
+            cell.typingArea.isHidden = true
+        }
+        
+        cell.profileImageView.load(from: userInfo.avatar)
+        let d = getCurrentUtcTimeInterval()
+        let t = userInfo.time_ref
         let final = d - t
         if t == 1000000000 {
             cell.timeLabel.text = "Long ago"
-        }
-        else if final / 604800 > 0 {
-            cell.timeLabel.text = String(final / 604800) + "w"
-        }else if final / 86400 > 0 {
-            cell.timeLabel.text = String(final / 86400) + "d"
-        } else if final / 3600 > 0{
-            cell.timeLabel.text = String(final / 3600) + "h"
-        } else if final / 60 > 0{
-            cell.timeLabel.text = String(final / 60) + "m"
+        } else if final / 604800 > 1 {
+            cell.timeLabel.text = String(Int(final / 604800)) + "w"
+        } else if final / 86400 > 1 {
+            cell.timeLabel.text = String(Int(final / 86400)) + "d"
+        } else if final / 3600 > 1 {
+            cell.timeLabel.text = String(Int(final / 3600)) + "h"
+        } else if final / 60 > 1 {
+            cell.timeLabel.text = String(Int(final / 60)) + "m"
+        } else if final > 1 {
+            cell.timeLabel.text = String(Int(final)) + "s"
         } else {
-            cell.timeLabel.text = String(final) + "s"
+            cell.timeLabel.text = "Long ago"
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if userIds[indexPath.row]["isNew"] as! Int == 1{
-            let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(userIds[indexPath.row]["userID"] as! String)
-            userDataRefMe.child("isNew").setValue(false)
+        if userIds[indexPath.row].isNew {
+            firebaseManager.setNewUserContact(externalID, userIds[indexPath.row].userId, false)
         }
-        self.goToChat(otherUserId: userIds[indexPath.row]["userID"] as! String, otherUserDisplayName: userIds[indexPath.row]["displayName"] as! String, amIAnon: userIds[indexPath.row]["amIAnon"] as! Bool)
+        let otherUser = userIds[indexPath.row]
+        self.goToChat(otherUserId: otherUser.userId, otherUserPushToken: otherUser.fcm_token, otherUserAvatar: otherUser.avatar, otherUserDisplayName: otherUser.displayName, otherAnon: otherUser.amIAnon)
     }
-    
-    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let userDataRef = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.userIds[indexPath.row]["userID"] as! String)
-            let messageDataRef = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.userIds[indexPath.row]["userID"] as! String)
+            let userDataRef = Constants.refs.databaseRoot.child("UserData").child(self.userIds[indexPath.row].userId)
+            let messageDataRef = Constants.refs.databaseRoot.child("messageData").child(self.userIds[indexPath.row].userId)
             userIds.remove(at: indexPath.row)
             userDataRef.removeValue()
             messageDataRef.removeValue()
