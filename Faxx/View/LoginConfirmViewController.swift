@@ -23,13 +23,14 @@ class LoginConfirmViewController: UIViewController {
     
     var userEntity: UserEntity?
     var externalID = ""
+    var firebaseManager = FirebaseManager()
     
     override func viewDidLoad() {
         let vlayer = CAGradientLayer()
         vlayer.frame = view.bounds
         vlayer.colors=[FaxxPink.cgColor, UIColor.white.cgColor]
         view.layer.insertSublayer(vlayer, at: 0)
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
         super.viewDidLoad()
         
         let wlcm = "Hi " + String((userEntity?.displayName)!) + "!"
@@ -37,7 +38,7 @@ class LoginConfirmViewController: UIViewController {
         
         
         // set Image
-        guard let avatarString = userEntity?.avatar else { return }
+        let avatarString = userEntity?.avatar ?? DefaultAvatarUrl
         avatarImageView.load(from: avatarString)
     }
     
@@ -50,27 +51,29 @@ class LoginConfirmViewController: UIViewController {
     }
 
     @IBAction func goFemale(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
-        goToMain()
+        saveUser("Female")
     }
     
 
     @IBAction func goMale(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
-        goToMain()
+        saveUser("Male")
     }
     
     @IBAction func goNonBinary(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
+        saveUser("Other")
+    }
+    
+    func saveUser(_ gender: String) {
+        UserGender = gender
+        let content = [
+            "DisplayName": self.userEntity?.displayName ?? "",
+            "Avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
+            "Sex": gender,
+            "Age": 1000,
+            "FCM_Token": FCM_Token
+        ] as [String : Any]
+        firebaseManager.updateUser(self.externalID, content)
+        
         goToMain()
     }
 }

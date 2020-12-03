@@ -40,7 +40,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This application will use the camera for Augmented Reality.</string>
+	<string>Required to select user image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Required to select user image</string>
 	<key>SCSDKClientId</key>
 	<string>021236b3-45ac-438a-a786-a6b43ed92f86</string>
 	<key>SCSDKRedirectUrl</key>
@@ -50,6 +52,12 @@
 		<string>https://auth.snapchat.com/oauth2/api/user.external_id</string>
 		<string>https://auth.snapchat.com/oauth2/api/user.display_name</string>
 		<string>https://auth.snapchat.com/oauth2/api/user.bitmoji.avatar</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -75,5 +83,7 @@
 	</array>
 	<key>branch_key</key>
 	<string>key_live_jcO7ugZXfX05oelzZMALvoekrqd5RFB6</string>
+    <key>UIUserInterfaceStyle</key>
+    <string>Light</string>
 </dict>
 </plist>

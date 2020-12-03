@@ -8,344 +8,323 @@
 
 import Foundation
 import UIKit
-import JSQMessagesViewController
+import MessageKit
+import InputBarAccessoryView
 import SCSDKLoginKit
 import SCSDKBitmojiKit
+import PINRemoteImage
 
-class ChatViewController: JSQMessagesViewController {
-    var externalID:String = ""
-    var userEntity: UserEntity?
-    var otherUserID:String = ""
-    var otherUserDisplayName:String = ""
-    var amIAnon = false
-    var areTheyAnon = false
-    var messages = [JSQMessage]()
-//    var button = dropDownBtn()
-    lazy var outgoingBubble: JSQMessagesBubbleImage = {
-        return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: FaxxPink)
+class ChatViewController: BaseChatViewController {
+   
+    let outgoingAvatarOverlap: CGFloat = 17.5
+    
+    private let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
     }()
-
-    lazy var incomingBubble: JSQMessagesBubbleImage = {
-        return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
-    }()
+   
+    var avatar: Avatar!
     override func viewDidLoad() {
+        messagesCollectionView = MessagesCollectionView(frame: .zero, collectionViewLayout: CustomMessagesFlowLayout())
+        messagesCollectionView.register(MessageCell.self)
+        
         super.viewDidLoad()
         
-        self.addTitle(title: otherUserDisplayName)
-        print("EXTRNL")
-        print(externalID)
-        
-//        print(userEntity as Any)
-//        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
-        print("Am I anon in viewDidLoad Chat")
-        print(amIAnon)
-        if amIAnon {
-            senderId = "ZAAAAA3AAAAAZ" + externalID
-        } else {
-            senderId = externalID
+        var first = ""
+        if otherUserDisplayName.first != nil {
+            first = String(otherUserDisplayName.first!)
         }
-        print(amIAnon)
-        senderDisplayName = ""
-        inputToolbar.contentView.leftBarButtonItem = nil
-        collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
-        collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-        let messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID)
-        let query = messageDataRefMe.queryLimited(toLast: 10000)
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            print("lmaoooo")
-            print(snapshot)
+        avatar = Avatar(image: UIImage.load(from: otherUserAvatar), initials: first)
+    }
+   
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func configureMessageCollectionView() {
+        super.configureMessageCollectionView()
+        
+        let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout
+        layout?.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
+        
+        // Hide the outgoing avatar and adjust the label alignment to line up with the messages
+        layout?.setMessageOutgoingAvatarSize(.zero)
+        layout?.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
+        layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
 
-            if  let data        = snapshot.value as? [String: String],
-                let id          = data["sender_id"],
-                let text        = data["text"],
-                !text.isEmpty
-            {
-                if let message = JSQMessage(senderId: id, displayName: "", text: text)
-                {
-                    self?.messages.append(message)
+        // Set outgoing avatar to overlap with the message bubble
+        layout?.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 18, bottom: outgoingAvatarOverlap, right: 0)))
+        layout?.setMessageIncomingAvatarSize(.zero)
+        layout?.setMessageIncomingMessagePadding(UIEdgeInsets(top: -outgoingAvatarOverlap, left: 0, bottom: outgoingAvatarOverlap, right: 18))
+        
+        layout?.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
+        layout?.setMessageIncomingAccessoryViewPadding(HorizontalEdgeInsets(left: 8, right: 0))
+        layout?.setMessageIncomingAccessoryViewPosition(.messageBottom)
+        layout?.setMessageOutgoingAccessoryViewSize(CGSize(width: 30, height: 30))
+        layout?.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
 
-                    self?.finishReceivingMessage()
-                }
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
+    }
+    
+    override func configureMessageInputBar() {
+        super.configureMessageInputBar()
+        
+        messageInputBar.isTranslucent = true
+        messageInputBar.separatorLine.isHidden = true
+        messageInputBar.inputTextView.tintColor = .primaryColor
+        messageInputBar.inputTextView.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        messageInputBar.inputTextView.placeholderTextColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
+        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 36)
+        messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 36)
+        messageInputBar.inputTextView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1).cgColor
+        messageInputBar.inputTextView.layer.borderWidth = 1.0
+        messageInputBar.inputTextView.layer.cornerRadius = 16.0
+        messageInputBar.inputTextView.layer.masksToBounds = true
+        messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        configureInputBarItems()
+    }
+
+    private func configureInputBarItems() {
+        messageInputBar.setRightStackViewWidthConstant(to: 36, animated: false)
+        messageInputBar.sendButton.imageView?.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+        messageInputBar.sendButton.setSize(CGSize(width: 36, height: 36), animated: false)
+        messageInputBar.sendButton.image = #imageLiteral(resourceName: "ic_up")
+        messageInputBar.sendButton.title = nil
+        messageInputBar.sendButton.imageView?.layer.cornerRadius = 16
+//
+//        configureInputBarPadding()
+//
+        // This just adds some more flare
+        messageInputBar.sendButton
+            .onEnabled { item in
+                UIView.animate(withDuration: 0.3, animations: {
+                    item.imageView?.backgroundColor = FaxxDarkPink
+                })
+            }.onDisabled { item in
+                UIView.animate(withDuration: 0.3, animations: {
+                    item.imageView?.backgroundColor = UIColor(white: 0.85, alpha: 1)
+                })
+        }
+
+        messageInputBar.setLeftStackViewWidthConstant(to: 40, animated: false)
+        let cameraButton = InputBarButtonItem()
+            .configure {
+                $0.spacing = .fixed(0)
+                $0.image = UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate)
+                $0.setSize(CGSize(width: 40, height: 40), animated: false)
+                $0.tintColor = FaxxDarkPink
+            }.onTextViewDidChange { button, textView in
+                button.isEnabled = textView.text.isEmpty
+            }.onTouchUpInside {_ in
+                self.selectAsset()
             }
-        })
+        messageInputBar.setStackViewItems([cameraButton], forStack: .left, animated: false)
+    }
+    
+    private func configureInputBarPadding() {
+    
+        // Entire InputBar padding
+        messageInputBar.padding.bottom = 8
         
-//        button = dropDownBtn.init(frame: CGRect(x:0, y:0, width: 0, height:0))
-//        button.setTitle("Menu", for: .normal)
-//        button.translatesAutoresizingMaskIntoConstraints = true
-//        self.view.addSubview(button)
-        
-        //position button
-//        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-//        button.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        
-        //button dims
-//        button.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//        button.heightAnchor.constraint(equalToConstant: 140).isActive = true
-        
-//        button.dropView.dropDownOptions = ["Block", "Clear Chat", "Reveal Identity"]
-        
+        // or MiddleContentView padding
+        messageInputBar.middleContentViewPadding.right = -38
 
+        // or InputTextView padding
+        messageInputBar.inputTextView.textContainerInset.bottom = 8
+        
     }
     
+    // MARK: - Helpers
     
-    @objc func backPressed() {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "main") as!MainViewController
-        newViewController.userEntity = userEntity
-        newViewController.modalPresentationStyle = .fullScreen
-        newViewController.modalPresentationStyle = .custom
-        self.present(newViewController, animated: true, completion: nil)
+    func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
+        return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
     }
     
+    func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section - 1 >= 0 else { return false }
+        return messageList[indexPath.section].user == messageList[indexPath.section - 1].user
+    }
     
-    override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData!
-    {
-        return messages[indexPath.item]
+    func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section + 1 < messageList.count else { return false }
+        return messageList[indexPath.section].user == messageList[indexPath.section + 1].user
+    }
+    
+    func setTypingIndicatorViewHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
+        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
+            if success, self?.isLastSectionVisible() == true {
+                self?.messagesCollectionView.scrollToBottom(animated: true)
+            }
+        }
+    }
+   
+    // MARK: - UICollectionViewDataSource
+    
+    public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
+            fatalError("Ouch. nil data source for messages")
+        }
+
+        // Very important to check this when overriding `cellForItemAt`
+        // Super method will handle returning the typing indicator cell
+        guard !isSectionReservedForTypingIndicator(indexPath.section) else {
+            return super.collectionView(collectionView, cellForItemAt: indexPath)
+        }
+
+        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+        if case .custom = message.kind {
+            let cell = messagesCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return cell
+        }
+        return super.collectionView(collectionView, cellForItemAt: indexPath)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-    {
-        return messages.count
-    }
-    
-    override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource!
-    {
-        return messages[indexPath.item].senderId == senderId ? outgoingBubble : incomingBubble
-    }
-    override func collectionView(_ collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource!
-    {
+    // MARK: - MessagesDataSource
+
+    override func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if isTimeLabelVisible(at: indexPath) {
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        }
         return nil
     }
-    override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForMessageBubbleTopLabelAt indexPath: IndexPath!) -> NSAttributedString!
-    {
-        return messages[indexPath.item].senderId == senderId ? nil : NSAttributedString(string: messages[indexPath.item].senderDisplayName)
-    }
-
-    override func collectionView(_ collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAt indexPath: IndexPath!) -> CGFloat
-    {
-        return messages[indexPath.item].senderId == senderId ? 0 : 15
-    }
     
-    override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
-    {
-
-        let d = Int(Date().timeIntervalSinceReferenceDate)
-        let message = ["sender_id": senderId, "text": text]
-        
-        var messageDataRefThem = Constants.refs.databaseRoot.child("messageData")
-        var messageDataRefMe = Constants.refs.databaseRoot.child("messageData")
-        var userDataRefThem = Constants.refs.databaseRoot.child("UserData")
-        var userDataRefMe = Constants.refs.databaseRoot.child("UserData")
-        
-        print("Chat pressed send data:")
-        print("Am i Anon?")
-        print(amIAnon)
-        print("Are they anon?")
-        print(areTheyAnon)
-        
-        if areTheyAnon{
-            if amIAnon{
-                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID)
-                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID).childByAutoId()
-                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID)
-                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID).childByAutoId()
-            } else {
-                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID)
-                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child("ZAAAAA3AAAAAZ" + self.otherUserID).childByAutoId()
-                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child(self.externalID)
-                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.otherUserID).child(self.externalID).childByAutoId()
-            }
-        } else {
-            if amIAnon{
-                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child("ZAAAAA3AAAAAZ" + self.externalID).child(self.otherUserID)
-                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child("ZAAAAA3AAAAAZ" + self.externalID).child(self.otherUserID).childByAutoId()
-                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID)
-                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child("ZAAAAA3AAAAAZ" + self.externalID).childByAutoId()
-            } else {
-                userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID).child(self.otherUserID)
-                messageDataRefMe = Constants.refs.databaseRoot.child("messageData").child(self.externalID).child(self.otherUserID).childByAutoId()
-                userDataRefThem = Constants.refs.databaseRoot.child("UserData").child(self.otherUserID).child(self.externalID)
-                messageDataRefThem = Constants.refs.databaseRoot.child("messageData").child(self.otherUserID).child(self.externalID).childByAutoId()
-                
-            }
-            
+    override func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if !isPreviousMessageSameSender(at: indexPath) {
+            let name = message.sender.displayName
+            return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
         }
-        
-        print(userDataRefThem)
-        print(userDataRefMe)
-        print(messageDataRefThem)
-        print(messageDataRefMe)
-        messageDataRefThem.setValue(message)
-        userDataRefThem.child("time").setValue(d)
-        userDataRefThem.child("isNew").setValue(true)
-        
-        messageDataRefMe.setValue(message)
-        userDataRefMe.child("time").setValue(d)
-
-        incrementScore(senderID: self.externalID, recieiverID: self.otherUserID)
-        finishSendingMessage()
+        return nil
     }
-    
-    func incrementScore(senderID:String, recieiverID:String){
-        print("initial score:")
-        var dict = UserDefaults.standard.dictionary(forKey: "scoreDict")
-        print(scoreDict)
-        
-        if scoreDict[senderID] == nil{
-           // dict?[senderID] = 1
-            print("added")
-            var myCurrentScore = scoreDict[senderID] as? Int
-            print(myCurrentScore)
-            myCurrentScore = 0
-            print(myCurrentScore)
-            var myCurrentScoreInt = myCurrentScore!+1
-            print(myCurrentScoreInt)
-            print("hi")
-            print(scoreDict)
-            scoreDict[senderID] = myCurrentScoreInt
-            print(scoreDict)
-            
-        }else{
-            var myCurrentScore = scoreDict[senderID] as? Int
-            myCurrentScore = myCurrentScore!+1
-            scoreDict[senderID] = myCurrentScore
-        }
-        if scoreDict[recieiverID] == nil{
-            //dict?[senderID] = 1
-            var theirCurrentScore = scoreDict[recieiverID] as? Int
-            theirCurrentScore = 0
-            var theirCurrentScoreInt = theirCurrentScore!+1
-            scoreDict[recieiverID] = theirCurrentScoreInt
-        }else{
-            var theirCurrentScore = scoreDict[recieiverID] as? Int
-            theirCurrentScore = theirCurrentScore!+1
-            scoreDict[recieiverID] = theirCurrentScore
-        }
 
-//        defaults.set(dict, forKey: "scoreDict")
-////        defaults.dictionary(forKey: "scoreDict")
-        print("final score:")
-        print(scoreDict)
-        print("increase score")
-        print(defaults)
+    override func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
-        
+        if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
+            guard let tmp = message as? MockMessage else {
+                return nil
+            }
+            if tmp.unread {
+                return NSAttributedString(string: "Unread", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+            } else {
+                return NSAttributedString(string: "Read", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1), NSAttributedString.Key.foregroundColor: FaxxPink])
+            }
+        }
+        return nil
     }
 }
 
-        
-    
+// MARK: - MessagesDisplayDelegate
 
-//
-//class dropDownBtn: UIButton {
-//
-//    var dropView = dropDownView()
-//    var height = NSLayoutConstraint()
-//
-//    override init(frame: CGRect){
-//        super.init(frame: frame)
-//
-//        self.backgroundColor = UIColor.darkGray
-//
-//        dropView = dropDownView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
-//
-//        dropView.translatesAutoresizingMaskIntoConstraints = false
-//
-//    }
-//
-//    override func didMoveToSuperview() {
-//        self.superview?.addSubview(dropView)
-//        self.superview?.bringSubview(toFront: dropView)
-//        dropView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-//        dropView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        dropView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-//        height = dropView.heightAnchor.constraint(equalToConstant: 0)
-//    }
-//
-//    var isOpen = false
-//
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        if isOpen == false {
-//            isOpen = true
-//            NSLayoutConstraint.deactivate([self.height])
-//            if self.dropView.tableView.contentSize.height > 150 {
-//                self.height.constant = 150
-//            } else {
-//                self.height.constant = self.dropView.tableView.contentSize.height
-//            }
-//
-//            NSLayoutConstraint.activate([self.height])
-//
-//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-//                self.dropView.layoutIfNeeded()
-//                self.dropView.center.y += self.dropView.frame.height / 2
-//            }, completion: nil)
-//        }else{
-//            isOpen = false
-//
-//            NSLayoutConstraint.deactivate([self.height])
-//            self.height.constant = 0
-//            NSLayoutConstraint.activate([self.height])
-//
-//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-//                self.dropView.center.y -= self.dropView.frame.height / 2
-//                self.dropView.layoutIfNeeded()
-//
-//            }, completion: nil)
-//        }
-//    }
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
-//
-//
-//class dropDownView: UIView, UITableViewDelegate, UITableViewDataSource {
-//    var dropDownOptions = [String]()
-//    var tableView = UITableView()
-//
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//        tableView.backgroundColor = UIColor.darkGray
-//        self.backgroundColor = UIColor.darkGray
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//
-//        tableView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        self.addSubview(tableView)
-//
-//        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-//        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-//        tableView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//
-//
-//    }
-//
-//
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return dropDownOptions.count
-//    }
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath : IndexPath) -> UITableViewCell {
-//        var cell = UITableViewCell()
-//
-//        cell.textLabel?.text = dropDownOptions[indexPath.row]
-//        cell.backgroundColor = UIColor.darkGray
-//
-//
-//        return cell
-//    }
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print(dropDownOptions[indexPath.row])
-//    }
-//}
+extension ChatViewController: MessagesDisplayDelegate {
+
+    // MARK: - Text Messages
+
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? .white : .darkText
+    }
+
+    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
+        switch detector {
+        case .hashtag, .mention:
+            if isFromCurrentSender(message: message) {
+                return [.foregroundColor: UIColor.white]
+            } else {
+                return [.foregroundColor: UIColor.primaryColor]
+            }
+        default: return MessageLabel.defaultAttributes
+        }
+    }
+
+    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+        return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
+    }
+
+    // MARK: - All Messages
+    
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+    }
+
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        
+        var corners: UIRectCorner = []
+        
+        if isFromCurrentSender(message: message) {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.bottomLeft)
+            if !isPreviousMessageSameSender(at: indexPath) {
+                corners.formUnion(.topRight)
+            }
+            if !isNextMessageSameSender(at: indexPath) {
+                corners.formUnion(.bottomRight)
+            }
+        } else {
+            corners.formUnion(.topRight)
+            corners.formUnion(.bottomRight)
+            if !isPreviousMessageSameSender(at: indexPath) {
+                corners.formUnion(.topLeft)
+            }
+            if !isNextMessageSameSender(at: indexPath) {
+                corners.formUnion(.bottomLeft)
+            }
+        }
+        
+        return .custom { view in
+            let radius: CGFloat = 16
+            let path = UIBezierPath(roundedRect: view.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+            let mask = CAShapeLayer()
+            mask.path = path.cgPath
+            view.layer.mask = mask
+        }
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        
+//        avatarView.set(avatar: avatar)
+//        avatarView.isHidden = isNextMessageSameSender(at: indexPath)
+//        avatarView.layer.borderWidth = 2
+//        avatarView.layer.borderColor = UIColor.primaryColor.cgColor
+    }
+
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            imageView.pin_setImage(from: imageURL)
+        } else {
+            imageView.pin_cancelImageDownload()
+        }
+    }
+}
+
+// MARK: - MessagesLayoutDelegate
+
+extension ChatViewController: MessagesLayoutDelegate {
+
+    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if isTimeLabelVisible(at: indexPath) {
+            return 18
+        }
+        return 0
+    }
+    
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if isFromCurrentSender(message: message) {
+            return !isPreviousMessageSameSender(at: indexPath) ? 20 : 0
+        } else {
+            return !isPreviousMessageSameSender(at: indexPath) ? (20 + outgoingAvatarOverlap) : 0
+        }
+    }
+
+    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
+    }
+
+}
