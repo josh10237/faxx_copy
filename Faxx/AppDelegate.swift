@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
     var deepParams: [String : AnyObject]? = nil
     var firebaseManager: FirebaseManager!
     
-    var notificationSenderId: String = ""
+    var notificationSenderId: Int = 0
     var isNotificationSenderAnon: Bool = false
 
     internal func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -99,31 +99,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
             // do stuff with deep link data (nav to page, display content, etc)
             self.deepParams = params as? [String : AnyObject]
             if let s = (params as? [String: AnyObject]),
-                let posterId = s["user"] as? String,
-                let posterName = s["displayName"] as? String,
-                let avatar = s["avatar"] as? String,
-                let fcm_token = s["fcm_token"] as? String,
-                let gender = s["gender"] as? String {
-                if self.sharedUserEntity != nil {
-                    let externalID = getExtenalId(self.sharedUserEntity.externalID ?? "")
-                    let user_info = [
-                        "DisplayName": self.sharedUserEntity.displayName ?? "",
-                        "Avatar": self.sharedUserEntity.avatar ?? DefaultAvatarUrl,
-                        "FCM_Token": FCM_Token,
-                        "Sex": UserGender ?? "Other",
-                        "Age": 1000
-                        ] as [String : Any]
-                    
-                    let poster_info = [
-                        "DisplayName": posterName,
-                        "Avatar": avatar,
-                        "FCM_Token": fcm_token,
-                        "Sex": gender,
-                        "Age": 1000
-                        ] as [String : Any]
-                    
-                    self.firebaseManager.setAnonUser(externalID, posterId, user_info, poster_info)
-                    self.goToAnnonChat(posterId, posterName, fcm_token, avatar)
+               let tmp = s["posterId"] as? String {
+                let posterId = Int(tmp) ?? 0
+                if CurrentUser != nil {
+                    if posterId != CurrentUser?.id {
+                        self.goToAnnonChat(posterId)
+                    } else {
+                        self.window?.rootViewController?.showToastMessageCenter(message: "Sorry, you cannot send yourself messages")
+                    }
                 } else {
                     self.closedDeepLink = true
                 }
@@ -132,36 +115,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
         return true
     }
     
-    func goToAnnonChat(_ posterId: String, _ posterName: String, _ fcm_token: String, _ avatar: String) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let newChatViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
-        newChatViewController.areTheyAnon = false
-        newChatViewController.userEntity = self.sharedUserEntity
-        newChatViewController.externalID = getExtenalId(self.sharedUserEntity.externalID ?? "")
-        newChatViewController.otherUserID = posterId
-        newChatViewController.areTheyAnon = false
-        newChatViewController.otherUserPushToken = fcm_token
-        newChatViewController.otherUserAvatar = avatar
-        newChatViewController.otherUserDisplayName = posterName
-        
-        StoryboardManager.segueToChat(with: self.sharedUserEntity, chatView: newChatViewController)
+    func goToAnnonChat(_ posterId: Int) {
+        if let curUser = CurrentUser {
+            let params = [
+                "f_id": curUser.id,
+                "t_id": posterId,
+                "anon_id": curUser.id
+            ] as [String : Any]
+            
+            if !NetworkManager.shared.isConnectedNetwork() {
+                return
+            }
+            
+            guard let url = URL(string: NetworkManager.shared.CreateContact) else {
+                return
+            }
+           
+            NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+                if ((self.window?.rootViewController?.parseResponse(response: response)) != nil) {
+                    if ((self.window?.rootViewController?.parseResponse(response: response)) != nil) {
+                        let contact = ContactModel(response["contact"], curUser)
+                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                        let newChatViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
+                        newChatViewController.contact = contact
+                        StoryboardManager.segueToChat(with: self.sharedUserEntity, chatView: newChatViewController)
+                    }
+                } else {
+                    let message = response["err_msg"].stringValue
+                    self.window?.rootViewController?.showToastMessage(message: message)
+                }
+            }
+        }
     }
     
-    func goToNotificationChat(_ senderId: String, _ senderInfo: JSON, _ isAnon: Bool) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let newChatViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
-        newChatViewController.areTheyAnon = isAnon
-        newChatViewController.userEntity = self.sharedUserEntity
-        newChatViewController.externalID = getExtenalId(self.sharedUserEntity.externalID ?? "")
-        newChatViewController.otherUserID = senderId
-        newChatViewController.areTheyAnon = false
-        newChatViewController.otherUserPushToken = senderInfo["FCM_Token"].stringValue
-        newChatViewController.otherUserAvatar = senderInfo["Avatar"].stringValue
-        newChatViewController.otherUserDisplayName = senderInfo["DisplayName"].stringValue
-        
-        StoryboardManager.segueToChat(with: self.sharedUserEntity, chatView: newChatViewController)
+    func goToNotificationChat(_ f_id: Int, _ t_id: Int, _ anon_id: Int) {
+        if let curUser = CurrentUser {
+            let params = [
+                "f_id": f_id,
+                "t_id": t_id,
+                "anon_id": anon_id
+            ] as [String : Any]
+            
+            if !NetworkManager.shared.isConnectedNetwork() {
+                return
+            }
+            
+            guard let url = URL(string: NetworkManager.shared.CreateContact) else {
+                return
+            }
+           
+            NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+                if ((self.window?.rootViewController?.parseResponse(response: response)) != nil) {
+                    if ((self.window?.rootViewController?.parseResponse(response: response)) != nil) {
+                        let contact = ContactModel(response["contact"], curUser)
+                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                        let newChatViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
+                        newChatViewController.contact = contact
+                        StoryboardManager.segueToChat(with: self.sharedUserEntity, chatView: newChatViewController)
+                    }
+                } else {
+                    let message = response["err_msg"].stringValue
+                    self.window?.rootViewController?.showToastMessage(message: message)
+                }
+            }
+        }
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -248,17 +265,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
 
         // Print full message.
         let tmp = JSON(userInfo)
-        var senderId = tmp["senderId"].stringValue
+        let senderId = tmp["senderId"].intValue
         let isAnon = tmp["isAnon"].boolValue
-        if isAnon {
-            senderId = "\(AnnoymousIdPrefix)\(senderId)"
-        }
         
-        if self.sharedUserEntity != nil {
-            let externalId = getExtenalId(self.sharedUserEntity.externalID ?? "")
-            firebaseManager.getNotificationSender(externalId, senderId) { (result) in
-                self.goToNotificationChat(senderId, result, isAnon)
+        if let curUser = CurrentUser {
+            let cur_id = curUser.id
+            var anon_id = cur_id
+            if isAnon {
+                anon_id = senderId
             }
+            self.goToNotificationChat(cur_id, senderId, anon_id)
         } else {
             self.notificationSenderId = senderId
             self.isNotificationSenderAnon = isAnon

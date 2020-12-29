@@ -8,8 +8,43 @@
 
 import Foundation
 import UIKit
+import Toast_Swift
+import SwiftyJSON
 
 extension UIViewController {
+    
+    func showNetConnectionAlert() {
+        let title = "Whoops!"
+        let message = "NetworkError: Please verify that you have internet connectivity"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showToastMessage(message: String) {
+        var style = ToastStyle()
+        style.messageColor = .white
+        self.view.makeToast(message, duration: 3.0, position: .bottom, style: style)
+    }
+    
+    func showToastMessageCenter(message: String) {
+        var style = ToastStyle()
+        style.messageColor = .white
+        style.backgroundColor = FaxxPink
+        style.messageFont = UIFont.systemFont(ofSize: 20)
+        style.messageAlignment = .center
+        self.view.makeToast(message, duration: 5.0, position: .center, style: style)
+    }
+    
+    func parseResponse(response: JSON) -> Bool {
+        let res = response["res"].stringValue.uppercased()
+        if res == "SUCCESS" {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func addTitle(title:String){
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2

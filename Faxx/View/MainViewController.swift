@@ -13,60 +13,10 @@ import SCSDKBitmojiKit
 import SCSDKCreativeKit
 import Branch
 import MessageKit
+import SwiftyJSON
+import MBProgressHUD
 
-class MainViewController: UIViewController, FirebaseManagerDelegate {
-    
-    // MARK: - Firebase delegate
-    
-    func updateMessage(_ message: MockMessage) {
-        return
-    }
-    
-    func setTypingStatus(_ otherUserId: String, _ typing: Bool) {
-        let index = self.userIds.firstIndex { (item) -> Bool in
-            return item.userId == otherUserId
-        }
-        if index != nil {
-            self.userIds[index!].isTyping = typing
-            self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
-        }
-    }
-    
-    func onMessageAdded(_ message: MockMessage) {
-        return
-    }
-    
-    func onSelfStateChanged(_ state: UserContact) {
-        let index = self.userIds.firstIndex { (item) -> Bool in
-            return item.userId == state.userId
-        }
-        if index != nil {
-            print("isNew: ", state.isNew)
-            self.userIds[index!].isNew = state.isNew
-            self.userIds[index!].time_ref = state.time_ref
-            self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
-        }
-    }
-    
-    func onUserAdded(_ user: UserContact) {
-        if user.userId == self.externalID {
-            self.curUser = user
-        } else {
-            self.firebaseManager.observeMessageThread(self.externalID, user.userId)
-            let index = self.userIds.firstIndex { (item) -> Bool in
-                return item.userId == user.userId
-            }
-            if index != nil {
-                self.userIds[index!] = user
-                self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
-            } else {
-                self.userIds.append(user)
-                let ordered = self.userIds.sorted(by: self.compareNames)
-                self.userIds = ordered
-                self.tableView.reloadData()
-            }
-        }
-    }
+class MainViewController: UIViewController {
     
     
     // MARK: - Interface Builder
@@ -76,9 +26,8 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
     @IBOutlet weak var getMessages: UIButton!
     
     let firebaseManager = FirebaseManager()
-    
-    var userIds: [UserContact] = []
-    var curUser: UserContact?
+    var contactList: [ContactModel] = []
+    var realContactList: [ContactModel] = []
     var externalID: String = ""
     var userEntity: UserEntity?
     var shareURL = ""
@@ -87,12 +36,12 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
     var lastScoreUploadTime:Int = 0
     private var refreshControl = UIRefreshControl()
     
+    var socketIOManager = SocketIOManager.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        firebaseManager.delegate = self
-        
-        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(self.loadContacts), for: .valueChanged)
         tableView.addSubview(refreshControl)
         self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
         myDispName = userEntity?.displayName ?? ""
@@ -103,57 +52,73 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
             lastScoreUploadTime = d
         }
         
-        if userEntity != nil {
-            SCSDKBitmojiClient.fetchAvatarURL { (avatarURL: String?, error: Error?) in
-                DispatchQueue.main.async {
-                    var avatar = avatarURL ?? ""
-                    if avatar == "" {
-                        avatar = DefaultAvatarUrl
-                    }
-                    self.myAvatarURL = avatar
-                    self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: avatar)!)
-                }
-            }
+        if CurrentUser != nil {
+            self.myAvatarURL = CurrentUser!.avatar
+            self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: self.myAvatarURL) ?? #imageLiteral(resourceName: "Nathan-Tannar"))
         }
-        updateUser()
         
         self.addTitle(title: "Messages")
         self.addChatButton(withAction: #selector(navigateToAbout))
         
-        refresh(self)
+        loadContacts()
         
+        socketIOManager.establishConnection(user_id: CurrentUser?.id ?? 0)
+        socketIOManager.delegate = self
     }
     
-    func updateUser() {
-        let info = [
-            "DisplayName": self.userEntity?.displayName ?? "",
-            "Avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
-            "Sex": UserGender ?? "Female",
-            "Age": 1000,
-            "FCM_Token": FCM_Token
-        ] as [String : Any]
-        firebaseManager.updateUser(externalID, info)
+    @objc func loadContacts() {
+        if let curUser = CurrentUser {
+            let params = [
+                "u_id": curUser.id
+            ] as [String : Any]
+            
+            if !NetworkManager.shared.isConnectedNetwork() {
+                return
+            }
+            
+            guard let url = URL(string: NetworkManager.shared.AllContacts) else {
+                return
+            }
+           
+            NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+                if self.parseResponse(response: response) {
+                    let contacts = response["contacts"].arrayValue
+                    var tmp_arr: [ContactModel] = []
+                    contacts.forEach { (contact) in
+                        let tmp = ContactModel(contact, curUser)
+                        tmp_arr.append(tmp)
+                    }
+                    self.contactList = tmp_arr
+                    self.loadContactTable()
+                } else {
+                    let message = response["err_msg"].stringValue
+                    self.showToastMessage(message: message)
+                }
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
     
-    @objc func refresh(_ sender: AnyObject) {
-        userIds.removeAll()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
-        
-        firebaseManager.observeNewUser(self.externalID)
+    func loadContactTable() {
+        realContactList = contactList.filter({ (contact) -> Bool in
+            return contact.last_msg != ""
+        })
+        self.tableView.reloadData()
     }
-
+   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+//        self.view.endEditing(true)
+        
+//        firebaseManager.observeNewUser(self.externalID)
+        current_chat_thread_id = 0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
     }
    
-    func compareNames(s1 :UserContact, s2: UserContact) -> Bool {
-        return s1.time_ref > s2.time_ref
-    }
-        
-    
     @objc func navigateToProfile() {
         uploadScore()
         let d = Int(getCurrentUtcTimeInterval())
@@ -192,18 +157,23 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
         })
     }
     
-    func goToChat(otherUserId: String, otherUserPushToken: String, otherUserAvatar: String, otherUserDisplayName: String, otherAnon: Bool) {
+    func goToChat(_ contact: ContactModel) {
         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "chat") as! ChatViewController
         newViewController.userEntity = userEntity
-        newViewController.otherUserID = otherUserId
-        newViewController.externalID = self.externalID
-        newViewController.otherUserPushToken = otherUserPushToken
-        newViewController.areTheyAnon = otherAnon //if the other userid starts with anon delimiter than true else false
-        newViewController.otherUserAvatar = otherUserAvatar
-        newViewController.otherUserDisplayName = otherUserDisplayName
+        newViewController.currentUser = CurrentUser
+        newViewController.contact = contact
+        
+//        newViewController.otherUserID = otherUserId
+//        newViewController.externalID = self.externalID
+//        newViewController.otherUserPushToken = otherUserPushToken
+//        newViewController.areTheyAnon = otherAnon //if the other userid starts with anon delimiter than true else false
+//        newViewController.otherUserAvatar = otherUserAvatar
+//        newViewController.otherUserDisplayName = otherUserDisplayName
         self.navigationController?.pushViewController(newViewController, animated: true)
+//        newViewController.modalPresentationStyle = .fullScreen
+//        self.present(newViewController, animated: true, completion: nil)
     }
     
     @IBAction func getMessages(_ sender: Any) {
@@ -221,6 +191,18 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
                 print(error.localizedDescription)
             }
         }
+        
+        let anonUsers = self.contactList.filter { (item) -> Bool in
+            return item.amIAnon
+        }
+        anonUsers.forEach { (user) in
+            let token = user.t_fcm_token
+            let data = [
+                "senderId": CurrentUser?.id ?? 0,
+                "isAnon": false
+            ] as [String : Any]
+            self.firebaseManager.sendPushNotification(token, String(format: GetMessagesFormat, CurrentUser?.display_name ?? ""), "", data)
+        }
     }
     
     func getURL() {
@@ -232,23 +214,22 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
         let lp: BranchLinkProperties = BranchLinkProperties()
         
         lp.addControlParam("$desktop_url", withValue: "https://www.snapchat.com/")
+//        lp.addControlParam("$ios_url", withValue: "https://faxxapp.page.link/snapchat")
         lp.addControlParam("$ios_url", withValue: "joshbenson://faxx")
-        lp.addControlParam("$fallback_url", withValue: "https://www.snapchat.com/")
+//        lp.addControlParam("$fallback_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$ipad_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
         lp.addControlParam("$match_duration", withValue: "2000")
-        lp.addControlParam("user", withValue: String((userEntity?.externalID)!.dropFirst(6)).replacingOccurrences(of: "/", with: ""))
-        lp.addControlParam("fcm_token", withValue: self.curUser?.fcm_token ?? "")
-        lp.addControlParam("avatar", withValue: self.userEntity?.avatar ?? DefaultAvatarUrl)
-        lp.addControlParam("displayName", withValue: userEntity?.displayName ?? "Annoymous")
-        lp.addControlParam("gender", withValue: UserGender ?? "Other")
-        lp.addControlParam("random", withValue: UUID.init().uuidString)
+        lp.addControlParam("posterId", withValue: "\(CurrentUser?.id ?? 0)")
         
         buo.getShortUrl(with: lp) { url, error in
             self.shareURL = url ?? ""
             self.postToSnap()
         }
+        
     }
+    
+    var current_chat_thread_id = 0
     
 }
 
@@ -257,37 +238,52 @@ class MainViewController: UIViewController, FirebaseManagerDelegate {
 extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userIds.count
+        return realContactList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
-        
-        let userInfo = userIds[indexPath.row]
-        if userInfo.isNew {
+        let contact = realContactList[indexPath.row]
+        if contact.last_msg_status == "unread" {
             cell.newMessageDot.image = UIImage(named: "unread_message")
             cell.nameLabel.textColor = UIColor.black
         } else {
             cell.newMessageDot.image = nil
             cell.nameLabel.textColor = UIColor.darkGray
         }
-      
-        if userInfo.isTyping {
+
+        var display_name = contact.t_display_name
+        var avatar = contact.t_avatar
+        if contact.areTheyAnon {
+            display_name = contact.t_anon_display_name
+            avatar = contact.t_anon_avatar
+        }
+        
+        if contact.isTyping {
             cell.nameArea.isHidden = true
-            
+
             cell.typingArea.isHidden = false
-            cell.typingNameLabel.text = "\(userInfo.displayName) is typing"
+            
+            cell.typingNameLabel.text = "\(display_name) is typing"
             cell.typingImage.showAnimatingDotsInImageView()
         } else {
             cell.nameArea.isHidden = false
-            cell.nameLabel.text = userInfo.displayName
-            
+            cell.nameLabel.text = display_name
+
             cell.typingArea.isHidden = true
         }
         
-        cell.profileImageView.load(from: userInfo.avatar)
+        if contact.amIAnon {
+            cell.lbl_anonymous.isHidden = true
+            cell.lbl_anonymous_2.isHidden = true
+        } else {
+            cell.lbl_anonymous.isHidden = false
+            cell.lbl_anonymous_2.isHidden = false
+        }
+        
+        cell.profileImageView.load(from: avatar)
         let d = getCurrentUtcTimeInterval()
-        let t = userInfo.time_ref
+        let t = contact.last_msg_timestamp
         let final = d - t
         if t == 1000000000 {
             cell.timeLabel.text = "Long ago"
@@ -302,28 +298,124 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
         } else if final > 1 {
             cell.timeLabel.text = String(Int(final)) + "s"
         } else {
-            cell.timeLabel.text = "Long ago"
+            cell.timeLabel.text = "Just now"
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if userIds[indexPath.row].isNew {
-            firebaseManager.setNewUserContact(externalID, userIds[indexPath.row].userId, false)
+        
+        let contact = realContactList[indexPath.row]
+        if self.current_chat_thread_id != contact.id {
+            self.goToChat(contact)
+            self.current_chat_thread_id = contact.id
         }
-        let otherUser = userIds[indexPath.row]
-        self.goToChat(otherUserId: otherUser.userId, otherUserPushToken: otherUser.fcm_token, otherUserAvatar: otherUser.avatar, otherUserDisplayName: otherUser.displayName, otherAnon: otherUser.amIAnon)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let userDataRef = Constants.refs.databaseRoot.child("UserData").child(self.userIds[indexPath.row].userId)
-            let messageDataRef = Constants.refs.databaseRoot.child("messageData").child(self.userIds[indexPath.row].userId)
-            userIds.remove(at: indexPath.row)
-            userDataRef.removeValue()
-            messageDataRef.removeValue()
+            // Delete contact
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     
 }
+
+extension MainViewController: SocketIOManagerDelegate {
+    func messageReceived(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+                chatView.onMessageAdded(message)
+            }
+        }
+    }
+    
+    func lastMessageUpdated(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            let c_id = message["c_id"].intValue
+            
+            let index = self.contactList.firstIndex { (contact) -> Bool in
+                return contact.id == c_id
+            }
+            if index != nil {
+                let contact = self.contactList[index!]
+                contact.last_msg = message["msg_content"].stringValue
+                contact.last_msg_type = message["msg_type"].stringValue
+                contact.last_msg_status = message["msg_status"].stringValue
+                contact.last_msg_timestamp = message["add_time"].doubleValue
+                
+                let index_1 = self.realContactList.firstIndex { (contact) -> Bool in
+                    return contact.id == c_id
+                }
+                if index_1 != nil {
+                    self.realContactList[index_1!] = contact
+                    self.tableView.reloadRows(at: [IndexPath(row: index_1!, section: 0)], with: .automatic)
+                } else {
+                    self.loadContactTable()
+                }
+            }
+        }
+    }
+    
+    func readMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+                chatView.updateMessage(message)
+            }
+        }
+    }
+    
+    func readAllMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+                chatView.updateMessage(message)
+            }
+        }
+    }
+    
+    func contactCreated(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let tmp =  result.arrayValue[0]
+            if let curUser = CurrentUser {
+                let contact = ContactModel(tmp, curUser)
+                let c_id = contact.id
+                let index = self.contactList.firstIndex { (contact) -> Bool in
+                    return contact.id == c_id
+                }
+                if index == nil {
+                    self.contactList.insert(contact, at: 0)
+                }
+            }
+            
+        }
+    }
+    
+    func userTyping(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let item = result.arrayValue[0]
+            let c_id = item["c_id"].intValue
+            let typing = item["typing"].intValue == 0 ? false : true
+            let index = self.realContactList.firstIndex { (contact) -> Bool in
+                return contact.id == c_id
+            }
+            if index != nil {
+                let contact = self.realContactList[index!]
+                contact.isTyping = typing
+                self.realContactList[index!] = contact
+                self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
+            }
+            
+            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+                chatView.setTypingStatus(typing: typing)
+            }
+        }
+    }
+    
+}
+
