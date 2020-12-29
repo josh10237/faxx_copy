@@ -99,7 +99,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
             // do stuff with deep link data (nav to page, display content, etc)
             self.deepParams = params as? [String : AnyObject]
             if let s = (params as? [String: AnyObject]),
-               let tmp = s["posterId"] as? String {
+               let url = URL(string: s["$ios_url"] as? String ?? ""),
+               let tmp = url["posterId"] {
                 let posterId = Int(tmp) ?? 0
                 if CurrentUser != nil {
                     if posterId != CurrentUser?.id {

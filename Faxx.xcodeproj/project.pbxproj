@@ -46,6 +46,7 @@
 		BDC91551255C782E00AADE24 /* UserContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC91550255C782E00AADE24 /* UserContact.swift */; };
 		BDC91553255C7E5500AADE24 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC91552255C7E5500AADE24 /* FirebaseManager.swift */; };
 		BDE89B9425706EBE00064B25 /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */; };
+		BDFC5F8E259BC79400846A79 /* URL + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFC5F8D259BC79400846A79 /* URL + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +103,7 @@
 		BDC91550255C782E00AADE24 /* UserContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContact.swift; sourceTree = "<group>"; };
 		BDC91552255C7E5500AADE24 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
+		BDFC5F8D259BC79400846A79 /* URL + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL + Extension.swift"; sourceTree = "<group>"; };
 		C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				BDC0F4142561A5C4008CF591 /* UIColor + Extension.swift */,
 				BDC0F4342561AD0F008CF591 /* Settings+UserDefaults.swift */,
 				BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */,
+				BDFC5F8D259BC79400846A79 /* URL + Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				BDC91551255C782E00AADE24 /* UserContact.swift in Sources */,
 				BDC0F4352561AD0F008CF591 /* Settings+UserDefaults.swift in Sources */,
 				2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */,
+				BDFC5F8E259BC79400846A79 /* URL + Extension.swift in Sources */,
 				287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */,
 				BDC0F41D2561A8A8008CF591 /* MessageCell.swift in Sources */,
 				677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */,

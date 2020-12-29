@@ -164,16 +164,8 @@ class MainViewController: UIViewController {
         newViewController.userEntity = userEntity
         newViewController.currentUser = CurrentUser
         newViewController.contact = contact
-        
-//        newViewController.otherUserID = otherUserId
-//        newViewController.externalID = self.externalID
-//        newViewController.otherUserPushToken = otherUserPushToken
-//        newViewController.areTheyAnon = otherAnon //if the other userid starts with anon delimiter than true else false
-//        newViewController.otherUserAvatar = otherUserAvatar
-//        newViewController.otherUserDisplayName = otherUserDisplayName
+
         self.navigationController?.pushViewController(newViewController, animated: true)
-//        newViewController.modalPresentationStyle = .fullScreen
-//        self.present(newViewController, animated: true, completion: nil)
     }
     
     @IBAction func getMessages(_ sender: Any) {
@@ -212,21 +204,61 @@ class MainViewController: UIViewController {
         buo.publiclyIndex = true
         buo.locallyIndex = true
         let lp: BranchLinkProperties = BranchLinkProperties()
-        
-        lp.addControlParam("$desktop_url", withValue: "https://www.snapchat.com/")
+        let deepLinkUrl = String(format: NetworkManager.shared.DeepLinkUrl, CurrentUser?.id ?? 0)
+//        lp.addControlParam("$desktop_url", withValue: "https://www.snapchat.com/")
 //        lp.addControlParam("$ios_url", withValue: "https://faxxapp.page.link/snapchat")
-        lp.addControlParam("$ios_url", withValue: "joshbenson://faxx")
+        lp.addControlParam("$ios_url", withValue: deepLinkUrl)
 //        lp.addControlParam("$fallback_url", withValue: "https://www.snapchat.com/")
-        lp.addControlParam("$ipad_url", withValue: "https://www.snapchat.com/")
-        lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
-        lp.addControlParam("$match_duration", withValue: "2000")
-        lp.addControlParam("posterId", withValue: "\(CurrentUser?.id ?? 0)")
+//        lp.addControlParam("$ipad_url", withValue: "https://www.snapchat.com/")
+//        lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
+//        lp.addControlParam("$match_duration", withValue: "2000")
+//        lp.addControlParam("posterId", withValue: "\(CurrentUser?.id ?? 0)")
         
         buo.getShortUrl(with: lp) { url, error in
             self.shareURL = url ?? ""
             self.postToSnap()
         }
+    }
+    
+    func deleteContact(_ contact: ContactModel) {
+        let params = [
+            "c_id": contact.id
+        ] as [String : Any]
         
+        if !NetworkManager.shared.isConnectedNetwork() {
+            return
+        }
+        
+        guard let url = URL(string: NetworkManager.shared.DeleteContact) else {
+            return
+        }
+       
+        NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+            if self.parseResponse(response: response) {
+                let index_1 = self.realContactList.firstIndex { (item) -> Bool in
+                    return item.id == contact.id
+                }
+                if index_1 != nil {
+                    self.realContactList.remove(at: index_1!)
+                }
+                let index_2 = self.contactList.firstIndex { (item) -> Bool in
+                    return contact.id == item.id
+                }
+                if index_2 != nil {
+                    self.contactList.remove(at: index_2!)
+                }
+                
+                let params = [
+                    "c_id": contact.id,
+                    "t_id": contact.t_id
+                ]
+                self.socketIOManager.deleteContact(params: params)
+            } else {
+                let message = response["err_msg"].stringValue
+                self.showToastMessage(message: message)
+            }
+            self.refreshControl.endRefreshing()
+        }
     }
     
     var current_chat_thread_id = 0
@@ -317,7 +349,13 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete contact
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            let row = indexPath.row
+            if self.realContactList.count > row {
+                let contact = self.realContactList.remove(at: row)
+                self.deleteContact(contact)
+
+                self.tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+            }
         }
     }
     
@@ -417,5 +455,24 @@ extension MainViewController: SocketIOManagerDelegate {
         }
     }
     
+    func deleteContact(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let item = result.arrayValue[0]
+            let c_id = item["c_id"].intValue
+            let index_1 = self.realContactList.firstIndex { (item) -> Bool in
+                return item.id == c_id
+            }
+            if index_1 != nil {
+                self.realContactList.remove(at: index_1!)
+                self.tableView.deleteRows(at: [IndexPath(row: index_1!, section: 0)], with: .fade)
+            }
+            let index_2 = self.contactList.firstIndex { (item) -> Bool in
+                return item.id == c_id
+            }
+            if index_2 != nil {
+                self.contactList.remove(at: index_2!)
+            }
+        }
+    }
 }
 

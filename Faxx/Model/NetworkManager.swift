@@ -21,9 +21,11 @@ class NetworkManager: NSObject {
     var UpdateUser = ""
     var AllContacts = ""
     var CreateContact = ""
+    var DeleteContact = ""
     var AllMessages = ""
     var UploadChatImage = ""
     
+    var DeepLinkUrl = ""
     
     // MARK: - Life Cycle
     
@@ -34,8 +36,10 @@ class NetworkManager: NSObject {
         UpdateUser = "\(BaseUrl)/user/update"
         AllContacts = "\(BaseUrl)/chat/all-contacts"
         CreateContact = "\(BaseUrl)/chat/create-contact"
+        DeleteContact = "\(BaseUrl)/chat/delete-contact"
         AllMessages = "\(BaseUrl)/chat/all-messages"
         UploadChatImage = "\(BaseUrl)/chat/upload-image"
+        DeepLinkUrl = "\(BaseUrl)/get-messages?posterId=%d"
     }
     
     // MARK: - Request Functions
