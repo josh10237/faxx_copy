@@ -19,6 +19,8 @@ class MessageTableViewCell: UITableViewCell {
     @IBOutlet weak var typingArea: UIView!
     @IBOutlet weak var typingNameLabel: UILabel!
     @IBOutlet weak var typingImage: UIImageView!
+    @IBOutlet weak var lbl_anonymous: UILabel!
+    @IBOutlet weak var lbl_anonymous_2: UILabel!
     
     
     override func awakeFromNib() {

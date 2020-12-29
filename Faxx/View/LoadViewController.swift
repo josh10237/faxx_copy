@@ -40,54 +40,76 @@ class LoadViewController: UIViewController {
         self.fetchSnapUserInfo({ (userEntity, error) in
             if let userEntity = userEntity {
                 self.appDelegate.sharedUserEntity = userEntity
-                DispatchQueue.main.async {
-                    if self.appDelegate.closedDeepLink {
-                        self.appDelegate.closedDeepLink = false
-                        if let s = self.appDelegate.deepParams,
-                            let posterId = s["user"] as? String,
-                            let posterName = s["displayName"] as? String,
-                            let avatar = s["avatar"] as? String,
-                            let fcm_token = s["fcm_token"] as? String,
-                            let gender = s["gender"] as? String {
-                            
-                            let externalID = getExtenalId(userEntity.externalID ?? "")
-                            let user_info = [
-                                "DisplayName": userEntity.displayName ?? "",
-                                "Avatar": userEntity.avatar ?? DefaultAvatarUrl,
-                                "FCM_Token": FCM_Token,
-                                "Sex": UserGender ?? "Other",
-                                "Age": 1000
-                                ] as [String : Any]
-                            
-                            let poster_info = [
-                                "DisplayName": posterName,
-                                "Avatar": avatar,
-                                "FCM_Token": fcm_token,
-                                "Sex": gender,
-                                "Age": 1000
-                                ] as [String : Any]
-                            
-                            self.firebaseManager.setAnonUser(externalID, posterId, user_info, poster_info)
-                            
-                            self.appDelegate.goToAnnonChat(posterId, posterName, fcm_token, avatar)
-                        } else {
-                            self.goToLogIn()
-                        }
-                    } else if self.appDelegate.notificationSenderId != "" {
-                        let externalId = getExtenalId(userEntity.externalID ?? "")
-                        self.firebaseManager.getNotificationSender(externalId, self.appDelegate.notificationSenderId) { (result) in
-                            self.appDelegate.goToNotificationChat(self.appDelegate.notificationSenderId, result, self.appDelegate.isNotificationSenderAnon)
-                        }
-                    } else {
-                        self.goToMain(userEntity)
-                    }
-                }
+                self.updateUser()
             } else {
                 DispatchQueue.main.async {
                     self.goToLogIn()
                 }
             }
         })
+    }
+    
+    func updateUser() {
+        if let entry = self.appDelegate.sharedUserEntity {
+            let externalID = getExtenalId(entry.externalID ?? "")
+            let params = [
+                "externalId": externalID,
+                "display_name": entry.displayName ?? "",
+                "avatar": entry.avatar ?? DefaultAvatarUrl,
+                "gender": UserGender ?? "Female",
+                "age": 1000,
+                "fcm_token": FCM_Token
+            ] as [String : Any]
+            
+            if !NetworkManager.shared.isConnectedNetwork() {
+                return
+            }
+            
+            guard let url = URL(string: NetworkManager.shared.UpdateUser) else {
+                return
+            }
+           
+            NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+                if self.parseResponse(response: response) {
+                    let user = response["user"]
+                    CurrentUser = UserContact(user)
+                    
+                    DispatchQueue.main.async {
+                        if self.appDelegate.closedDeepLink {
+                            self.appDelegate.closedDeepLink = false
+                            if let s = self.appDelegate.deepParams,
+                                let tmp = s["posterId"] as? String {
+                                let posterId = Int(tmp) ?? 0
+                                self.appDelegate.goToAnnonChat(posterId)
+                            } else {
+                                self.goToMain(entry)
+                            }
+                        } else if self.appDelegate.notificationSenderId != 0 {
+                            let senderId = self.appDelegate.notificationSenderId
+                            let isAnon = self.appDelegate.isNotificationSenderAnon
+                            if let curUser = CurrentUser {
+                                let cur_id = curUser.id
+                                var anon_id = cur_id
+                                if isAnon {
+                                    anon_id = senderId
+                                }
+                                self.appDelegate.goToNotificationChat(cur_id, senderId, anon_id)
+                            }
+                        } else {
+                            self.goToMain(entry)
+                        }
+                    }
+                } else {
+                    let message = response["err_msg"].stringValue
+                    self.showToastMessage(message: message)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.goToLogIn()
+                    }
+                }
+            }
+        } else {
+            self.goToLogIn()
+        }
     }
     
     func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())) {
@@ -113,12 +135,10 @@ class LoadViewController: UIViewController {
         StoryboardManager.segueToHome(with: entity)
     }
     
-    
     private func goToLogIn() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Login", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "login") as! LoginViewController
         newViewController.modalPresentationStyle = .fullScreen
         self.present(newViewController, animated: true, completion: nil)
     }
-    
 }
