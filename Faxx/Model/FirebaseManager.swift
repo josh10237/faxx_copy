@@ -58,6 +58,28 @@ class FirebaseManager: NSObject {
     }
     
     func setAnonUser(_ externalID: String, _ posterId: String, _ user_info: [String : Any], _ poster_info: [String : Any]) {
+        userDataRef.child(externalID).observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.hasChild("AnonInfo") {
+                let info = snapshot.value as! NSDictionary
+                if let anonInfo = info["AnonInfo"] as? NSDictionary {
+                    var swiftDictionary: [String : Any] = [:]
+                    let keys = anonInfo.allKeys.compactMap { $0 as? String }
+                    for key in keys {
+                        let keyValue = anonInfo.value(forKey: key) as AnyObject
+                        swiftDictionary[key] = keyValue
+                    }
+                    let userId = AnnoymousIdPrefix + externalID
+                    self.updateUserInfo(self.userDataRef.child(posterId).child(userId).child("Info"), swiftDictionary)
+                } else {
+                    self.doSetAnonUser(externalID, posterId, user_info, poster_info)
+                }
+            } else {
+                self.doSetAnonUser(externalID, posterId, user_info, poster_info)
+            }
+        }
+    }
+    
+    func doSetAnonUser(_ externalID: String, _ posterId: String, _ user_info: [String : Any], _ poster_info: [String : Any]) {
         let gender = user_info["Sex"] as? String ?? "Other"
         let avatar_str = getRandomAvatar(gender)
         let avatar = UIImage(named: avatar_str) ?? #imageLiteral(resourceName: "Tractor_Other")
@@ -69,6 +91,7 @@ class FirebaseManager: NSObject {
             annon_info["DisplayName"] = avatar_str.components(separatedBy: "_").first ?? ""
             annon_info["Avatar"] = avatarUrl == "" ? DefaultAvatarUrl : avatarUrl
             self.updateUserInfo(self.userDataRef.child(posterId).child(userId).child("Info"), annon_info)
+            self.updateUserInfo(self.userDataRef.child(externalID).child("AnonInfo"), annon_info)
         }
     }
     
@@ -101,36 +124,20 @@ class FirebaseManager: NSObject {
         })
     }
     
-    func observeNewUser(_ userId: String) {
-        userDataRef.child(userId).queryLimited(toLast: 100).observe(.childAdded, with: { [weak self] snapshot in
-            let theirID = String(snapshot.key)
-            if theirID == "Info" {
-                let info = snapshot.value as! NSDictionary
-                let user = UserContact(userId, info)
-                self?.delegate?.onUserAdded(user)
-            } else {
-                let snpsht = snapshot.value as! NSDictionary
-                if let theirInfo = snpsht["Info"] as? NSDictionary {
-                    if theirInfo["time"] as? Double != nil {
-                        let user = UserContact(theirID, theirInfo)
-                        self?.delegate?.onUserAdded(user)
-                    }
-                }
-            }
+    func getSenderAnonUser(_ userId: String, _ otherId: String, completion: @escaping (JSON)->Void) {
+        userDataRef.child(otherId).child(AnnoymousIdPrefix + userId).child("Info").observeSingleEvent(of: .value, with: { (snp) in
+            let userInfo = JSON(snp.value as? [String : Any] ?? [:])
+            completion(userInfo)
         })
-    }
-    
-    func observeMessageThread(_ userId: String, _ theirId: String) {
-        userDataRef.child(userId).child(theirId).observe(.value, with: { [weak self] snapshot in
-            if let snpsht = snapshot.value as? NSDictionary, let info = snpsht["Info"] as? NSDictionary {
-                self?.delegate?.onSelfStateChanged(UserContact(theirId, info))
-            }
-        })
-        self.observeTypingStatus(theirId)
     }
    
     func setNewUserContact(_ userId: String, _ theirId: String, _ state: Bool) {
         userDataRef.child(userId).child(theirId).child("Info").child("isNew").setValue(state)
+    }
+    
+    func deleteContact(_ userId: String, _ theirId: String) {
+        userDataRef.child(userId).child(theirId).removeValue()
+        messageDataRef.child(userId).child(theirId).removeValue()
     }
     
     func observeMessageAdded(_ curUser: MockUser, _ otherUser: MockUser) {
@@ -191,7 +198,7 @@ class FirebaseManager: NSObject {
         let senderIdOther = otherUser.senderId
         sendMessageToUser(senderIdMe, senderIdOther, message)
         
-        self.setUserEndTyping(curUser.senderId)
+        self.setUserEndTyping(curUser, otherUser)
         
         let type = message["type"] as? String ?? ""
         var type_str = "message"
@@ -242,7 +249,7 @@ class FirebaseManager: NSObject {
     func sendImage(_ curUser: MockUser, _ otherUser: MockUser, _ image: UIImage, _ fcm_token: String, _ senderUserName: String) {
         let message_push_id = messageDataRef.child(curUser.senderId).child(otherUser.senderId).childByAutoId().key ?? ""
         let file_path = imageMessageStorageRef.child("\(message_push_id).jpg")
-        file_path.putData(image.jpegData(compressionQuality: 1) ?? Data(), metadata: nil) { (metaData, error) in
+        file_path.putData(image.jpegData(compressionQuality: 0.6) ?? Data(), metadata: nil) { (metaData, error) in
             if error != nil {
                 print(error?.localizedDescription ?? "")
             } else {
@@ -289,21 +296,35 @@ class FirebaseManager: NSObject {
         }
     }
     
-    func setUserTyping(_ userId: String) {
-        userDataRef.child(userId).child("Info").child("typing").setValue(true)
+    func setUserTyping(_ curUser: MockUser, _ otherUser: MockUser) {
+        var otherId = otherUser.senderId
+        var userId = curUser.senderId
+        if otherId.hasPrefix(AnnoymousIdPrefix) {
+            otherId = String(otherId.dropFirst(AnnoymousIdPrefix.count))
+        } else {
+            userId = "\(AnnoymousIdPrefix)\(userId)"
+        }
+        userDataRef.child(otherId).child(userId).child("Info").child("typing").setValue(true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.setUserEndTyping(userId)
+            self.setUserEndTyping(curUser, otherUser)
         }
     }
     
-    func setUserEndTyping(_ userId: String) {
-        userDataRef.child(userId).child("Info").child("typing").setValue(false)
+    func setUserEndTyping(_ curUser: MockUser, _ otherUser: MockUser) {
+        var otherId = otherUser.senderId
+        var userId = curUser.senderId
+        if otherId.hasPrefix(AnnoymousIdPrefix) {
+            otherId = String(otherId.dropFirst(AnnoymousIdPrefix.count))
+        } else {
+            userId = "\(AnnoymousIdPrefix)\(userId)"
+        }
+        userDataRef.child(otherId).child(userId).child("Info").child("typing").setValue(false)
     }
     
-    func observeTypingStatus(_ otherUserId: String) {
-        userDataRef.child(otherUserId).child("Info").child("typing").observe(.value, with: { [weak self] snapshot in
+    func observeTypingStatus(_ senderId: String, _ otherId: String) {
+        userDataRef.child(senderId).child(otherId).child("Info").child("typing").observe(.value, with: { [weak self] snapshot in
             let typing = snapshot.value as? Bool ?? false
-            self?.delegate?.setTypingStatus(otherUserId, typing)
+            self?.delegate?.setTypingStatus(otherId, typing)
         })
     }
     

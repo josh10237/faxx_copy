@@ -7,14 +7,18 @@
 
 import Foundation
 import UIKit
+import Photos
 
 let AnnoymousIdPrefix = "ZAAAAA3AAAAAZ"
 let DefaultAvatarUrl = "https://static.thenounproject.com/png/630729-200.png"
+
+let STR_URL_PASSING_ERROR = "Url parsing error. Please contact with support team."
 
 var FCM_Token = ""
 
 var TypingMessageFormat = "%@ is typing..."
 var SentMessageFormat = "%@ Sent %@"
+var GetMessagesFormat = "%@ is looking for new messages"
 
 func getCurrentUtcTimeInterval() -> Double {
     let utcDateFormatter = DateFormatter()
@@ -32,6 +36,8 @@ func getCurrentUtcTimeInterval() -> Double {
 func getExtenalId(_ id: String) -> String {
     return String(id.dropFirst(6).replacingOccurrences(of: "/", with: ""))
 }
+
+var CurrentUser: UserContact?
 
 var UserGender: String? {
     get {
@@ -115,3 +121,4 @@ func getRandomAvatar(_ gender: String) -> String {
     }
     return avatar
 }
+

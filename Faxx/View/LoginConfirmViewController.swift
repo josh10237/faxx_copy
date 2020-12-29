@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MBProgressHUD
+
 let defaults = UserDefaults.standard
 var scoreDict: [String:Int] = defaults.dictionary(forKey: "scoreDict") as? [String:Int] ?? [:]
 let hasLoggedInBefore = defaults.bool(forKey: "hasLoggedInBefore")
@@ -65,15 +67,37 @@ class LoginConfirmViewController: UIViewController {
     
     func saveUser(_ gender: String) {
         UserGender = gender
-        let content = [
-            "DisplayName": self.userEntity?.displayName ?? "",
-            "Avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
-            "Sex": gender,
-            "Age": 1000,
-            "FCM_Token": FCM_Token
+        let params = [
+            "externalId": self.externalID,
+            "display_name": self.userEntity?.displayName ?? "",
+            "avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
+            "gender": gender,
+            "age": 1000,
+            "fcm_token": FCM_Token
         ] as [String : Any]
-        firebaseManager.updateUser(self.externalID, content)
         
-        goToMain()
+        if !NetworkManager.shared.isConnectedNetwork() {
+            showNetConnectionAlert()
+            return
+        }
+        
+        guard let url = URL(string: NetworkManager.shared.AddUser) else {
+            self.showToastMessage(message: STR_URL_PASSING_ERROR)
+            return
+        }
+        
+        MBProgressHUD.hide(for: self.view, animated: true)
+        
+        NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            if self.parseResponse(response: response) {
+                let user = response["user"]
+                CurrentUser = UserContact(user)
+                self.goToMain()
+            } else {
+                let message = response["err_msg"].stringValue
+                self.showToastMessage(message: message)
+            }
+        }
     }
 }
