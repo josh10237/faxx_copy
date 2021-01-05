@@ -108,15 +108,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
     
     func onMessageAdded(_ item: JSON) {
         if let message = self.getMockMessageItem(item) {
-            let index = messageList.firstIndex { (item) -> Bool in
-                return item.messageId == message.messageId
-            }
-            if index == nil {
-                self.insertMessage(message)
-            } else {
-                messageList[index!] = message
-                self.messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: index!)])
-            }
+            self.insertMessage(message)
             if message.unread && message.sender.senderId == otherUser.senderId {
                 let params = [
                     "msg_id": message.messageId,
@@ -201,6 +193,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         
         loadData()
         socketIOManager.establishConnection(user_id: CurrentUser?.id ?? 0)
+        socketIOManager.delegate = self
         
     }
     
@@ -257,8 +250,20 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
                             result.append(message)
                         }
                     }
-                    self.messageList = result
-                    self.messagesCollectionView.reloadData()
+                    var final: [MockMessage] = []
+                    if result.count > 1 {
+                        final = Array(result[0 ..< result.count - 1])
+                        self.messageList = final
+                        self.messagesCollectionView.reloadData()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            if let last = result.last {
+                                self.insertMessage(last)
+                            }
+                        }
+                    } else {
+                        self.messageList = result
+                        self.messagesCollectionView.reloadData()
+                    }
                 } else {
                     let message = response["err_msg"].stringValue
                     self.showToastMessage(message: message)
@@ -995,5 +1000,54 @@ extension ChatViewController: SelectOptionDelegate {
     
     func onClose() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ChatViewController: SocketIOManagerDelegate {
+    func messageReceived(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+                chatView.onMessageAdded(message)
+            }
+        }
+    }
+    
+    func lastMessageUpdated(result: JSON) {
+        if result.arrayValue.count > 0 {
+            return
+        }
+    }
+    
+    func readMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            updateMessage(message)
+        }
+    }
+    
+    func readAllMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            updateMessage(message)
+        }
+    }
+    
+    func contactCreated(result: JSON) {
+        return
+    }
+    
+    func userTyping(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let item = result.arrayValue[0]
+            let typing = item["typing"].intValue == 0 ? false : true
+            setTypingStatus(typing: typing)
+        }
+    }
+    
+    func deleteContact(result: JSON) {
+        if result.arrayValue.count > 0 {
+            return
+        }
     }
 }

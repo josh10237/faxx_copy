@@ -363,12 +363,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension MainViewController: SocketIOManagerDelegate {
     func messageReceived(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
-                chatView.onMessageAdded(message)
-            }
-        }
+        return
     }
     
     func lastMessageUpdated(result: JSON) {
@@ -400,21 +395,11 @@ extension MainViewController: SocketIOManagerDelegate {
     }
     
     func readMessage(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
-                chatView.updateMessage(message)
-            }
-        }
+        return
     }
     
     func readAllMessage(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
-                chatView.updateMessage(message)
-            }
-        }
+        return
     }
     
     func contactCreated(result: JSON) {
@@ -447,10 +432,6 @@ extension MainViewController: SocketIOManagerDelegate {
                 contact.isTyping = typing
                 self.realContactList[index!] = contact
                 self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
-            }
-            
-            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
-                chatView.setTypingStatus(typing: typing)
             }
         }
     }
