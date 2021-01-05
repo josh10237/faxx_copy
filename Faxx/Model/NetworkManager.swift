@@ -16,7 +16,8 @@ class NetworkManager: NSObject {
     // MARK: - URL
     
 //    let BaseUrl = "http://192.168.0.65:6001"
-    let BaseUrl = "http://162.0.239.44:6001"
+//    let BaseUrl = "http://162.0.239.44:6001"
+    let BaseUrl = "http://3.19.62.111:6001"
     var AddUser = ""
     var UpdateUser = ""
     var AllContacts = ""
