@@ -205,15 +205,7 @@ class MainViewController: UIViewController {
         buo.locallyIndex = true
         let lp: BranchLinkProperties = BranchLinkProperties()
         let deepLinkUrl = String(format: NetworkManager.shared.DeepLinkUrl, CurrentUser?.id ?? 0)
-//        lp.addControlParam("$desktop_url", withValue: "https://www.snapchat.com/")
-//        lp.addControlParam("$ios_url", withValue: "https://faxxapp.page.link/snapchat")
         lp.addControlParam("$ios_url", withValue: deepLinkUrl)
-//        lp.addControlParam("$fallback_url", withValue: "https://www.snapchat.com/")
-//        lp.addControlParam("$ipad_url", withValue: "https://www.snapchat.com/")
-//        lp.addControlParam("$android_url", withValue: "https://www.snapchat.com/")
-//        lp.addControlParam("$match_duration", withValue: "2000")
-//        lp.addControlParam("posterId", withValue: "\(CurrentUser?.id ?? 0)")
-        
         buo.getShortUrl(with: lp) { url, error in
             self.shareURL = url ?? ""
             self.postToSnap()
