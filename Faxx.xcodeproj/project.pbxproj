@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02FE58CCDBC0A99BCCB0F8EC /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB711D625A827CD00D26E60 /* Pods_Faxx.framework */; };
 		2842FB3920E895EE00D34863 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842FB3820E895EE00D34863 /* UserEntity.swift */; };
 		2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842FB3C20E89B7700D34863 /* LoginConfirmViewController.swift */; };
 		287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287526F220F3450800601FE0 /* UIImage+Extension.swift */; };
@@ -14,7 +15,6 @@
 		28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322DB20D3D6020045E02A /* LaunchScreen.storyboard */; };
 		28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322FA20D3D83C0045E02A /* Login.storyboard */; };
 		28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C322FC20D3D8500045E02A /* LoginViewController.swift */; };
-		3063708AA87D992B67878147 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */; };
 		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
 		674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 674625A825099878002F42AF /* BalooPaaji-Regular.ttf */; };
 		674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674866A424EE162F005D3F82 /* AnonIcons.xcassets */; };
@@ -29,6 +29,8 @@
 		677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBD24D88C1400DC1685 /* AnonIcons.swift */; };
 		67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9CC2501B2640021E8D5 /* Media.xcassets */; };
 		67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9D025030B370021E8D5 /* fax_animation.gif */; };
+		9A77B93B25B166F000E2CDDA /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A77B93A25B166F000E2CDDA /* OverlayView.xib */; };
+		9A77B93D25B1691300E2CDDA /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A77B93C25B1691300E2CDDA /* OverlayView.swift */; };
 		BD04F6CA2567052700B54E6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BD04F6C92567052700B54E6B /* GoogleService-Info.plist */; };
 		BD2D00BB258C0D2F00E25B67 /* SelectOptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D00BA258C0D2F00E25B67 /* SelectOptionController.swift */; };
 		BD61C306259090A400A37866 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD61C305259090A400A37866 /* TestViewController.swift */; };
@@ -86,6 +88,10 @@
 		67BDF9D025030B370021E8D5 /* fax_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fax_animation.gif; sourceTree = "<group>"; };
 		69319AA2F3AE2B6D167F4499 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
 		8431614FDFE75D7FAB1FD0A3 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
+		9A77B93525B1632200E2CDDA /* DIsplayProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DIsplayProfile.xib; path = /Users/gjimerson/Desktop/faxx/Faxx/View/DIsplayProfile.xib; sourceTree = "<absolute>"; };
+		9A77B93A25B166F000E2CDDA /* OverlayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OverlayView.xib; sourceTree = "<group>"; };
+		9A77B93C25B1691300E2CDDA /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		9AB711D625A827CD00D26E60 /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD04F6C92567052700B54E6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BD2D00BA258C0D2F00E25B67 /* SelectOptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectOptionController.swift; sourceTree = "<group>"; };
 		BD61C305259090A400A37866 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
@@ -112,7 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3063708AA87D992B67878147 /* Pods_Faxx.framework in Frameworks */,
+				02FE58CCDBC0A99BCCB0F8EC /* Pods_Faxx.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +131,9 @@
 				28C322DB20D3D6020045E02A /* LaunchScreen.storyboard */,
 				28C322FA20D3D83C0045E02A /* Login.storyboard */,
 				67546C9324C1226D00312D8E /* Main.storyboard */,
+				9A77B93525B1632200E2CDDA /* DIsplayProfile.xib */,
+				9A77B93A25B166F000E2CDDA /* OverlayView.xib */,
+				9A77B93C25B1691300E2CDDA /* OverlayView.swift */,
 				67546C9124C117E700312D8E /* MainViewController.swift */,
 				67546CA224C246BA00312D8E /* ChatViewController.swift */,
 				677A6BB724D5262200DC1685 /* MessageTableViewCell.swift */,
@@ -213,6 +222,7 @@
 		28C322E420D3D6280045E02A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9AB711D625A827CD00D26E60 /* Pods_Faxx.framework */,
 				28C322E820D3D6280045E02A /* SCSDKBitmojiKit.framework */,
 				28C322E520D3D6280045E02A /* SCSDKCoreKit.framework */,
 				28C322E620D3D6280045E02A /* SCSDKCreativeKit.framework */,
@@ -313,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */,
+				9A77B93B25B166F000E2CDDA /* OverlayView.xib in Resources */,
 				BD04F6CA2567052700B54E6B /* GoogleService-Info.plist in Resources */,
 				67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */,
 				67546C9424C1226D00312D8E /* Main.storyboard in Resources */,
@@ -381,6 +392,7 @@
 				BDC0F4352561AD0F008CF591 /* Settings+UserDefaults.swift in Sources */,
 				2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */,
 				BDFC5F8E259BC79400846A79 /* URL + Extension.swift in Sources */,
+				9A77B93D25B1691300E2CDDA /* OverlayView.swift in Sources */,
 				287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */,
 				BDC0F41D2561A8A8008CF591 /* MessageCell.swift in Sources */,
 				677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */,

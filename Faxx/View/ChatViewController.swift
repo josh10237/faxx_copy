@@ -22,7 +22,7 @@ import Photos
 import AVFoundation
 import SwiftyJSON
 
-class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
    
     // MARK: - UIImagePickerControllerDelegate
     
@@ -172,7 +172,19 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         
         configureMessageCollectionView()
         configureMessageInputBar()
-
+        
+        let image = UIImage(named: "menubutton") as UIImage?
+        let menu:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        menu.setImage(image, for: .normal)
+        menu.imageView?.contentMode = .scaleAspectFit
+        menu.addTarget(self, action: #selector(pressed(_ :)), for: .touchUpInside)
+        let menuBarButton = UIBarButtonItem(customView: menu)
+        let width = menuBarButton.customView?.widthAnchor.constraint(equalToConstant: 40.0)
+        let height = menuBarButton.customView?.heightAnchor.constraint(equalToConstant: 40.0)
+        width?.isActive = true
+        height?.isActive = true
+        self.navigationItem.rightBarButtonItem = menuBarButton
+        
         if contact != nil {
             self.curUser = MockUser(senderId: "\(contact.f_id)", displayName: contact.f_display_name)
             if contact.areTheyAnon {
@@ -505,6 +517,23 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
         
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
+    }
+    @objc func pressed(_ sender: UIButton) {
+        print("Pressed")
+     //   addSecondChildVC()
+        
+        showMenuCard()
+        
+       
+        
+    }
+    @objc func showMenuCard() {
+        let slideVC = OverlayView()
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        
+        
+        self.present(slideVC, animated: true, completion: nil)
     }
    
     // MARK: - UICollectionViewDataSource

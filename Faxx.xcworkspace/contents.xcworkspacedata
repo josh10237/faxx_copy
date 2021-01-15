@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/gjimerson/Desktop/faxx/Faxx/View/DIsplayProfile.xib">
+   </FileRef>
+   <FileRef
       location = "group:Faxx.xcodeproj">
    </FileRef>
    <FileRef
