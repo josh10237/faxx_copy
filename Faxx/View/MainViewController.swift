@@ -199,17 +199,17 @@ class MainViewController: UIViewController {
     
     func getURL() {
         Branch.getInstance().setIdentity(externalID)
-             let buo = BranchUniversalObject.init(canonicalIdentifier: "content/12345")
-             buo.title = "Swipe Up"
-             buo.publiclyIndex = true
-             buo.locallyIndex = true
-             let lp: BranchLinkProperties = BranchLinkProperties()
-             let deepLinkUrl = String(format: NetworkManager.shared.DeepLinkUrl, CurrentUser?.id ?? 0)
-             lp.addControlParam("$ios_url", withValue: deepLinkUrl)
-             buo.getShortUrl(with: lp) { url, error in
-                 self.shareURL = url ?? ""
-                 self.postToSnap()
-             }
+        let buo = BranchUniversalObject.init(canonicalIdentifier: "content/12345")
+        buo.title = "Swipe Up"
+        buo.publiclyIndex = true
+        buo.locallyIndex = true
+        let lp: BranchLinkProperties = BranchLinkProperties()
+        let deepLinkUrl = String(format: NetworkManager.shared.DeepLinkUrl, CurrentUser?.id ?? 0)
+        lp.addControlParam("$ios_url", withValue: deepLinkUrl)
+        buo.getShortUrl(with: lp) { url, error in
+            self.shareURL = url ?? ""
+            self.postToSnap()
+        }
     }
     
     func deleteContact(_ contact: ContactModel) {

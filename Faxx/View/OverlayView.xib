@@ -20,39 +20,39 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="299"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mGx-0d-8Pq">
-                    <rect key="frame" x="26" y="36" width="362" height="60"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mGx-0d-8Pq">
+                    <rect key="frame" x="26" y="25" width="362" height="60"/>
                     <state key="normal" image="Reveal_Identity"/>
                     <connections>
                         <action selector="revealIdentity:" destination="-1" eventType="touchUpInside" id="6Dz-Kh-n7y"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oN-EG-Wcd">
-                    <rect key="frame" x="26" y="101" width="362" height="60"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oN-EG-Wcd">
+                    <rect key="frame" x="26" y="90" width="362" height="60"/>
                     <state key="normal" image="Clear Conversation"/>
                     <connections>
                         <action selector="clearConversation:" destination="-1" eventType="touchUpInside" id="QaA-Rh-VKy"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nwA-Rx-PTT">
-                    <rect key="frame" x="26" y="166" width="362" height="60"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nwA-Rx-PTT">
+                    <rect key="frame" x="26" y="155" width="362" height="60"/>
                     <state key="normal" image="Block"/>
                     <connections>
                         <action selector="block:" destination="-1" eventType="touchUpInside" id="RNJ-B5-h0w"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bH1-gB-6DB">
-                    <rect key="frame" x="26" y="231" width="362" height="60"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bH1-gB-6DB">
+                    <rect key="frame" x="26" y="220" width="362" height="60"/>
                     <state key="normal" image="Block_and_Report"/>
                     <connections>
                         <action selector="blockAndReport:" destination="-1" eventType="touchUpInside" id="3mv-4H-OAQ"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KhC-CY-snY">
-                    <rect key="frame" x="169.5" y="21" width="75" height="6"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KhC-CY-snY">
+                    <rect key="frame" x="169.5" y="10" width="75" height="6"/>
                     <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="75" id="FKs-P5-YJ9"/>
@@ -63,6 +63,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="KhC-CY-snY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="3g9-Kd-sGq"/>
+                <constraint firstItem="mGx-0d-8Pq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="25" id="AZb-bQ-7Yd"/>
                 <constraint firstItem="KhC-CY-snY" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="BqT-Wz-hD1"/>
                 <constraint firstItem="mGx-0d-8Pq" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="R8R-NE-opt"/>
                 <constraint firstItem="4oN-EG-Wcd" firstAttribute="top" secondItem="mGx-0d-8Pq" secondAttribute="bottom" constant="5" id="RLK-Os-9nW"/>

@@ -35,15 +35,8 @@ class OverlayView: UIViewController {
         super.viewDidLoad()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerAction))
         view.addGestureRecognizer(panGesture)
-        print("vars")
-        print(userEntity)
-        print(otherUserID)
-        print(externalID)
-        print(amIAnon)
-        print(areTheyAnon)
-        if amIAnon == false {
-            revealIdentity.isHidden = true
-        }
+        
+
     }
     
     override func viewDidLayoutSubviews() {
