@@ -36,10 +36,39 @@ class MainViewController: UIViewController {
     var lastScoreUploadTime:Int = 0
     private var refreshControl = UIRefreshControl()
     
-    var socketIOManager = SocketIOManager.shared
+    // MARK: - Socket Handler
+    func setTyping(_ item: JSON) {
+        let c_id = item["c_id"].intValue
+        let typing = item["typing"].intValue == 0 ? false : true
+        
+        let index = realContactList.firstIndex { (contact) -> Bool in
+            return contact.id == c_id
+        }
+        if index != nil {
+            let contact = realContactList[index!]
+            if !(contact.isTyping && typing) {
+                contact.isTyping = typing
+                realContactList[index!] = contact
+                tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+                
+                if typing {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        let contact = self.realContactList[index!]
+                        contact.isTyping = false
+                        self.realContactList[index!] = contact
+                        self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+                    }
+                }
+            }
+        }
+    }
+    
+    var socketIOManager: SocketIOManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.appDelegate()?.mainView = self
+        self.socketIOManager = self.appDelegate()?.socketIOManager ?? SocketIOManager.shared
         
         refreshControl.addTarget(self, action: #selector(self.loadContacts), for: .valueChanged)
         tableView.addSubview(refreshControl)
@@ -55,6 +84,8 @@ class MainViewController: UIViewController {
         if CurrentUser != nil {
             self.myAvatarURL = CurrentUser!.avatar
             self.addProfileButton(withAction: #selector(self.navigateToProfile), image: UIImage.load(from: self.myAvatarURL) ?? #imageLiteral(resourceName: "Nathan-Tannar"))
+            
+            self.appDelegate()?.connectSocket(CurrentUser?.id ?? 0)
         }
         
         self.addTitle(title: "Messages")
@@ -62,8 +93,6 @@ class MainViewController: UIViewController {
         
         loadContacts()
         
-        socketIOManager.establishConnection(user_id: CurrentUser?.id ?? 0)
-        socketIOManager.delegate = self
     }
     
     @objc func loadContacts() {
@@ -91,8 +120,8 @@ class MainViewController: UIViewController {
                     self.contactList = tmp_arr
                     self.loadContactTable()
                 } else {
-                    let message = response["err_msg"].stringValue
-                    self.showToastMessage(message: message)
+                    self.contactList = []
+                    self.loadContactTable()
                 }
                 self.refreshControl.endRefreshing()
             }
@@ -101,11 +130,18 @@ class MainViewController: UIViewController {
     
     func loadContactTable() {
         realContactList = contactList.filter({ (contact) -> Bool in
-            return contact.last_msg != ""
+            return contact.last_msg != "" && contact.d_start_msg_id >= contact.d_last_msg_id
         })
+        sortContact()
         self.tableView.reloadData()
     }
-   
+    
+    func sortContact() {
+        realContactList = realContactList.sorted(by: { (tmp1, tmp2) -> Bool in
+            return tmp1.last_msg_timestamp > tmp2.last_msg_timestamp
+        })
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        self.view.endEditing(true)
@@ -114,9 +150,18 @@ class MainViewController: UIViewController {
         current_chat_thread_id = 0
     }
     
+    var isFromNotification = false
+    var chatView: ChatViewController?
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        if isFromNotification && chatView != nil {
+            self.navigationController?.pushViewController(chatView!, animated: true)
+            
+            isFromNotification = false
+            chatView = nil
+        }
     }
    
     @objc func navigateToProfile() {
@@ -214,7 +259,8 @@ class MainViewController: UIViewController {
     
     func deleteContact(_ contact: ContactModel) {
         let params = [
-            "c_id": contact.id
+            "c_id": contact.id,
+            "u_id": contact.f_id
         ] as [String : Any]
         
         if !NetworkManager.shared.isConnectedNetwork() {
@@ -237,14 +283,14 @@ class MainViewController: UIViewController {
                     return contact.id == item.id
                 }
                 if index_2 != nil {
-                    self.contactList.remove(at: index_2!)
+                    self.contactList[index_2!].d_last_msg_id = contact.last_msg_id
                 }
                 
-                let params = [
-                    "c_id": contact.id,
-                    "t_id": contact.t_id
-                ]
-                self.socketIOManager.deleteContact(params: params)
+//                let params = [
+//                    "c_id": contact.id,
+//                    "t_id": contact.t_id
+//                ]
+//                self.socketIOManager.deleteContact(params: params)
             } else {
                 let message = response["err_msg"].stringValue
                 self.showToastMessage(message: message)
@@ -268,7 +314,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as! MessageTableViewCell
         let contact = realContactList[indexPath.row]
-        if contact.last_msg_status == "unread" {
+        if contact.last_msg_status == "unread" && contact.last_msg_sender_id == contact.t_id {
             cell.newMessageDot.image = UIImage(named: "unread_message")
             cell.nameLabel.textColor = UIColor.black
         } else {
@@ -353,99 +399,122 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-extension MainViewController: SocketIOManagerDelegate {
-    func messageReceived(result: JSON) {
-        return
-    }
-    
-    func lastMessageUpdated(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            let c_id = message["c_id"].intValue
-            
-            let index = self.contactList.firstIndex { (contact) -> Bool in
-                return contact.id == c_id
-            }
-            if index != nil {
-                let contact = self.contactList[index!]
-                contact.last_msg = message["msg_content"].stringValue
-                contact.last_msg_type = message["msg_type"].stringValue
-                contact.last_msg_status = message["msg_status"].stringValue
-                contact.last_msg_timestamp = message["add_time"].doubleValue
-                
-                let index_1 = self.realContactList.firstIndex { (contact) -> Bool in
-                    return contact.id == c_id
-                }
-                if index_1 != nil {
-                    self.realContactList[index_1!] = contact
-                    self.tableView.reloadRows(at: [IndexPath(row: index_1!, section: 0)], with: .automatic)
-                } else {
-                    self.loadContactTable()
-                }
-            }
-        }
-    }
-    
-    func readMessage(result: JSON) {
-        return
-    }
-    
-    func readAllMessage(result: JSON) {
-        return
-    }
-    
-    func contactCreated(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let tmp =  result.arrayValue[0]
-            if let curUser = CurrentUser {
-                let contact = ContactModel(tmp, curUser)
-                let c_id = contact.id
-                let index = self.contactList.firstIndex { (contact) -> Bool in
-                    return contact.id == c_id
-                }
-                if index == nil {
-                    self.contactList.insert(contact, at: 0)
-                }
-            }
-            
-        }
-    }
-    
-    func userTyping(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let item = result.arrayValue[0]
-            let c_id = item["c_id"].intValue
-            let typing = item["typing"].intValue == 0 ? false : true
-            let index = self.realContactList.firstIndex { (contact) -> Bool in
-                return contact.id == c_id
-            }
-            if index != nil {
-                let contact = self.realContactList[index!]
-                contact.isTyping = typing
-                self.realContactList[index!] = contact
-                self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
-            }
-        }
-    }
-    
-    func deleteContact(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let item = result.arrayValue[0]
-            let c_id = item["c_id"].intValue
-            let index_1 = self.realContactList.firstIndex { (item) -> Bool in
-                return item.id == c_id
-            }
-            if index_1 != nil {
-                self.realContactList.remove(at: index_1!)
-                self.tableView.deleteRows(at: [IndexPath(row: index_1!, section: 0)], with: .fade)
-            }
-            let index_2 = self.contactList.firstIndex { (item) -> Bool in
-                return item.id == c_id
-            }
-            if index_2 != nil {
-                self.contactList.remove(at: index_2!)
-            }
-        }
-    }
-}
-
+//extension MainViewController: SocketIOManagerDelegate {
+//
+//    func messageReceived(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let message =  result.arrayValue[0]
+//            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+//                chatView.onMessageAdded(message)
+//            }
+//        }
+//    }
+//
+//    func lastMessageUpdated(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let message =  result.arrayValue[0]
+//            let c_id = message["c_id"].intValue
+//
+//            let index = self.contactList.firstIndex { (contact) -> Bool in
+//                return contact.id == c_id
+//            }
+//            if index != nil {
+//                let contact = self.contactList[index!]
+//                contact.last_msg_sender_id = message["f_id"].intValue
+//                contact.last_msg = message["msg_content"].stringValue
+//                contact.last_msg_type = message["msg_type"].stringValue
+//                contact.last_msg_status = message["msg_status"].stringValue
+//                contact.last_msg_timestamp = message["msg_timestamp"].doubleValue
+//
+//                let index_1 = self.realContactList.firstIndex { (contact) -> Bool in
+//                    return contact.id == c_id
+//                }
+//                if index_1 != nil {
+//                    self.realContactList[index_1!] = contact
+//                    self.sortContact()
+//                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: index_1!, section: 0)], with: .none)
+//                } else {
+//                    self.loadContactTable()
+//                }
+//            }
+//        }
+//    }
+//
+//    func readMessage(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let message =  result.arrayValue[0]
+//            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+//                chatView.updateMessage(message)
+//            }
+//        }
+//    }
+//
+//    func readAllMessage(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let message =  result.arrayValue[0]
+//            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+//                chatView.updateMessage(message)
+//            }
+//        }
+//    }
+//
+//    func contactCreated(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let tmp =  result.arrayValue[0]
+//            if let curUser = CurrentUser {
+//                let contact = ContactModel(tmp, curUser)
+//                let c_id = contact.id
+//                let index = self.contactList.firstIndex { (contact) -> Bool in
+//                    return contact.id == c_id
+//                }
+//                if index == nil {
+//                    self.contactList.insert(contact, at: 0)
+//                }
+//            }
+//        }
+//    }
+//
+//    func userTyping(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let item = result.arrayValue[0]
+//            let c_id = item["c_id"].intValue
+//            let typing = item["typing"].intValue == 0 ? false : true
+//            let index = self.realContactList.firstIndex { (contact) -> Bool in
+//                return contact.id == c_id
+//            }
+//            if index != nil {
+//                let contact = self.realContactList[index!]
+//                contact.isTyping = typing
+//                self.realContactList[index!] = contact
+//                self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
+//            }
+//
+//            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
+//                if chatView.contact != nil && chatView.contact.id == c_id {
+//                    chatView.setTypingStatus(typing: typing)
+//                }
+//            }
+//        }
+//    }
+//
+//    func deleteContact(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            let item = result.arrayValue[0]
+//            let c_id = item["c_id"].intValue
+//            let index_1 = self.realContactList.firstIndex { (item) -> Bool in
+//                return item.id == c_id
+//            }
+//            if index_1 != nil {
+//                self.realContactList.remove(at: index_1!)
+//                self.tableView.deleteRows(at: [IndexPath(row: index_1!, section: 0)], with: .fade)
+//            }
+//            let index_2 = self.contactList.firstIndex { (item) -> Bool in
+//                return item.id == c_id
+//            }
+//            if index_2 != nil {
+//                self.contactList.remove(at: index_2!)
+//            }
+//        }
+//    }
+//}
+//

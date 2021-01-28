@@ -54,8 +54,10 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
            
             NetworkManager.shared.uploadImage(image: image, url: url) { (response) in
                 if self.parseResponse(response: response) {
+                    let id = Date().timeIntervalSince1970
                     let url = response["url"].stringValue
                     let message = [
+                        "old_id": id,
                         "c_id": self.contact.id,
                         "t_id": self.contact.t_id,
                         "type": "image",
@@ -63,6 +65,9 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
                         "push_token": self.contact.t_fcm_token
                     ] as [String : Any]
                     self.socketIOManager.sendMessage(params: message)
+                    
+                    let mockMsg = self.getImageMockMessageItem(id, image)
+                    self.insertMessage(mockMsg)
                     
                     let token = self.contact.t_fcm_token
                     var displayName = self.contact.f_display_name
@@ -98,23 +103,62 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
     }
     
     func setTypingStatus(typing: Bool) {
-        let isHidden = !typing
-        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: nil) { [weak self] success in
-            if success, self?.isLastSectionVisible() == true {
-                self?.messagesCollectionView.scrollToBottom(animated: true)
+        if typing {
+            if self.isTypingIndicatorHidden {
+                setTypingIndicatorViewHidden(false, animated: true, whilePerforming: nil) { [weak self] success in
+                    if success, self?.isLastSectionVisible() == true {
+                        self?.messagesCollectionView.scrollToBottom(animated: true)
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.setTypingIndicatorViewHidden(true, animated: true, whilePerforming: nil) { [weak self] success in
+                        if success, self?.isLastSectionVisible() == true {
+                            self?.messagesCollectionView.scrollToBottom(animated: true)
+                        }
+                    }
+                }
+            }
+        } else {
+            if !self.isTypingIndicatorHidden {
+                setTypingIndicatorViewHidden(true, animated: true, whilePerforming: nil) { [weak self] success in
+                    if success, self?.isLastSectionVisible() == true {
+                        self?.messagesCollectionView.scrollToBottom(animated: true)
+                    }
+                }
             }
         }
     }
     
     func onMessageAdded(_ item: JSON) {
-        if let message = self.getMockMessageItem(item) {
-            self.insertMessage(message)
-            if message.unread && message.sender.senderId == otherUser.senderId {
-                let params = [
-                    "msg_id": message.messageId,
-                    "c_id": contact.id
-                ] as [String : Any]
-                socketIOManager.readMessage(params: params)
+        if self.isTypingIndicatorHidden {
+            self.doAddMessage(item)
+        } else {
+            setTypingIndicatorViewHidden(true, animated: true, whilePerforming: nil) { [weak self] success in
+                self?.doAddMessage(item)
+            }
+        }
+    }
+    
+    func doAddMessage(_ item: JSON) {
+        print("new maessage: ", item)
+        if item["f_id"].intValue == contact.f_id {
+            let old_id = item["old_id"].stringValue
+            let index = self.messageList.firstIndex { (item) -> Bool in
+                return item.messageId == old_id
+            }
+            if index != nil {
+                self.messageList[index!].messageId = item["id"].stringValue
+            }
+        } else {
+            if let message = self.getMockMessageItem(item) {
+                if message.unread && message.sender.senderId == otherUser.senderId {
+                    let params = [
+                        "msg_id": message.messageId,
+                        "c_id": contact.id
+                    ] as [String : Any]
+                    socketIOManager.readMessage(params: params)
+                }
+                self.insertMessage(message)
             }
         }
     }
@@ -153,7 +197,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
     
     var firebaseManager: FirebaseManager = FirebaseManager()
     
-    var socketIOManager = SocketIOManager.shared
+    var socketIOManager: SocketIOManager!
     
     let camera = LuminaViewController()
     
@@ -169,6 +213,9 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         messagesCollectionView.register(MessageCell.self)
         
         super.viewDidLoad()
+        
+        self.appDelegate()?.chatView = self
+        self.socketIOManager = self.appDelegate()?.socketIOManager ?? SocketIOManager.shared
         
         configureMessageCollectionView()
         configureMessageInputBar()
@@ -195,17 +242,12 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
                 self.otherUser = MockUser(senderId: "\(contact.t_id)", displayName: contact.t_display_name)
             }
             
-            let params = [
-                "c_id": contact.id
-            ]
-            self.socketIOManager.readAllMessage(params: params)
-            
             self.socketIOManager.createContact(params: contact.getJSON())
         }
         
         loadData()
-        socketIOManager.establishConnection(user_id: CurrentUser?.id ?? 0)
-        socketIOManager.delegate = self
+//        socketIOManager.establishConnection(user_id: CurrentUser?.id ?? 0)
+//        socketIOManager.delegate = self
         
     }
     
@@ -239,10 +281,23 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         return message
     }
     
+    func getTextMockMessageItem(_ id: Double, _ content: String) -> MockMessage {
+        let msg_id = "\(id)"
+        let message = MockMessage(text: content, user: self.curUser, messageId: msg_id, date: Date(), unread: true)
+        return message
+    }
+    
+    func getImageMockMessageItem(_ id: Double, _ image: UIImage) -> MockMessage {
+        let msg_id = "\(id)"
+        let message = MockMessage(image: image, user: self.curUser, messageId: msg_id, date: Date(), unread: true)
+        return message
+    }
+    
     func loadData() {
         if contact != nil {
             let params = [
-                "c_id": contact.id
+                "c_id": contact.id,
+                "d_start_msg_id": contact.d_start_msg_id
             ] as [String : Any]
             
             if !NetworkManager.shared.isConnectedNetwork() {
@@ -270,11 +325,27 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             if let last = result.last {
                                 self.insertMessage(last)
+                                
+                                if last.user.senderId != self.curUser.senderId {
+                                    let params = [
+                                        "c_id": self.contact.id
+                                    ]
+                                    self.socketIOManager.readAllMessage(params: params)
+                                }
                             }
                         }
                     } else {
                         self.messageList = result
                         self.messagesCollectionView.reloadData()
+                        
+                        if let last = result.last {
+                            if last.user.senderId != self.curUser.senderId {
+                                let params = [
+                                    "c_id": self.contact.id
+                                ]
+                                self.socketIOManager.readAllMessage(params: params)
+                            }
+                        }
                     }
                 } else {
                     let message = response["err_msg"].stringValue
@@ -296,6 +367,8 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
 //        messageInputBar.inputTextViewDidEndEditing()
         
         super.viewWillDisappear(animated)
+        
+        self.appDelegate()?.chatView = nil
     }
     
     func configureMessageCollectionView() {
@@ -325,7 +398,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource, UIImagePic
         layout?.setMessageIncomingAccessoryViewPosition(.messageBottom)
         layout?.setMessageOutgoingAccessoryViewSize(CGSize(width: 30, height: 30))
         layout?.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
-
+        
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
     }
@@ -726,16 +799,14 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         if contact != nil {
-            var params = [
+            
+            let params = [
                 "c_id": contact.id,
                 "t_id": contact.t_id,
                 "typing": 1
             ]
             socketIOManager.userTyping(params: params)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                params["typing"] = 0
-                self.socketIOManager.userTyping(params: params)
-            }
+            
             if !isTyping {
                 let token = contact.t_fcm_token
                 var displayName = contact.f_display_name
@@ -785,27 +856,32 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         for component in data {
             if let str = component as? String {
                 if contact != nil {
+                    let id = Date().timeIntervalSince1970
                     let message = [
-                        "c_id": contact.id,
-                        "t_id": contact.t_id,
+                        "old_id": id,
+                        "c_id": self.contact.id,
+                        "t_id": self.contact.t_id,
                         "type": "text",
                         "message": str,
-                        "push_token": contact.t_fcm_token
+                        "push_token": self.contact.t_fcm_token
                     ] as [String : Any]
                     self.socketIOManager.sendMessage(params: message)
                     
-                    let token = contact.t_fcm_token
-                    var displayName = contact.f_display_name
-                    if contact.amIAnon {
-                        displayName = contact.f_anon_display_name
+                    let mockMsg = self.getTextMockMessageItem(id, str)
+                    self.insertMessage(mockMsg)
+                    
+                    let token = self.contact.t_fcm_token
+                    var displayName = self.contact.f_display_name
+                    if self.contact.amIAnon {
+                        displayName = self.contact.f_anon_display_name
                     }
                     let data = [
                         "senderId": self.contact.f_id,
-                        "isAnon": contact.amIAnon
+                        "isAnon": self.contact.amIAnon
                     ] as [String : Any]
                     self.firebaseManager.sendPushNotification(token, String(format: SentMessageFormat, displayName, str), "", data)
                     
-                    incrementScore(senderID: externalID, recieiverID: otherUserID)
+                    self.incrementScore(senderID: self.externalID, recieiverID: self.otherUserID)
                 }
             }
         }
@@ -1015,6 +1091,8 @@ extension ChatViewController: MessagesLayoutDelegate {
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
     }
+    
+    
 
 }
 
@@ -1029,54 +1107,5 @@ extension ChatViewController: SelectOptionDelegate {
     
     func onClose() {
         self.dismiss(animated: true, completion: nil)
-    }
-}
-
-extension ChatViewController: SocketIOManagerDelegate {
-    func messageReceived(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            if let chatView = self.navigationController?.viewControllers.last as? ChatViewController {
-                chatView.onMessageAdded(message)
-            }
-        }
-    }
-    
-    func lastMessageUpdated(result: JSON) {
-        if result.arrayValue.count > 0 {
-            return
-        }
-    }
-    
-    func readMessage(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            updateMessage(message)
-        }
-    }
-    
-    func readAllMessage(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let message =  result.arrayValue[0]
-            updateMessage(message)
-        }
-    }
-    
-    func contactCreated(result: JSON) {
-        return
-    }
-    
-    func userTyping(result: JSON) {
-        if result.arrayValue.count > 0 {
-            let item = result.arrayValue[0]
-            let typing = item["typing"].intValue == 0 ? false : true
-            setTypingStatus(typing: typing)
-        }
-    }
-    
-    func deleteContact(result: JSON) {
-        if result.arrayValue.count > 0 {
-            return
-        }
     }
 }

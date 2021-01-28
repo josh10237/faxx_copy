@@ -36,7 +36,8 @@ extension UIImage {
     }
     
     func upOrientationImage() -> UIImage? {
-        let imageSize = CGSize(width: 500, height: 500)
+        let curSize = self.size
+        let imageSize = CGSize(width: curSize.width * 0.2, height: curSize.height * 0.2)
         switch imageOrientation {
         case .up:
             return self

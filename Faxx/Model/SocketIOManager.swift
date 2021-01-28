@@ -16,7 +16,7 @@ protocol SocketIOManagerDelegate {
     func readMessage(result: JSON)
     func readAllMessage(result: JSON)
     func userTyping(result: JSON)
-    func deleteContact(result: JSON)
+//    func deleteContact(result: JSON)
 }
 
 class SocketIOManager: NSObject {
@@ -84,7 +84,7 @@ class SocketIOManager: NSObject {
         self.onReadAllMessage()
         self.onLastMessageUpdated()
         self.onUserTyping()
-        self.onDeleteContact()
+//        self.onDeleteContact()
     }
     
     // MARK: - Chat Socket
@@ -155,12 +155,12 @@ class SocketIOManager: NSObject {
         socketManager.defaultSocket.emit(SocketEmiDeleteContact, with: [params])
     }
     
-    func onDeleteContact() {
-        socketManager.defaultSocket.on(SocketOnDeleteContact) { (result, socketAckEmitter) in
-            let jsonData = JSON(result)
-            self.delegate?.deleteContact(result: jsonData)
-        }
-    }
+//    func onDeleteContact() {
+//        socketManager.defaultSocket.on(SocketOnDeleteContact) { (result, socketAckEmitter) in
+//            let jsonData = JSON(result)
+//            self.delegate?.deleteContact(result: jsonData)
+//        }
+//    }
    
     // MARK: - Close Socket
     func closeConnection() {
