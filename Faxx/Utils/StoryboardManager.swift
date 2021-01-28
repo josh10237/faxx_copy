@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class StoryboardManager {
  
@@ -16,32 +17,25 @@ class StoryboardManager {
         let mainVC = newViewController.viewControllers.first as! MainViewController
         mainVC.userEntity = entity
         
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.replaceRootViewController(with: newViewController)
+        
+    }
+    
+    class func segueToChat(with entity: UserEntity, chatView: ChatViewController) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
+        let mainVC = newViewController.viewControllers.first as! MainViewController
+        mainVC.userEntity = entity
+        mainVC.isFromNotification = true
+        mainVC.chatView = chatView
+        newViewController.viewControllers = [mainVC]
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.replaceRootViewController(with: newViewController)
         
-
+        //newViewController.pushViewController(chatView, animated: true)
+        
     }
-//    class func segueToChatDeepLink(entity: UserEntity, posterID: String, externalID: String) {
-//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let newViewController = storyBoard.instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
-//        let chatVC = newViewController.viewControllers.first as! ChatViewController
-//        chatVC.userEntity = entity
-//
-//        chatVC.amIAnon = true
-//        chatVC.areTheyAnon = false
-//        chatVC.modalPresentationStyle = .fullScreen
-//
-//        chatVC.userEntity = entity
-//        chatVC.otherUserID = posterID
-//
-//        chatVC.externalID = externalID
-//        chatVC.otherUserDisplayName = "posterID" //TODO: Query for disp name from server
-//
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        appDelegate.replaceRootViewController(with: newViewController)
-//
-//
-//    }
 
 }

@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import MBProgressHUD
+
 let defaults = UserDefaults.standard
-let scoreDict: [String:Int] = defaults.dictionary(forKey: "scoreDict") as? [String:Int] ?? [:]
+var scoreDict: [String:Int] = defaults.dictionary(forKey: "scoreDict") as? [String:Int] ?? [:]
 let hasLoggedInBefore = defaults.bool(forKey: "hasLoggedInBefore")
 
 //var strings: [String:String] = userDefaults.object(forKey: "myKey") as? [String:String] ?? [:]
@@ -23,13 +25,14 @@ class LoginConfirmViewController: UIViewController {
     
     var userEntity: UserEntity?
     var externalID = ""
+    var firebaseManager = FirebaseManager()
     
     override func viewDidLoad() {
         let vlayer = CAGradientLayer()
         vlayer.frame = view.bounds
         vlayer.colors=[FaxxPink.cgColor, UIColor.white.cgColor]
         view.layer.insertSublayer(vlayer, at: 0)
-        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
+        self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
         super.viewDidLoad()
         
         let wlcm = "Hi " + String((userEntity?.displayName)!) + "!"
@@ -37,7 +40,7 @@ class LoginConfirmViewController: UIViewController {
         
         
         // set Image
-        guard let avatarString = userEntity?.avatar else { return }
+        let avatarString = userEntity?.avatar ?? DefaultAvatarUrl
         avatarImageView.load(from: avatarString)
     }
     
@@ -50,27 +53,51 @@ class LoginConfirmViewController: UIViewController {
     }
 
     @IBAction func goFemale(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
-        goToMain()
+        saveUser("Female")
     }
     
 
     @IBAction func goMale(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
-        goToMain()
+        saveUser("Male")
     }
     
     @IBAction func goNonBinary(_ sender: Any) {
-        let userDataRefMe = Constants.refs.databaseRoot.child("UserData").child(self.externalID)
-        let content = ["DisplayName": self.userEntity?.displayName, "Avatar": self.userEntity?.avatar, "Sex": 0, "Age": 1000] as [String : Any]
-        userDataRefMe.child("Info").setValue(content)
-//        UserDefaults.standard.set(true, forKey: "hasLoggedInBefore")
-        goToMain()
+        saveUser("Other")
+    }
+    
+    func saveUser(_ gender: String) {
+        UserGender = gender
+        let params = [
+            "externalId": self.externalID,
+            "display_name": self.userEntity?.displayName ?? "",
+            "avatar": self.userEntity?.avatar ?? DefaultAvatarUrl,
+            "gender": gender,
+            "age": 1000,
+            "fcm_token": FCM_Token
+        ] as [String : Any]
+        
+        if !NetworkManager.shared.isConnectedNetwork() {
+            showNetConnectionAlert()
+            return
+        }
+        
+        guard let url = URL(string: NetworkManager.shared.AddUser) else {
+            self.showToastMessage(message: STR_URL_PASSING_ERROR)
+            return
+        }
+        
+        MBProgressHUD.hide(for: self.view, animated: true)
+        
+        NetworkManager.shared.postRequest(url: url, headers: nil, params: params) { (response) in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            if self.parseResponse(response: response) {
+                let user = response["user"]
+                CurrentUser = UserContact(user)
+                self.goToMain()
+            } else {
+                let message = response["err_msg"].stringValue
+                self.showToastMessage(message: message)
+            }
+        }
     }
 }

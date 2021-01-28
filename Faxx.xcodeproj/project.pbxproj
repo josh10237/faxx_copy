@@ -29,7 +29,24 @@
 		677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677A6BBD24D88C1400DC1685 /* AnonIcons.swift */; };
 		67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9CC2501B2640021E8D5 /* Media.xcassets */; };
 		67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9D025030B370021E8D5 /* fax_animation.gif */; };
-		67BDF9D525030CCC0021E8D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 67BDF9D425030CCC0021E8D5 /* GoogleService-Info.plist */; };
+		BD04F6CA2567052700B54E6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BD04F6C92567052700B54E6B /* GoogleService-Info.plist */; };
+		BD2D00BB258C0D2F00E25B67 /* SelectOptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D00BA258C0D2F00E25B67 /* SelectOptionController.swift */; };
+		BD61C306259090A400A37866 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD61C305259090A400A37866 /* TestViewController.swift */; };
+		BD61C4492593F9D900A37866 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD61C4482593F9D900A37866 /* NetworkManager.swift */; };
+		BD61C4A72594114F00A37866 /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD61C4A62594114F00A37866 /* ContactModel.swift */; };
+		BD61C506259881D300A37866 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD61C505259881D300A37866 /* SocketIOManager.swift */; };
+		BD6AA9C8255C9E1000178A22 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AA9C7255C9E1000178A22 /* Global.swift */; };
+		BDC0F3F925619C2B008CF591 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F3F825619C2B008CF591 /* MockMessage.swift */; };
+		BDC0F3FC25619C4E008CF591 /* MockUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F3FB25619C4E008CF591 /* MockUser.swift */; };
+		BDC0F4152561A5C4008CF591 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F4142561A5C4008CF591 /* UIColor + Extension.swift */; };
+		BDC0F4192561A839008CF591 /* CustomMessagesFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F4182561A839008CF591 /* CustomMessagesFlowLayout.swift */; };
+		BDC0F41D2561A8A8008CF591 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F41C2561A8A8008CF591 /* MessageCell.swift */; };
+		BDC0F4292561ABF0008CF591 /* BasicAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F4282561ABF0008CF591 /* BasicAudioController.swift */; };
+		BDC0F4352561AD0F008CF591 /* Settings+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC0F4342561AD0F008CF591 /* Settings+UserDefaults.swift */; };
+		BDC91551255C782E00AADE24 /* UserContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC91550255C782E00AADE24 /* UserContact.swift */; };
+		BDC91553255C7E5500AADE24 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC91552255C7E5500AADE24 /* FirebaseManager.swift */; };
+		BDE89B9425706EBE00064B25 /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */; };
+		BDFC5F8E259BC79400846A79 /* URL + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFC5F8D259BC79400846A79 /* URL + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,9 +84,26 @@
 		677A6BBD24D88C1400DC1685 /* AnonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnonIcons.swift; sourceTree = "<group>"; };
 		67BDF9CC2501B2640021E8D5 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		67BDF9D025030B370021E8D5 /* fax_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fax_animation.gif; sourceTree = "<group>"; };
-		67BDF9D425030CCC0021E8D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		69319AA2F3AE2B6D167F4499 /* Pods-Faxx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.debug.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.debug.xcconfig"; sourceTree = "<group>"; };
 		8431614FDFE75D7FAB1FD0A3 /* Pods-Faxx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Faxx.release.xcconfig"; path = "Target Support Files/Pods-Faxx/Pods-Faxx.release.xcconfig"; sourceTree = "<group>"; };
+		BD04F6C92567052700B54E6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BD2D00BA258C0D2F00E25B67 /* SelectOptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectOptionController.swift; sourceTree = "<group>"; };
+		BD61C305259090A400A37866 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		BD61C4482593F9D900A37866 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		BD61C4A62594114F00A37866 /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
+		BD61C505259881D300A37866 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
+		BD6AA9C7255C9E1000178A22 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		BDC0F3F825619C2B008CF591 /* MockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessage.swift; sourceTree = "<group>"; };
+		BDC0F3FB25619C4E008CF591 /* MockUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUser.swift; sourceTree = "<group>"; };
+		BDC0F4142561A5C4008CF591 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
+		BDC0F4182561A839008CF591 /* CustomMessagesFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesFlowLayout.swift; sourceTree = "<group>"; };
+		BDC0F41C2561A8A8008CF591 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		BDC0F4282561ABF0008CF591 /* BasicAudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAudioController.swift; sourceTree = "<group>"; };
+		BDC0F4342561AD0F008CF591 /* Settings+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+UserDefaults.swift"; sourceTree = "<group>"; };
+		BDC91550255C782E00AADE24 /* UserContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContact.swift; sourceTree = "<group>"; };
+		BDC91552255C7E5500AADE24 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
+		BDFC5F8D259BC79400846A79 /* URL + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL + Extension.swift"; sourceTree = "<group>"; };
 		C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Faxx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -98,6 +132,9 @@
 				28C322FC20D3D8500045E02A /* LoginViewController.swift */,
 				67546C9524C186FF00312D8E /* LoadViewController.swift */,
 				67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */,
+				BDC0F41C2561A8A8008CF591 /* MessageCell.swift */,
+				BD2D00BA258C0D2F00E25B67 /* SelectOptionController.swift */,
+				BD61C305259090A400A37866 /* TestViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -106,6 +143,14 @@
 			isa = PBXGroup;
 			children = (
 				2842FB3820E895EE00D34863 /* UserEntity.swift */,
+				BDC91550255C782E00AADE24 /* UserContact.swift */,
+				BDC91552255C7E5500AADE24 /* FirebaseManager.swift */,
+				BDC0F3F825619C2B008CF591 /* MockMessage.swift */,
+				BDC0F3FB25619C4E008CF591 /* MockUser.swift */,
+				BDC0F4282561ABF0008CF591 /* BasicAudioController.swift */,
+				BD61C4482593F9D900A37866 /* NetworkManager.swift */,
+				BD61C4A62594114F00A37866 /* ContactModel.swift */,
+				BD61C505259881D300A37866 /* SocketIOManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -118,6 +163,11 @@
 				677A6BBB24D534B300DC1685 /* UIViewController+Extensions.swift */,
 				677A6BBD24D88C1400DC1685 /* AnonIcons.swift */,
 				67BDF9D025030B370021E8D5 /* fax_animation.gif */,
+				BD6AA9C7255C9E1000178A22 /* Global.swift */,
+				BDC0F4142561A5C4008CF591 /* UIColor + Extension.swift */,
+				BDC0F4342561AD0F008CF591 /* Settings+UserDefaults.swift */,
+				BDE89B9325706EBE00064B25 /* UIImageView + Extension.swift */,
+				BDFC5F8D259BC79400846A79 /* URL + Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -126,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				67546CA024C2442400312D8E /* Constraints.swift */,
+				BD04F6C92567052700B54E6B /* GoogleService-Info.plist */,
 				67546C9724C23EA200312D8E /* Bridging-Header.h */,
 				28C322CF20D3D6000045E02A /* Faxx */,
 				28C322CE20D3D6000045E02A /* Products */,
@@ -145,6 +196,7 @@
 		28C322CF20D3D6000045E02A /* Faxx */ = {
 			isa = PBXGroup;
 			children = (
+				BDC0F4172561A826008CF591 /* Layout */,
 				674625A725099831002F42AF /* fonts */,
 				674625A62508CFCC002F42AF /* Faxx.entitlements */,
 				287526F120F344FD00601FE0 /* Utils */,
@@ -154,7 +206,6 @@
 				28C322DE20D3D6020045E02A /* Info.plist */,
 				67BDF9CC2501B2640021E8D5 /* Media.xcassets */,
 				674866A424EE162F005D3F82 /* AnonIcons.xcassets */,
-				67BDF9D425030CCC0021E8D5 /* GoogleService-Info.plist */,
 			);
 			path = Faxx;
 			sourceTree = "<group>";
@@ -182,6 +233,14 @@
 				674625AE250998E2002F42AF /* BalooPaaji2-SemiBold.ttf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		BDC0F4172561A826008CF591 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				BDC0F4182561A839008CF591 /* CustomMessagesFlowLayout.swift */,
+			);
+			path = Layout;
 			sourceTree = "<group>";
 		};
 		C6F87B9902BE44B8B184AE11 /* Pods */ = {
@@ -254,13 +313,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				28C322DD20D3D6020045E02A /* LaunchScreen.storyboard in Resources */,
+				BD04F6CA2567052700B54E6B /* GoogleService-Info.plist in Resources */,
 				67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */,
 				67546C9424C1226D00312D8E /* Main.storyboard in Resources */,
 				674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */,
 				28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */,
 				67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */,
 				674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */,
-				67BDF9D525030CCC0021E8D5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,17 +372,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDE89B9425706EBE00064B25 /* UIImageView + Extension.swift in Sources */,
+				BDC0F4292561ABF0008CF591 /* BasicAudioController.swift in Sources */,
+				BD61C4A72594114F00A37866 /* ContactModel.swift in Sources */,
+				BDC0F4152561A5C4008CF591 /* UIColor + Extension.swift in Sources */,
+				BDC0F3F925619C2B008CF591 /* MockMessage.swift in Sources */,
+				BDC91551255C782E00AADE24 /* UserContact.swift in Sources */,
+				BDC0F4352561AD0F008CF591 /* Settings+UserDefaults.swift in Sources */,
 				2842FB3D20E89B7700D34863 /* LoginConfirmViewController.swift in Sources */,
+				BDFC5F8E259BC79400846A79 /* URL + Extension.swift in Sources */,
 				287526F320F3450800601FE0 /* UIImage+Extension.swift in Sources */,
+				BDC0F41D2561A8A8008CF591 /* MessageCell.swift in Sources */,
 				677A6BBE24D88C1400DC1685 /* AnonIcons.swift in Sources */,
+				BD2D00BB258C0D2F00E25B67 /* SelectOptionController.swift in Sources */,
 				677A6BBA24D52DF900DC1685 /* StoryboardManager.swift in Sources */,
 				67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */,
 				67546C9624C186FF00312D8E /* LoadViewController.swift in Sources */,
+				BD6AA9C8255C9E1000178A22 /* Global.swift in Sources */,
+				BD61C506259881D300A37866 /* SocketIOManager.swift in Sources */,
+				BDC0F3FC25619C4E008CF591 /* MockUser.swift in Sources */,
+				BD61C306259090A400A37866 /* TestViewController.swift in Sources */,
 				28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */,
 				677A6BB824D5262200DC1685 /* MessageTableViewCell.swift in Sources */,
+				BDC0F4192561A839008CF591 /* CustomMessagesFlowLayout.swift in Sources */,
 				67546CA124C2442400312D8E /* Constraints.swift in Sources */,
 				67546C9224C117E700312D8E /* MainViewController.swift in Sources */,
 				28C322D120D3D6000045E02A /* AppDelegate.swift in Sources */,
+				BDC91553255C7E5500AADE24 /* FirebaseManager.swift in Sources */,
+				BD61C4492593F9D900A37866 /* NetworkManager.swift in Sources */,
 				677A6BBC24D534B300DC1685 /* UIViewController+Extensions.swift in Sources */,
 				67546CA324C246BA00312D8E /* ChatViewController.swift in Sources */,
 				2842FB3920E895EE00D34863 /* UserEntity.swift in Sources */,
@@ -467,7 +543,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DA3XMRJ5TV;
+				DEVELOPMENT_TEAM = 6D99Z2R35B;
 				EXCLUDED_ARCHS = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -482,7 +558,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = JB.faxx;
 				PRODUCT_NAME = Faxx;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -494,7 +570,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Faxx/Faxx.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DA3XMRJ5TV;
+				DEVELOPMENT_TEAM = 6D99Z2R35B;
 				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -509,7 +585,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = JB.faxx;
 				PRODUCT_NAME = Faxx;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

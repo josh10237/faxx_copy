@@ -34,4 +34,19 @@ extension UIImage {
         }
         return UIImage(data: data)
     }
+    
+    func upOrientationImage() -> UIImage? {
+        let curSize = self.size
+        let imageSize = CGSize(width: curSize.width * 0.2, height: curSize.height * 0.2)
+        switch imageOrientation {
+        case .up:
+            return self
+        default:
+            UIGraphicsBeginImageContextWithOptions(imageSize, false, scale)
+            draw(in: CGRect(origin: .zero, size: imageSize))
+            let result = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return result
+        }
+    }
 }
