@@ -87,4 +87,8 @@ extension UIViewController {
         
         self.navigationItem.leftBarButtonItem = chatBarButton
     }
+    
+    func appDelegate() -> AppDelegate? {
+        return UIApplication.shared.delegate as? AppDelegate
+    }
 }

@@ -50,8 +50,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
     var deepParams: [String : AnyObject]? = nil
     var firebaseManager: FirebaseManager!
     
+    var socketIOManager = SocketIOManager.shared
+    
     var notificationSenderId: Int = 0
     var isNotificationSenderAnon: Bool = false
+    
+    var mainView: MainViewController?
+    var chatView: ChatViewController?
+    
+    func connectSocket(_ user_id: Int) {
+        socketIOManager.establishConnection(user_id: user_id)
+    }
 
     internal func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -66,6 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
         
         self.firebaseManager = FirebaseManager()
         self.firebaseManager.delegate = self
+        
+        socketIOManager.delegate = self
         
         Messaging.messaging().delegate = self
         Messaging.messaging().subscribe(toTopic: "TestFaxxTopic")
@@ -152,8 +163,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FirebaseManagerDelegate {
     func goToNotificationChat(_ f_id: Int, _ t_id: Int, _ anon_id: Int) {
         if let curUser = CurrentUser {
             let params = [
-                "f_id": f_id,
-                "t_id": t_id,
+                "f_id": f_id == anon_id ? f_id : t_id,
+                "t_id": f_id == anon_id ? t_id : f_id,
                 "anon_id": anon_id
             ] as [String : Any]
             
@@ -292,6 +303,160 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
     }
     
+}
+
+extension AppDelegate: SocketIOManagerDelegate {
+    func contactCreated(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let tmp =  result.arrayValue[0]
+            if let curUser = CurrentUser {
+                let contact = ContactModel(tmp, curUser)
+                let c_id = contact.id
+                let index = mainView?.contactList.firstIndex { (contact) -> Bool in
+                    return contact.id == c_id
+                }
+                if index == nil {
+                    mainView?.contactList.insert(contact, at: 0)
+                }
+            }
+        }
+    }
+    
+    func messageReceived(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            chatView?.onMessageAdded(message)
+        }
+    }
+    
+    func lastMessageUpdated(result: JSON) {
+        if result.arrayValue.count > 0 {
+            if let mainView = self.mainView {
+                let message =  result.arrayValue[0]
+                let c_id = message["c_id"].intValue
+                
+                let index = mainView.contactList.firstIndex { (contact) -> Bool in
+                    return contact.id == c_id
+                }
+                if index != nil {
+                    let contact = mainView.contactList[index!]
+                    contact.last_msg_sender_id = message["f_id"].intValue
+<<<<<<< Updated upstream
+=======
+                    contact.last_msg_id = message["id"].intValue
+>>>>>>> Stashed changes
+                    contact.last_msg = message["msg_content"].stringValue
+                    contact.last_msg_type = message["msg_type"].stringValue
+                    contact.last_msg_status = message["msg_status"].stringValue
+                    contact.last_msg_timestamp = message["msg_timestamp"].doubleValue
+<<<<<<< Updated upstream
+=======
+                    if contact.d_start_msg_id < contact.d_last_msg_id {
+                        contact.d_start_msg_id = message["id"].intValue
+                    }
+>>>>>>> Stashed changes
+                    contact.isTyping = false
+                    
+                    let index_1 = mainView.realContactList.firstIndex { (contact) -> Bool in
+                        return contact.id == c_id
+                    }
+                    if index_1 != nil {
+                        mainView.realContactList[index_1!] = contact
+                        mainView.sortContact()
+                        var indexPath: [IndexPath] = []
+                        for i in 0 ... index_1! {
+                            indexPath.append(IndexPath(row: i, section: 0))
+                        }
+                        mainView.tableView.reloadRows(at: indexPath, with: .none)
+                    } else {
+                        mainView.loadContactTable()
+                    }
+                }
+            }
+        }
+    }
+    
+    func readMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.chatView {
+                chatView.updateMessage(message)
+            }
+        }
+    }
+    
+    func readAllMessage(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let message =  result.arrayValue[0]
+            if let chatView = self.chatView {
+                chatView.updateMessage(message)
+            }
+        }
+    }
+    
+    func userTyping(result: JSON) {
+        if result.arrayValue.count > 0 {
+            let item = result.arrayValue[0]
+            let c_id = item["c_id"].intValue
+            let typing = item["typing"].intValue == 0 ? false : true
+            
+            if let mainView = self.mainView {
+                mainView.setTyping(item)
+            }
+            
+            if let chatView = self.chatView {
+                if chatView.contact != nil && chatView.contact.id == c_id {
+                    chatView.setTypingStatus(typing: typing)
+                }
+            }
+        }
+    }
+    
+<<<<<<< Updated upstream
+    func deleteContact(result: JSON) {
+        if result.arrayValue.count > 0 {
+            if let mainView = self.mainView {
+                let item = result.arrayValue[0]
+                let c_id = item["c_id"].intValue
+                let index_1 = mainView.realContactList.firstIndex { (item) -> Bool in
+                    return item.id == c_id
+                }
+                if index_1 != nil {
+                    mainView.realContactList.remove(at: index_1!)
+                    mainView.tableView.deleteRows(at: [IndexPath(row: index_1!, section: 0)], with: .fade)
+                }
+                let index_2 = mainView.contactList.firstIndex { (item) -> Bool in
+                    return item.id == c_id
+                }
+                if index_2 != nil {
+                    mainView.contactList.remove(at: index_2!)
+                }
+            }
+        }
+    }
+=======
+//    func deleteContact(result: JSON) {
+//        if result.arrayValue.count > 0 {
+//            if let mainView = self.mainView {
+//                let item = result.arrayValue[0]
+//                let c_id = item["c_id"].intValue
+//                let index_1 = mainView.realContactList.firstIndex { (item) -> Bool in
+//                    return item.id == c_id
+//                }
+//                if index_1 != nil {
+//                    mainView.realContactList.remove(at: index_1!)
+//                    mainView.tableView.deleteRows(at: [IndexPath(row: index_1!, section: 0)], with: .fade)
+//                }
+//                let index_2 = mainView.contactList.firstIndex { (item) -> Bool in
+//                    return item.id == c_id
+//                }
+//                if index_2 != nil {
+//                    mainView.contactList.remove(at: index_2!)
+//                }
+//            }
+//        }
+//    }
+>>>>>>> Stashed changes
 }
 
 

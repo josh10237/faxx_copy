@@ -27,7 +27,9 @@ class StoryboardManager {
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
         let mainVC = newViewController.viewControllers.first as! MainViewController
         mainVC.userEntity = entity
-        newViewController.viewControllers = [mainVC, chatView]
+        mainVC.isFromNotification = true
+        mainVC.chatView = chatView
+        newViewController.viewControllers = [mainVC]
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.replaceRootViewController(with: newViewController)
