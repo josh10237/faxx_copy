@@ -8,52 +8,137 @@
 
 import Foundation
 import SCSDKLoginKit
+
 class ProfileViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var score: UILabel!
+//    @IBOutlet weak var score: UILabel!
     @IBOutlet weak var displayName: UITextField!
     
-    @IBOutlet weak var mainScore: UILabel!
-    @IBOutlet weak var numOneBest: UIImageView!
+//    @IBOutlet weak var mainScore: UILabel!
+//    @IBOutlet weak var numOneBest: UIImageView!
+//
+//    @IBOutlet weak var numTwoBest: UIImageView!
+//
+//    @IBOutlet weak var numThreeBest: UIImageView!
+//
+//    @IBOutlet weak var numFourBest: UIImageView!
+//
+//    @IBOutlet weak var numFiveBest: UIImageView!
+//
+//    @IBOutlet weak var scoreOne: UILabel!
+//
+//    @IBOutlet weak var scoreFour: UILabel!
+//
+//    @IBOutlet weak var scoreThree: UILabel!
+//
+//    @IBOutlet weak var scoreFive: UILabel!
+//    @IBOutlet weak var scoreTwo: UILabel!
+    @IBOutlet weak var firstBar: UIImageView!
+    @IBOutlet weak var secondBar: UIImageView!
+    @IBOutlet weak var thirdBar: UIImageView!
+    @IBOutlet weak var fourthBar: UIImageView!
+    @IBOutlet weak var fifthBar: UIImageView!
+    @IBOutlet weak var sixthBar: UIImageView!
+    @IBOutlet weak var seventhBar: UIImageView!
     
-    @IBOutlet weak var numTwoBest: UIImageView!
-    
-    @IBOutlet weak var numThreeBest: UIImageView!
-    
-    @IBOutlet weak var numFourBest: UIImageView!
-    
-    @IBOutlet weak var numFiveBest: UIImageView!
-    
-    @IBOutlet weak var scoreOne: UILabel!
-    
-    @IBOutlet weak var scoreFour: UILabel!
-    
-    @IBOutlet weak var scoreThree: UILabel!
-    
-    @IBOutlet weak var scoreFive: UILabel!
-    @IBOutlet weak var scoreTwo: UILabel!
     var externalID = ""
     var avatarURL = ""
     var myDispName = ""
     var userEntity: UserEntity?
+    var OneBest = ""
+    var TwoBest = ""
+    var ThreeBest = ""
+    var FourBest = ""
+    var FiveBest = ""
     
     let screenSize: CGRect = UIScreen.main.bounds
     override func viewDidLoad() {
-        self.externalID = getExtenalId(self.userEntity?.externalID ?? "")
+        self.externalID = String((self.userEntity?.externalID)!.dropFirst(6).replacingOccurrences(of: "/", with: ""))
         super.viewDidLoad()
         displayName.delegate = self
-        displayName.backgroundColor = UIColor(patternImage: UIImage(named: "ProfileNameBar")!)
+//        displayName.backgroundColor = UIColor(patternImage: UIImage(named: "ProfileNameBar")!)
         //self!.displayName.isUserInteractionEnabled = false
         self.addTitle(title: myDispName)
         displayName.text = myDispName
-        let avatarString = userEntity?.avatar ?? DefaultAvatarUrl
-        avatarImageView.layer.cornerRadius = 70
+        guard let avatarString = userEntity?.avatar else { return }
+//        avatarImageView.layer.cornerRadius = 70
         avatarImageView.clipsToBounds = true
         avatarImageView.load(from: avatarString)
-            
+        let frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         view.backgroundColor = UIColor.white
-
+        
+//        if bestFriendDict[0]["avatar"] as? String == nil{
+//
+//        } else {
+//            let firstBestFriend = bestFriendDict[0]["avatar"] as! String
+//            numOneBest.load(from: firstBestFriend)
+//            self.numOneBest.frame = frame
+//
+//            let firstScore = bestFriendDict[0]["score"]
+//            scoreOne.text = ("\(String(describing: firstScore!))")
+//        }
+//        if bestFriendDict[1]["avatar"] as? String == nil{
+//
+//        } else {
+//            if bestFriendDict[1]["avatar"] as? String == bestFriendDict[0]["avatar"] as! String {
+//
+//            } else {
+//            let secondBestFriend = bestFriendDict[1]["avatar"] as! String
+//            numTwoBest.load(from: secondBestFriend)
+//            self.numTwoBest.frame = frame
+//
+//            let secondScore = bestFriendDict[1]["score"]
+//            scoreTwo.text = ("\(String(describing: secondScore!))")
+//            }
+//        }
+//
+//        if bestFriendDict[2]["avatar"] as? String == nil {
+//
+//        } else {
+//        let thirdBestFriend = bestFriendDict[2]["avatar"] as! String
+//        numThreeBest.load(from: thirdBestFriend)
+//        self.numThreeBest.frame = frame
+//
+//        let thirdScore = bestFriendDict[2]["score"]
+//        scoreThree.text = ("\(String(describing: thirdScore!))")
+//        }
+//
+//        if bestFriendDict[3]["avatar"] as? String == nil{
+//
+//        } else {
+//        let fourthBestFriend = bestFriendDict[3]["avatar"] as! String
+//        numFourBest.load(from: fourthBestFriend)
+//        self.numFourBest.frame = frame
+//
+//        let fourthScore = bestFriendDict[3]["score"]
+//        scoreFour.text = ("\(String(describing: fourthScore!))")
+//        }
+//
+//        if bestFriendDict[4]["avatar"] as? String == nil{
+//
+//        } else {
+//        let fifthBestFriend = bestFriendDict[4]["avatar"] as! String
+//        numFiveBest.load(from: fifthBestFriend)
+//        self.numFiveBest.frame = frame
+//
+//        let fifthScore = bestFriendDict[4]["score"]
+//        scoreFive.text = ("\(String(describing: fifthScore!))")
+//        }
+        
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateBars()
+    }
+    func animateBars() {
+        
+        UIView.animate(withDuration: 1, animations: {() -> Void in
+
+        })
+    }
+//    func compareScores(){
+//
+//    }
 
     @IBAction func logMeOut(_ sender: Any) {
         SCSDKLoginClient.clearToken()
@@ -63,6 +148,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
         self.present(newViewController, animated: true, completion: nil)
     }
     
+     
     
     func roundRect(){
         let rectWidth:CGFloat = 100
@@ -140,5 +226,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate{
     @IBAction func tOS(_ sender: Any) {
         
     }
+    @IBAction func Settings(_ sender: Any) {
+        
+    }
     
 }
+

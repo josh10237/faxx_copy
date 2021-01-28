@@ -23,10 +23,9 @@ class ContactModel: NSObject {
     var t_fcm_token: String = ""
     var t_anon_display_name: String = ""
     var t_anon_avatar: String = ""
-<<<<<<< Updated upstream
-=======
+
     var last_msg_id: Int = 0
->>>>>>> Stashed changes
+
     var last_msg_sender_id: Int = 0
     var last_msg_type: String = ""
     var last_msg: String = ""
@@ -73,10 +72,9 @@ class ContactModel: NSObject {
             f_anon_display_name = contact["t_anon_display_name"].stringValue
             f_anon_avatar = contact["t_anon_avatar"].stringValue
         }
-<<<<<<< Updated upstream
-=======
+
         last_msg_id = contact["last_msg_id"].intValue
->>>>>>> Stashed changes
+
         last_msg_sender_id = contact["last_msg_sender_id"].intValue
         last_msg_type = contact["last_msg_type"].stringValue
         last_msg = contact["last_msg"].stringValue
@@ -104,10 +102,9 @@ class ContactModel: NSObject {
             "t_fcm_token": amIAnon ? t_fcm_token : f_fcm_token,
             "t_anon_display_name": amIAnon ? t_anon_display_name : f_anon_display_name,
             "t_anon_avatar": amIAnon ? t_anon_avatar : f_anon_avatar,
-<<<<<<< Updated upstream
-=======
+
             "last_msg_id": last_msg_id,
->>>>>>> Stashed changes
+
             "last_msg_sender_id": last_msg_sender_id,
             "last_msg_type": last_msg_type,
             "last_msg": last_msg,

@@ -15,6 +15,9 @@
 		28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28C322FA20D3D83C0045E02A /* Login.storyboard */; };
 		28C322FD20D3D8500045E02A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C322FC20D3D8500045E02A /* LoginViewController.swift */; };
 		3063708AA87D992B67878147 /* Pods_Faxx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FAF328C3156C156CD5CB8B /* Pods_Faxx.framework */; };
+		4F9C29A525C34A3F00902101 /* Nationality.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F9C29A425C34A3F00902101 /* Nationality.xcassets */; };
+		4F9C29A725C34A8A00902101 /* Age.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F9C29A625C34A8A00902101 /* Age.xcassets */; };
+		4F9C29AA25C34B9500902101 /* InterestIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F9C29A925C34B9500902101 /* InterestIcons.xcassets */; };
 		67293E0B24C64BAC0070AEC0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */; };
 		674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 674625A825099878002F42AF /* BalooPaaji-Regular.ttf */; };
 		674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674866A424EE162F005D3F82 /* AnonIcons.xcassets */; };
@@ -63,6 +66,10 @@
 		28C322E820D3D6280045E02A /* SCSDKBitmojiKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SCSDKBitmojiKit.framework; path = ../../../../Downloads/SCSDK/SCSDKBitmojiKit.framework; sourceTree = "<group>"; };
 		28C322FA20D3D83C0045E02A /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		28C322FC20D3D8500045E02A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4F9C29A425C34A3F00902101 /* Nationality.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Nationality.xcassets; path = Faxx/Nationality.xcassets; sourceTree = SOURCE_ROOT; };
+		4F9C29A625C34A8A00902101 /* Age.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Age.xcassets; path = Faxx/Age.xcassets; sourceTree = SOURCE_ROOT; };
+		4F9C29A825C34AAA00902101 /* Gender.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Gender.xcassets; path = /Users/gavinjimerson/Desktop/faxx/Faxx/Gender.xcassets; sourceTree = "<absolute>"; };
+		4F9C29A925C34B9500902101 /* InterestIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = InterestIcons.xcassets; path = Faxx/InterestIcons.xcassets; sourceTree = SOURCE_ROOT; };
 		67293E0A24C64BAC0070AEC0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		674625A62508CFCC002F42AF /* Faxx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Faxx.entitlements; sourceTree = "<group>"; };
 		674625A825099878002F42AF /* BalooPaaji-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BalooPaaji-Regular.ttf"; sourceTree = "<group>"; };
@@ -205,6 +212,10 @@
 				28C322D020D3D6000045E02A /* AppDelegate.swift */,
 				28C322DE20D3D6020045E02A /* Info.plist */,
 				67BDF9CC2501B2640021E8D5 /* Media.xcassets */,
+				4F9C29A425C34A3F00902101 /* Nationality.xcassets */,
+				4F9C29A825C34AAA00902101 /* Gender.xcassets */,
+				4F9C29A925C34B9500902101 /* InterestIcons.xcassets */,
+				4F9C29A625C34A8A00902101 /* Age.xcassets */,
 				674866A424EE162F005D3F82 /* AnonIcons.xcassets */,
 			);
 			path = Faxx;
@@ -317,9 +328,12 @@
 				67BDF9D125030B370021E8D5 /* fax_animation.gif in Resources */,
 				67546C9424C1226D00312D8E /* Main.storyboard in Resources */,
 				674625A925099878002F42AF /* BalooPaaji-Regular.ttf in Resources */,
+				4F9C29A725C34A8A00902101 /* Age.xcassets in Resources */,
 				28C322FB20D3D83C0045E02A /* Login.storyboard in Resources */,
 				67BDF9CD2501B2640021E8D5 /* Media.xcassets in Resources */,
 				674866A524EE162F005D3F82 /* AnonIcons.xcassets in Resources */,
+				4F9C29A525C34A3F00902101 /* Nationality.xcassets in Resources */,
+				4F9C29AA25C34B9500902101 /* InterestIcons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

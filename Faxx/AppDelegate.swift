@@ -341,20 +341,18 @@ extension AppDelegate: SocketIOManagerDelegate {
                 if index != nil {
                     let contact = mainView.contactList[index!]
                     contact.last_msg_sender_id = message["f_id"].intValue
-<<<<<<< Updated upstream
-=======
+
                     contact.last_msg_id = message["id"].intValue
->>>>>>> Stashed changes
+
                     contact.last_msg = message["msg_content"].stringValue
                     contact.last_msg_type = message["msg_type"].stringValue
                     contact.last_msg_status = message["msg_status"].stringValue
                     contact.last_msg_timestamp = message["msg_timestamp"].doubleValue
-<<<<<<< Updated upstream
-=======
+
                     if contact.d_start_msg_id < contact.d_last_msg_id {
                         contact.d_start_msg_id = message["id"].intValue
                     }
->>>>>>> Stashed changes
+
                     contact.isTyping = false
                     
                     let index_1 = mainView.realContactList.firstIndex { (contact) -> Bool in
@@ -412,7 +410,6 @@ extension AppDelegate: SocketIOManagerDelegate {
         }
     }
     
-<<<<<<< Updated upstream
     func deleteContact(result: JSON) {
         if result.arrayValue.count > 0 {
             if let mainView = self.mainView {
@@ -434,7 +431,6 @@ extension AppDelegate: SocketIOManagerDelegate {
             }
         }
     }
-=======
 //    func deleteContact(result: JSON) {
 //        if result.arrayValue.count > 0 {
 //            if let mainView = self.mainView {
@@ -456,7 +452,7 @@ extension AppDelegate: SocketIOManagerDelegate {
 //            }
 //        }
 //    }
->>>>>>> Stashed changes
+
 }
 
 

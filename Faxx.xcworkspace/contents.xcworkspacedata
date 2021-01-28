@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/gavinjimerson/Desktop/faxx/Faxx/Gender.xcassets">
+   </FileRef>
+   <FileRef
       location = "group:Faxx.xcodeproj">
    </FileRef>
    <FileRef
